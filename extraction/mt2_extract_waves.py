@@ -132,11 +132,25 @@ def group_hits(hits):
 
 def wave_min_tier(chunk, wave_start, prev_end):
     """
-    Find minimum tier index for a wave group by scanning its preceding gap for
-    a 'Complete N' condition string.  Returns 0 if no condition (always present).
+    Find minimum tier index for a wave group by scanning its preceding gap for a
+    "regions complete" condition string.  The number = how many regions must be
+    cleared before this wave group appears, which equals its min tier index
+    (1 -> O2+, 2 -> O3+).  Several phrasings occur in-game and all must match:
+      - minor Battle scenarios:  "(Regions Complete N) ..."   (number AFTER)
+      - BossBattle scenarios:    "N Region(s) Complete"        (number BEFORE)
+      - some BossBattle (R2):    "Distance N"                  (= RunDistance N)
+    The old regex matched only the first form, so other BossBattle waves
+    defaulted to min_tier 0 and wrongly showed at O1 (e.g. Plaguebringer O1
+    showed 6 waves instead of 4).  Returns 0 if no condition (always present).
+
+    NOTE: a "(Bonus)" label (no number) also precedes some wave groups
+    (R1/R3 bosses, some battles) and is NOT handled — its tier gating is
+    unverified, so those waves stay always-present pending an in-game check.
     """
     gap = chunk[prev_end:wave_start]
-    m = re.search(rb'Complete (\d+)', gap)
+    m = (re.search(rb'Complete (\d+)', gap)
+         or re.search(rb'(\d+) Regions? Complete', gap)
+         or re.search(rb'Distance (\d+)', gap))
     return int(m.group(1)) if m else 0
 
 
