@@ -21,10 +21,17 @@ import sys, os, re, csv, json
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PLACEHOLDER = None  # JSON null for an unobserved order
 
+# Cell values that mean "no number here" — blank, or a deliberate
+# not-applicable marker the user can put in Excel for an order an enemy
+# never reaches (e.g. Mother's Fiend at O2/O3). All collapse to null; the
+# app never looks these up anyway (the hover only reads an order in which
+# the enemy actually appears), so the marker is just bookkeeping.
+NA_CELLS = {'', '-', '—', 'n/a', 'na'}
+
 
 def stat(a, h):
     a, h = (a or '').strip(), (h or '').strip()
-    return f'{a}⚔️ {h}❤️' if a and h else PLACEHOLDER
+    return PLACEHOLDER if a.lower() in NA_CELLS or h.lower() in NA_CELLS else f'{a}⚔️ {h}❤️'
 
 
 # Internals in the observation CSV that never spawn in any Soul Savior wave
