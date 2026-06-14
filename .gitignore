@@ -4,6 +4,9 @@ Contents/
 # Generated pipeline outputs (regenerable from extraction/)
 out/
 
+# Working observation spreadsheets — local only
+data/
+
 # Python
 __pycache__/
 *.py[cod]
