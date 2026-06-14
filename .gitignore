@@ -1,0 +1,18 @@
+# Game bundle — copyrighted, ~1.9GB, never commit
+Contents/
+
+# Generated pipeline outputs (regenerable from extraction_scripts/)
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Spreadsheet temp/lock files
+~$*.xlsx
+
+# macOS
+.DS_Store
