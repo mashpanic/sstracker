@@ -1,6 +1,6 @@
 # Boss Scaling Formula (Soul Savior — Overgrowth)
 
-Derived from `out/scaling.json` and verified against `Expected_Boss_Values.xlsx`.
+Derived from `out/scaling.json` and verified against `data/Expected_Boss_Values.xlsx`.
 
 ## Rounding
 
@@ -60,7 +60,7 @@ Verified against all three variants:
 
 ## Source of the flat additive constants
 
-Searched using `extraction_scripts/scan_flat_effects.py`. Two flat effect types exist in the RunDistance mutator objects targeting Boss subtype:
+Searched using `extraction/scan_flat_effects.py`. Two flat effect types exist in the RunDistance mutator objects targeting Boss subtype:
 
 - `RelicEffectModifyCharacterAttackDamage` — flat ATK bonus
 - `RelicEffectModifyCharacterMaxHealth` — flat HP bonus
@@ -84,4 +84,4 @@ The gap is not explained by any SoulSavior asset object — checked all five mut
 
 ## Verification
 
-All 26 boss rows in `Expected_Boss_Values.xlsx` match exactly using the formulas above.
+All 26 boss rows in `data/Expected_Boss_Values.xlsx` match exactly using the formulas above.

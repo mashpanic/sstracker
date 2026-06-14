@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-A Python pipeline that extracts and analyzes enemy/boss stat data from the Monster Train 2 game bundle — a Unity 2022.3 Mono build. Everything reads raw `.assets` binary files (no type trees; positional field reads). All scripts are in `extraction_scripts/`.
+A Python pipeline that extracts and analyzes enemy/boss stat data from the Monster Train 2 game bundle — a Unity 2022.3 Mono build. Everything reads raw `.assets` binary files (no type trees; positional field reads). All scripts are in `extraction/`.
 
 ## Game knowledge (Soul Savior)
 
@@ -106,15 +106,15 @@ Point scripts at the game's `Contents/Resources/Data` folder (contains `sharedas
 
 ```bash
 OUT=./out
-python3 extraction_scripts/mt2_extract_roster.py  "Contents/Resources/Data" --out $OUT
-python3 extraction_scripts/mt2_extract_scaling.py "Contents/Resources/Data" --out $OUT
-python3 extraction_scripts/mt2_build_outputs.py   --in $OUT --difficulty Overgrowth
+python3 extraction/mt2_extract_roster.py  "Contents/Resources/Data" --out $OUT
+python3 extraction/mt2_extract_scaling.py "Contents/Resources/Data" --out $OUT
+python3 extraction/mt2_build_outputs.py   --in $OUT --difficulty Overgrowth
 ```
 
 The wave/scenario extractor is a separate, self-contained pass (not part of the stat pipeline above):
 
 ```bash
-python3 extraction_scripts/mt2_extract_waves.py "Contents/Resources/Data" --out $OUT
+python3 extraction/mt2_extract_waves.py "Contents/Resources/Data" --out $OUT
 ```
 
 `mt2_extract_waves.py` options:
@@ -153,7 +153,7 @@ mt2_extract_waves.py       → out/waves.json + out/waves.md  (standalone, not w
 **Rounding rules** (verified across all 26 boss rows and non-boss observation set):
 - Boss O1–O4 formulas: `rnd(x) = math.floor(x + 0.5)` (round-half-up, not banker's, not ceil)
 - Non-boss O1 HP: `math.ceil` — confirmed by 5 small-base enemies where `rnd` gives the wrong answer
-- Non-boss O2–O4: empirical best-fit formula, **not derivable from raw game data** (see `enemy_scaling.md`)
+- Non-boss O2–O4: empirical best-fit formula, **not derivable from raw game data** (see `docs/enemy_scaling.md`)
 
 **Non-boss O2–O4 formula** is approximate (77% ATK match, 57% HP match against observations). The game data shows 10%/4% per RunDistance, but observed values match 20% ATK / 7% HP. The discrepancy is likely caused by an undecoded `int[2]=2` field in RunDistance effects (vs `int[2]=0` in difficulty effects). The empirical formula is the best available.
 

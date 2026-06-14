@@ -167,7 +167,7 @@ The following specific observations, if re-verified in-game, would resolve the m
 
 ## Current Code Status
 
-File: `extraction_scripts/mt2_build_outputs.py`
+File: `extraction/mt2_build_outputs.py`
 
 - O1 HP: uses `rnd` — **should be `ceil`** (confirmed)
 - O2–O4 ATK: uses `setB_attack` = 4% from RunDistance — **wrong**

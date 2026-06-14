@@ -1,6 +1,6 @@
 # MT2 extraction scripts
 
-Runnable companions to `MonsterTrain2_Extraction_Playbook.md`. They re-derive everything
+Runnable companions to `docs/MonsterTrain2_Extraction_Playbook.md`. They re-derive everything
 from the game files, so when a balance patch changes numbers you just re-run them — no
 re-analysis. Pure Python; only `openpyxl` is needed for the `.xlsx` outputs (JSON/console
 work without it).

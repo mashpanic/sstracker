@@ -113,7 +113,7 @@ def lifemother_overgrowth_scaled(base_atk, base_hp):
 def enemy_overgrowth_scaled(base_atk, base_hp, is_support):
     """Empirical best-fit formula for non-boss Overgrowth enemies O1-O4.
     Game data (scaling.json) shows SetA=10%/SetB=4% per RunDistance, but observed
-    values best fit 20% ATK / 7% HP additive from base. See enemy_scaling.md.
+    values best fit 20% ATK / 7% HP additive from base. See docs/enemy_scaling.md.
     77% ATK match / 57% HP match against 35-enemy observation set.
     Support enemies receive no ATK scaling (Support absent from SetA in all mutators)."""
     out = {}
