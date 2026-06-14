@@ -177,49 +177,84 @@ function updateNodeDisplay(selectEl) {
 // Returns the info-box HTML for an encounter. variantDescriptions entries
 // may contain HTML (e.g. <br>, <strong>) since the result is assigned via
 // innerHTML; the values are all author-controlled, so this is safe.
+// Resolve a string | [O1,O2,O3,O4] value to one string using the row's order
+// selector. Fixed (string) values ignore order; arrays index by order-1.
+// Used for BOSS_STATS, WAVE_SET_DESCRIPTIONS and BOSS_WAVE_DESCRIPTIONS.
+function pickByOrder(entry, region) {
+    if (entry == null) return null;
+    if (typeof entry === 'string') return entry;
+    const orderEl = document.getElementById(`${region}-order`);
+    const order = orderEl ? parseInt(orderEl.value, 10) : NaN;
+    return !Number.isNaN(order) ? entry[order - 1] : null;
+}
+
+// Regex matching any known enemy display name, longest-first so multi-word
+// names ("Mother's Glutmass") win over a contained shorter one ("Glutmass").
+// Static — ENEMY_STATS is fixed at load.
+const ENEMY_NAME_RE = new RegExp(
+    Object.keys(ENEMY_STATS)
+        .sort((a, b) => b.length - a.length)
+        .map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('|'),
+    'g'
+);
+
+// The visit order (1-4) used to look up an enemy's observed stats for a row.
+// astrael is always first (O1); lifemother always last (O4). Mid-run regions
+// use their Order dropdown; null until one is picked.
+function encounterOrder(key) {
+    if (key === 'astrael') return 1;
+    if (key === 'lifemother') return 4;
+    const el = document.getElementById(`${key.split('-')[0]}-order`);
+    const n = el ? parseInt(el.value, 10) : NaN;
+    return Number.isNaN(n) ? null : n;
+}
+
+// Wrap each known enemy name in a wave-list string with a hover title showing
+// its observed ATK/HP at the given order. Unobserved cell (null) or unknown
+// order → the title says the stat isn't recorded yet. Names not in ENEMY_STATS
+// (region bosses, Astrael, Lifemother) are left untouched.
+function wrapEnemyStats(html, order) {
+    return html.replace(ENEMY_NAME_RE, name => {
+        const v = order && ENEMY_STATS[name] ? ENEMY_STATS[name][order - 1] : null;
+        const title = v || `${name} — ATK/HP not yet recorded${order ? ' for O' + order : ''}`;
+        return `<span class="enemy-stat" title="${title}">${name}</span>`;
+    });
+}
+
 function getDisplayText(key) {
     const info = encounterInfo[key];
     const variantEl = document.getElementById(`${key}-variant`);
     if (variantEl && variantEl.value) {
         const variant = variantEl.value;
-        let text = variantDescriptions[variant]
+        const desc = variantDescriptions[variant]
             ? variant + ': ' + variantDescriptions[variant]
             : variant + ' information';
 
-        // Append stats if available. Fixed stats (Astrael/Lifemother) are stored
-        // as a string; order-scaled stats (four main regions) are stored as an array.
-        if (BOSS_STATS[variant]) {
-            const entry = BOSS_STATS[variant];
-            if (typeof entry === 'string') {
-                text += '<br>' + entry;
-            } else {
-                const region = key.split('-')[0];
-                const orderEl = document.getElementById(`${region}-order`);
-                const order = orderEl ? parseInt(orderEl.value, 10) : NaN;
-                const stats = !Number.isNaN(order) ? entry[order - 1] : null;
-                if (stats) text += '<br>' + stats;
-            }
-        }
+        // Lead the first line with ATK/HP. Fixed stats (Astrael/Lifemother) are
+        // stored as a string; order-scaled stats (four main regions) as an array.
+        const stats = pickByOrder(BOSS_STATS[variant], key.split('-')[0]);
+        let text = stats ? stats + ' — ' + desc : desc;
 
-        // For battle rows, append the wave set description if one is selected.
+        // For battle rows, append the selected wave set's composition (order-scaled).
         if (key.endsWith('-battle')) {
             const region = key.split('-')[0];
             const waveEl = document.getElementById(`${region}-wave-set`);
-            if (waveEl && waveEl.value && WAVE_SET_DESCRIPTIONS[waveEl.value]) {
-                text += '<br>' + WAVE_SET_DESCRIPTIONS[waveEl.value];
+            if (waveEl && waveEl.value) {
+                const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveEl.value], region);
+                if (waves) text += '<br>' + wrapEnemyStats(waves, encounterOrder(key));
             }
         }
 
-        // Append mutator info if this variant grants one on defeat.
-        if (MUTATORS[variant]) {
-            const m = MUTATORS[variant];
-            text += `<br>Defeat mutator — <em>${m.name}</em>: ${m.effect}`;
-        }
+        // (Defeat mutator is shown via the mutator box hover on each row, not here.)
 
-        // For boss rows and standalone rows (astrael, lifemother), append wave description.
-        const regionKey = key.includes('-') ? key.split('-')[0] : key;
-        if ((key.endsWith('-boss') || !key.includes('-')) && BOSS_WAVE_DESCRIPTIONS[regionKey]) {
-            text += '<br>' + BOSS_WAVE_DESCRIPTIONS[regionKey];
+        // For boss rows and standalone rows (astrael, lifemother), append the
+        // per-variant wave composition (order-scaled for main regions; a fixed
+        // string for Astrael/Lifemother).
+        if (key.endsWith('-boss') || !key.includes('-')) {
+            const regionKey = key.includes('-') ? key.split('-')[0] : key;
+            const bossWaves = pickByOrder(BOSS_WAVE_DESCRIPTIONS[variant], regionKey);
+            if (bossWaves) text += '<br>' + wrapEnemyStats(bossWaves, encounterOrder(key));
         }
 
         return text;

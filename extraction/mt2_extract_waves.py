@@ -12,7 +12,9 @@ the Oversoul-ring difficulty axis; output labels are O#) using two mechanisms:
 
 Reconstruction per tier (RD in 0-3):
   - Late variant (header=1):   include if tier >= threshold_rd
-  - Early of a pair (header=0 with header=1 at +56): include if tier < partner threshold_rd
+  - Early of a pair (header=0 with header=1 at +56): include if
+       own threshold_rd <= tier < partner threshold_rd  (the base has its own
+       RunDistance gate too — it doesn't spawn below it, even pre-upgrade)
   - Standalone (header=0, no pair): include if tier >= threshold_rd
   Enemy list is reversed from storage order for display.
 
@@ -164,8 +166,12 @@ def reconstruct_variants(wave_hits):
                 if tier >= threshold_rd:
                     enemies.append(pid)
             elif offset in late_threshold:
-                # Base of a pair: present only before the upgrade threshold
-                if tier < late_threshold[offset]:
+                # Base of a pair: present from its OWN threshold up to (but not
+                # including) the late-variant upgrade threshold.  The base carries
+                # its own RunDistance gate at +44 just like a standalone — a unit
+                # with own-threshold>0 doesn't spawn at the lower tiers, even
+                # though its late variant hasn't taken over yet.
+                if threshold_rd <= tier < late_threshold[offset]:
                     enemies.append(pid)
             else:
                 # Standalone: include when tier meets its own threshold

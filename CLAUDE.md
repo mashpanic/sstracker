@@ -21,16 +21,20 @@ A Soul Savior run has one of three difficultly levels.  This project is only con
 
 A Soul Savior run passes through six regions in a fixed order. Each region is named after its boss; the first and last are fixed encounters. These are the `R0`–`R5` indices used in the extracts (`mt2_extract_waves.py`, `R#_Battle_*` keys):
 
-| Index | Region | Also known as |
-|-------|--------|---------------|
-| `R0` | **Astrael's Region** | **"The First Battle"** (Astrael appears only here) |
-| `R1` | **Maera's Region** | |
-| `R2` | **Thaddeus's Region** | |
-| `R3` | **Tivi's Region** | |
-| `R4` | **Lylith's Region** | |
-| `R5` | **Lifemother's Region** | **"The Final Battle"** (Lifemother appears only here) |
+| Index | Region | Boss (full name) | Map position | Also known as |
+|-------|--------|------------------|--------------|---------------|
+| `R0` | **Astrael's Region** | Astrael, the First Reborn | — (fixed first) | **"The First Battle"** (Astrael appears only here) |
+| `R1` | **Maera's Region** | Maera the Dutiful | top-left | |
+| `R2` | **Thaddeus's Region** | Thaddeus the Indulgent | top-right | |
+| `R3` | **Tivi's Region** | Tivi the Unruly | bottom-left | |
+| `R4` | **Lylith's Region** | Lylith the Spurned | bottom-right | |
+| `R5` | **Lifemother's Region** | The Lifemother | — (fixed last) | **"The Final Battle"** (Lifemother appears only here) |
 
 `R0` and `R5` are single fixed encounters. **Regions `R1`–`R4` each have two encounters: a *minor boss* first, then the region's *named boss* second** (e.g. `R1` ends on Maera). So a full run is: Astrael → (minor, Maera) → (minor, Thaddeus) → (minor, Tivi) → (minor, Lylith) → Lifemother.
+
+The boss epithet is encoded in its `BossBattle` variant *family* name: Maera **Dutiful** = `DutifulChild`, Lylith **Spurned** = `EstrangedChild`, Thaddeus **Indulgent** = `FavoredChild` (the three are all "children" of the Lifemother; Tivi and Lifemother use mechanic-named families instead).
+
+**Central-node upgrade mechanic** (wiki, tracker-relevant): defeating any region's boss permanently upgrades one central node in *every other* region to a more powerful "+" version — so the 4th region visited has all 3 of its central nodes upgraded. (Detailed node lists live in `app.js`/`gamefacts.js`.)
 
 ## Web resources
 
@@ -138,6 +142,10 @@ mt2_extract_roster.py      → out/roster.json (+ roster.xlsx)
 mt2_extract_scaling.py     → out/scaling.json
 mt2_build_outputs.py       ← reads both JSONs → scaled_<difficulty>.xlsx + scaling_page.html
 mt2_extract_waves.py       → out/waves.json + out/waves.md  (standalone, not wired to build_outputs)
+mt2_emit_wave_descriptions.py → rewrites the BOSS_WAVE_DESCRIPTIONS + WAVE_SET_DESCRIPTIONS blocks in gamedata.js from out/waves.json (first piece of the "pipeline emits gamedata.js" job)
+mt2_emit_boss_stats.py     → rewrites the BOSS_STATS block in gamedata.js from roster.json + scaling.json (reuses mt2_build_outputs.compute_orders for the math)
+mt2_emit_enemy_stats.py    → rewrites the ENEMY_STATS block in gamedata.js from enemy_observations.csv (OBSERVED non-boss stats; not computed — non-boss scaling is unsolved)
+enemy_observations.csv     ← hand-maintained (Excel) SS-enemy ATK/HP by order; committed source of truth for ENEMY_STATS
 ```
 
 `mt2_lib.py` owns: `parse_assets()` (SerializedFile v22 reader), `Localizer` (resolves localization keys from `resources.assets`), `iter_characters()` (yields CharacterData dicts), `STAT_HP_INDEX`/`STAT_ATK_INDEX` constants.
@@ -172,18 +180,44 @@ mt2_extract_waves.py       → out/waves.json + out/waves.md  (standalone, not w
 
 Goal: replace the `'Waves: TBD'` placeholders in `index.html` with the wave compositions from `out/waves.md`. Data model: each scenario's final wave contains exactly one boss — the region's own (`BossBattle`) or the region's minor boss (`Battle`). After the extractor fix below, `waves.md` reflects this directly (one `[B]` per section, no cross-region bleed). Earlier docs claimed Maera appeared in "every region's first-battle pool" — **that was an extraction artifact, not game behavior** (see next note); Maera fights only in `R1_BossBattle_*`.
 
+**Paired-base RunDistance gate (extractor bug, fixed 2026-06-14).** Verified in-game: at order 2 (O2), Maera's `_AscendDescend` Wave 1 is **3 Zephyrites + Flautist**, but `waves.md` showed 4. Cause: a base enemy in a base/late pair carries its *own* RunDistance threshold at PPtr+44 (not just an upgrade point), and `reconstruct_variants` was gating it only by the late partner's upper threshold — so a base whose own threshold > 0 wrongly appeared at lower tiers. Fix: gate the paired base by `own_threshold <= tier < late_threshold`. After the fix early-tier waves are smaller and ramp up with tier (the intended "deeper = harder" behavior). Re-confirmed: `_AscendDescend` O1/O2/O3 W1 = 2 / 3 / 4 Zephyrites. **This changed counts across the whole `waves.md` — re-derive any transcribed wave lists from the regenerated file.**
+
 **Designated-boss pointer (extractor gotcha, fixed).** Every Soul Savior `ScenarioData` stores its *designated boss* as a doubled `PPtr<CharacterData>` (two identical copies, 12 bytes apart) at the tail of the final wave group. That pointer is a real combatant **only in `BossBattle` scenarios** (where it's the region boss). In a minor `Battle` it points at the run's order-1 boss (Maera) as metadata and does **not** spawn — the actual combatant is the *single-copy* minor boss earlier in the wave. `mt2_extract_waves.py` now collapses the duplicate for `BossBattle` and **drops** it for `Battle` (the `boss_counts[...] >= 2 and not is_boss_battle` guard in `parse_scenario`). Single-copy bosses (e.g. Astrael in `R0_Battle`) are always genuine and kept. If a future patch makes a minor boss appear doubled, this heuristic would wrongly drop it — re-verify against a known minor battle (Korin in `R1_Battle_AscendAttacker`).
 
-- [ ] **Decide per-variant vs per-region boss waves.** `BOSS_WAVE_DESCRIPTIONS` is currently keyed per region ("single wave composition regardless of variant"), but `waves.md` has 3 distinct boss-battle wave sets per region (one per variant). Likely needs to become per-variant.
-- [ ] **Nail the variant↔scenario pairing** within each boss trio (e.g. which of Stern Sister / Sibling Hierarchy / Eldest Scion is DutifulChild_AscendDescend vs _Burst vs _Heal). Lead: match the `BossBattle` suffix tag to the variant's mutator effect in `index.html`. Confirmed example — **Sibling Hierarchy ↔ `DutifulChild_Burst`** (its Overachiever mutator = "Bosses enter with Burst", index.html ~L393). Work the rest the same way.
+- [x] **Per-variant boss waves — DONE.** `BOSS_WAVE_DESCRIPTIONS` is now keyed by boss **variant name** (not region). Main-region bosses store an order-scaled `[O1..O4]` array; Astrael (O1 only) and Lifemother (O4 only) store a single string. `WAVE_SET_DESCRIPTIONS` is likewise order-scaled `[O1..O4]` per wave-set. `app.js` resolves both through the shared `pickByOrder(entry, region)` helper (same string-vs-array pattern as `BOSS_STATS`).
+- [ ] **Nail the variant↔scenario pairing** within each boss trio. **Rule discovered from the wiki: the `BossBattle` suffix tag = the named boss's *own* combat mechanic** (not its defeat mutator). Validated cleanly on R5 and R3:
+  - **R5 Lifemother — 3/3 confident:** The Corpseflower (spreads Debuff effects) ↔ `Lifemother_Debuffs` · The Swarmhost (gains Infested on Harvest) ↔ `Lifemother_Infested` · The Undying Bloom (applies Reanimate) ↔ `Lifemother_Reanimate`.
+  - **R3 Tivi — 2 confident + 1 by elimination:** Duplicitous (copies enemies) ↔ `DuplicateEnemy` · Prankster (adds Tivi's Scourge cards) ↔ `Scourge` · Mischievous Child (Sniper/Advance) ↔ `StealBuffs1` *(by elimination; name doesn't obviously match — verify against waves.md)*.
+  - **R2 Thaddeus / R4 Lylith — RESOLVED via boss internal name (2026-06-14).** The numbered *section* suffix (`FavoredChild_{1,2,3}`, `EstrangedChild_{1,2,3}`) is opaque, but the final-wave boss `CharacterData` internal name encodes the mechanic and matches the wiki 1:1 (read from `waves.json`). Numbering does **not** follow the wiki listing order.
+    - **R2:** `FavoredChild_1` = `…Indulgent_GorgeOnSlay` → **Insatiable** · `FavoredChild_2` = `…_ReduceCapacityResolve` → **Train Chomper** · `FavoredChild_3` = `…_Titanskin` → **Thick Skinned**.
+    - **R4:** `EstrangedChild_1` = `…Spurned_DualismAt50` → **Plaguebringer** · `EstrangedChild_2` = `…_ArmorPerDebuff` → **Inoculation** · `EstrangedChild_3` = `…_WitherbloomOnAction` → **Energy Vampire**.
+  - **R1 Maera — RESOLVED in-game (2026-06-14).** Confirmed live: Maera applying *Rage 3 to enemy units on Shift* (the wiki's Sibling Hierarchy mechanic) appeared in the `_AscendDescend` section → **Sibling Hierarchy ↔ `_AscendDescend`** confirmed. This validates the "suffix = boss's own mechanic" rule and **refutes the old "Sibling Hierarchy ↔ `_Burst`" claim** (that one mistakenly matched the *defeat mutator* Overachiever = "Bosses enter with Burst"). By the rule, the trio is: **Stern Sister ↔ `_Burst`** (Burst to self/enemies) · **Sibling Hierarchy ↔ `_AscendDescend`** (Rage on Shift) · **Eldest Scion ↔ `_Heal`** (Armor on Resolve; the Sentinel-heavy wave-set outlier corroborates it). **All four boss regions now fully paired** (R1 in-game · R3 + R5 by mechanic suffix · R2 + R4 by boss internal name).
 - [x] **Quoto (R2) and Ajax (R4) resolved.** Both are alternate bosses that **reuse their sibling's wave set** (Quoto↔Elebor, Ajax↔Qel) — no separate wave scenario, by design. Their **boss stat data is present in `roster.json`** (`…R2_TrainBoss_Titanskin` / `…R4_TrainBoss_EmberGranter`). `Gluttonous Masses` covers both R2 battle scenarios. See the Game knowledge "Alternate bosses" note.
-- [ ] **Fill `WAVE_SET_DESCRIPTIONS`** (battle wave-sets) and **`BOSS_WAVE_DESCRIPTIONS`** from `waves.md`. The wave-set → scenario mapping below is now **confirmed** (each minor boss's name appears in its scenario's final wave); just transcribe the per-wave enemy lists.
+- [x] **`WAVE_SET_DESCRIPTIONS` + `BOSS_WAVE_DESCRIPTIONS` filled — DONE** via `extraction/mt2_emit_wave_descriptions.py --write gamedata.js` (generated from `out/waves.json`, not hand-transcribed). Each entry renders one wave per line (`<br>`-separated), e.g. `① Zephyrite, Zephyrite, Zephyrite, Mother's Flautist` … `⑥ Maera the Dutiful, …` — circled wave number prefix, every enemy listed individually (no count consolidation). The scenario↔variant pairings live in that script's two mapping dicts. **Re-run it after `mt2_extract_waves.py`** to refresh.
+- [x] **`BOSS_STATS` wired to the pipeline — DONE (2026-06-14)** via `extraction/mt2_emit_boss_stats.py --write gamedata.js`, which reuses `mt2_build_outputs.compute_orders` (lifted out of `main()` to a module-level fn so the math has one source of truth). Keyed by variant name: main-region + minor bosses → `['O1','O2','O3','O4']` of `'ATK⚔️ HP❤️'`; Astrael (O1) and Lifemother (final) → single fixed string. Region-boss formula confirmed correct (e.g. Mischevious Child O1 = 21/1320 matched the prior hand value). **Re-run after `mt2_extract_roster.py` + `mt2_extract_scaling.py`.**
+- [ ] **Minor-boss HP formula is wrong (Athane issue, 2026-06-14).** `boss_overgrowth_scaled` is applied to **all** `is_boss` enemies, but its large additive HP constants (`+1224/+2703/+3883`) over-inflate the small-base **minor "TrainBoss" bosses** (Athane/Korin/Elebor/Quoto/Phalanx/Undying Spirit/Qel/Ajax). Example — **Athane the Fallen** (base 5/400): emitted O3 = **36⚔️/4667❤️**, but a prior observed value in `gamedata.js` was **44⚔️/2908❤️** (HP ~0.6× the formula). Same pattern on Elebor O4 (obs 66/4867 vs 69/8528) and Ajax O2 (29/1470 vs 30/2012). Region bosses (Maera/Thaddeus/Tivi/Lylith) + Astrael + Lifemother look correct; only the minor TrainBosses are off — they likely scale by a **different formula**. These numbers are emitted anyway (better than `0⚔️ 0❤️`). **Action:** gather ground-truth minor-boss observations (note: `boss_observations.csv` referenced by `mt2_build_outputs.py` is **not in the repo** — only `docs/boss_scaling.md` / `docs/enemy_scaling.md`), derive the minor-boss formula, then split the boss code path in `compute_orders` / `boss_overgrowth_scaled` and re-emit.
 
 Wave-set → scenario mapping (**confirmed** — see the Minor boss → wave set table in Game knowledge):
 - `Dutiful Sentinels` → `R1_Battle_HealOnShiftHeavy` (Athane) · `Favored Ascent` → `R1_Battle_AscendAttacker` (Korin)
 - `Gluttonous Masses` → `R2_Battle_TroopBuffFeed` **and** `R2_Battle_TroopTitanskin` (Elebor)
 - `Harassing Snipers` → `R3_Battle_StealthSniper` (Phalanx) · `Rabble-Rousers` → `R3_Battle_Decoys` (Undying Spirit)
 - `Plague Legion` → `R4_Battle_MultistrikeDebuffer` (Qel)
+
+## TODO — enemy stat hover (observation table)
+
+Goal: hovering an enemy name in the info box's wave lists shows that enemy's ATK/HP. Every wave-list name resolves to a roster entry, so the data exists — but the values must be **observed, not computed**.
+
+**Why a custom observation table (not a formula).** The non-boss O2–O4 scaling formula has never been solved (see `docs/enemy_scaling.md` — ~77% ATK / 57% HP match, best-effort only). So enemy order-scaled stats can't be trusted from the pipeline. Instead, maintain a hand-curated **observation table** of ground-truth ATK/HP by Oversoul order (O1–O4), scoped to **Soul Savior enemies only** (the full roster has 382 chars; SS is ~35 enemies).
+
+- **Source of truth = `enemy_observations.csv`** (repo root, committed — *not* under gitignored `data/`), **hand-edited directly in Excel**, no app or UI. Columns: `Name, Internal, Base ATK, Base HP, O1 ATK, O1 HP, O2 ATK, O2 HP, O3 ATK, O3 HP, O4 ATK, O4 HP, Reviewed and correct`. `extraction/mt2_emit_enemy_stats.py` reads it to emit `ENEMY_STATS`; the user fills/corrects cells in Excel and commits the CSV, then re-runs the emit.
+- **Keyed by `Internal`, not Subtype.** Internal name is unique across all 34 SS-enemy rows, so it cleanly distinguishes the duplicate display names (`Mother's Amalgam` / `Blade` / `Supplicant` each have two distinct internals). The CSV itself is unambiguous; only the *wave-list reference* (display name) is still ambiguous — see the duplicate-rows note below.
+- **`Reviewed and correct` column:** one flag per enemy row, marking the row's values were confirmed in-game. Per-row, not per-order. (Currently informational — the emit doesn't gate on it.)
+- **Source data was already being recorded** in `data/Enemy-Observations.xlsx` (~46% of order-cells filled with real hand-observed values that differ from the formula). The seed CSV was built from *that*, not the formula tab, preserving those observations; blank cells = not yet observed (emitted as `null`).
+
+- [x] **Seed CSV built — DONE.** `enemy_observations.csv` generated from `data/Enemy-Observations.xlsx` (real observations preserved, `Internal` key, `Reviewed and correct`=FALSE everywhere). Hand-maintained in Excel thereafter.
+- [x] **`ENEMY_STATS` in `gamedata.js` — DONE** via `extraction/mt2_emit_enemy_stats.py --write gamedata.js`. Keyed by display name → `[O1,O2,O3,O4]` of `'ATK⚔️ HP❤️'`, `null` per unobserved order. Same string/array shape as `BOSS_STATS` (so `pickByOrder` semantics apply). **Re-run after editing the CSV.**
+- [x] **Hover wired in `app.js` — DONE.** `wrapEnemyStats(html, order)` wraps recognized enemy names in the info-box wave lists in a `<span class="enemy-stat" title="…">` (native tooltip, dotted underline styled in `index.html`). Order resolved by `encounterOrder(key)` (astrael=O1, lifemother=O4, mid-run = region Order dropdown). Unobserved/no-order → title says "not yet recorded". Popup deliberately uses the native `title` (deferred styled-tooltip option not taken).
+- [ ] **Duplicate enemy rows — extraction bug, not a game thing.** Several SS enemies share a display name with distinct internals (`Mother's Amalgam` / `Blade` / `Supplicant`). The CSV disambiguates by `Internal`, but `ENEMY_STATS` is keyed by display name and the wave lists reference enemies by display name only, so the hover can't tell which row. **Interim rule:** `mt2_emit_enemy_stats.py` keeps the **first** CSV row per display name. **Real fix:** carry internal identity from `waves.json` into the wave descriptions so the hover keys on `Internal`.
 
 ## index.html (the product)
 
@@ -192,7 +226,7 @@ Wave-set → scenario mapping (**confirmed** — see the Minor boss → wave set
 It is being split into separate files (load order matters — data before logic, all **classic** `<script src>`, never `type="module"`, so top-level `const`s stay visible across files and it still works on `file://`):
 
 - `index.html` — markup + `<style>` only
-- `gamedata.js` — **pipeline-generated**: `BOSS_STATS`, `BOSS_WAVE_DESCRIPTIONS`, `WAVE_SET_DESCRIPTIONS` (exactly today's `'0⚔️ 0❤️'` / `'TBD'` placeholders)
+- `gamedata.js` — **pipeline-generated**: `BOSS_STATS` (by `mt2_emit_boss_stats.py`), `BOSS_WAVE_DESCRIPTIONS` + `WAVE_SET_DESCRIPTIONS` (by `mt2_emit_wave_descriptions.py`)
 - `gamefacts.js` — **hand-authored wiki facts**, NOT extractable: `MUTATORS`, `variantDescriptions`, `VARIANT_OPTIONS`, `WAVE_SET_OPTIONS`. The pipeline must never write this file.
 - `app.js` — tracker logic (all functions) + UI config (`CENTRAL_NODE_OPTIONS`, `TRACK_NODE_OPTIONS`, `PATH_TRACK_OPTIONS`, `ORDER_OPTIONS`, `encounterInfo`)
 

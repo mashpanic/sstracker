@@ -145,6 +145,33 @@ def role_of(e):
     if e['is_support']: return 'Support'
     return 'Heavy'   # health identical for all non-support combat roles; attack uses boss flag
 
+def compute_orders(e, diff, total_pct):
+    """Per-order ATK/HP dict (o1a..o5h, None where N/A) for one character.
+    Single source of truth for both the xlsx/HTML build and the gamedata emitter."""
+    role = role_of(e)
+    if is_o1_only(e):
+        if e['is_boss'] and diff == 'Overgrowth':
+            r = boss_overgrowth_scaled(e['atk'], e['hp'])
+            o1a, o1h = r['o1a'], r['o1h']
+        else:
+            o1a = scaled(e['atk'], total_pct(diff, 1, role, 'atk'))
+            o1h = scaled(e['hp'],  total_pct(diff, 1, role, 'hp'))
+        return {'o1a': o1a, 'o1h': o1h,
+                'o2a': None, 'o2h': None, 'o3a': None, 'o3h': None,
+                'o4a': None, 'o4h': None, 'o5a': None, 'o5h': None}
+    if e['is_boss'] and diff == 'Overgrowth':
+        if is_lifemother(e):
+            return lifemother_overgrowth_scaled(e['atk'], e['hp'])
+        return boss_overgrowth_scaled(e['atk'], e['hp'])
+    if not e['is_boss'] and diff == 'Overgrowth':
+        return enemy_overgrowth_scaled(e['atk'], e['hp'], e['is_support'])
+    out = {}
+    for o in range(1, 5):
+        out['o%da' % o] = scaled(e['atk'], total_pct(diff, o, role, 'atk'))
+        out['o%dh' % o] = scaled(e['hp'],  total_pct(diff, o, role, 'hp'))
+    out['o5a'] = out['o5h'] = None
+    return out
+
 def main():
     indir=getarg('--in','.')
     diff=getarg('--difficulty','Overgrowth')
@@ -174,29 +201,7 @@ def main():
     total_pct=build_model(scaling)
 
     def regions_for(e):
-        role = role_of(e)
-        if is_o1_only(e):
-            if e['is_boss'] and diff == 'Overgrowth':
-                r = boss_overgrowth_scaled(e['atk'], e['hp'])
-                o1a, o1h = r['o1a'], r['o1h']
-            else:
-                o1a = scaled(e['atk'], total_pct(diff, 1, role, 'atk'))
-                o1h = scaled(e['hp'],  total_pct(diff, 1, role, 'hp'))
-            return {'o1a': o1a, 'o1h': o1h,
-                    'o2a': None, 'o2h': None, 'o3a': None, 'o3h': None,
-                    'o4a': None, 'o4h': None, 'o5a': None, 'o5h': None}
-        if e['is_boss'] and diff == 'Overgrowth':
-            if is_lifemother(e):
-                return lifemother_overgrowth_scaled(e['atk'], e['hp'])
-            return boss_overgrowth_scaled(e['atk'], e['hp'])
-        if not e['is_boss'] and diff == 'Overgrowth':
-            return enemy_overgrowth_scaled(e['atk'], e['hp'], e['is_support'])
-        out = {}
-        for o in range(1, 5):
-            out['o%da' % o] = scaled(e['atk'], total_pct(diff, o, role, 'atk'))
-            out['o%dh' % o] = scaled(e['hp'],  total_pct(diff, o, role, 'hp'))
-        out['o5a'] = out['o5h'] = None
-        return out
+        return compute_orders(e, diff, total_pct)
 
     # ---- spreadsheets ----
     try:
