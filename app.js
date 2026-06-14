@@ -218,7 +218,8 @@ function wrapEnemyStats(html, order) {
     return html.replace(ENEMY_NAME_RE, name => {
         const v = order && ENEMY_STATS[name] ? ENEMY_STATS[name][order - 1] : null;
         const title = v || `${name} — ATK/HP not yet recorded${order ? ' for O' + order : ''}`;
-        return `<span class="enemy-stat" title="${title}">${name}</span>`;
+        const cls = v ? 'enemy-stat' : 'enemy-stat unrecorded';
+        return `<span class="${cls}" title="${title}">${name}</span>`;
     });
 }
 

@@ -102,7 +102,7 @@ const variantDescriptions = {
     'Inoculation': 'Lylith gains 3x Armor per Malaise on Strike.',
 
     // Lifemother
-    'The Corpseflower': 'The Lifemother applies Malaise 12 on Strike and spreads Debuff effects on Hellborne Harvest. Enemies are Witherbloom and Regen.',
-    'The Swarmhost': 'The Lifemother gains Infested 2 on Harvest. Enemies are Gorge.',
-    'The Undying Bloom': 'The Lifemother applies Witherbloom 10 to the front friendly unit and Reanimate 2 to front enemy unit at the end of the turn. Enemies are Shift, Jeermask, Snipers.'
+    'The Corpseflower': 'The Lifemother applies Malaise 12 on Strike and spreads Debuff effects on Hellborne Harvest.',
+    'The Swarmhost': 'The Lifemother gains Infested 2 on Harvest.',
+    'The Undying Bloom': 'The Lifemother applies Witherbloom 10 to the front friendly unit and Reanimate 2 to front enemy unit at the end of the turn.'
 };
