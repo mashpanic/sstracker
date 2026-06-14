@@ -143,15 +143,20 @@ def wave_min_tier(chunk, wave_start, prev_end):
     defaulted to min_tier 0 and wrongly showed at O1 (e.g. Plaguebringer O1
     showed 6 waves instead of 4).  Returns 0 if no condition (always present).
 
-    NOTE: a "(Bonus)" label (no number) also precedes some wave groups
-    (R1/R3 bosses, some battles) and is NOT handled — its tier gating is
-    unverified, so those waves stay always-present pending an in-game check.
+    A fourth phrasing — an unnumbered "(Bonus)" label (R1/R3 bosses, some R1
+    battles) — gates the wave too but carries no number.  Verified in-game +
+    wiki (Maera & Tivi bosses have 4 waves at O1): the two "(Bonus)" groups sit
+    in the same slots the numbered gates occupy and map to min_tier 1 then 2.
+    We signal it with the sentinel 'bonus'; parse_scenario resolves it to a
+    sequential tier (1st bonus -> 1, 2nd -> 2, …).
     """
     gap = chunk[prev_end:wave_start]
     m = (re.search(rb'Complete (\d+)', gap)
          or re.search(rb'(\d+) Regions? Complete', gap)
          or re.search(rb'Distance (\d+)', gap))
-    return int(m.group(1)) if m else 0
+    if m:
+        return int(m.group(1))
+    return 'bonus' if b'(Bonus)' in gap else 0
 
 
 def reconstruct_variants(wave_hits):
@@ -205,11 +210,15 @@ def parse_scenario(name, chunk, pid_to_internal, pid_to_display, pid_is_boss, rd
 
     wave_groups = []
     prev_end = 0
+    bonus_idx = 0   # nth "(Bonus)" group -> min_tier n (1st bonus = O2+, 2nd = O3+)
 
     for grp in groups:
         wave_start = grp[0][0]
         wave_end   = grp[-1][0] + 12   # fileID(4) + pathID(8)
         min_tier   = wave_min_tier(chunk, wave_start, prev_end)
+        if min_tier == 'bonus':
+            bonus_idx += 1
+            min_tier = bonus_idx
         variants   = reconstruct_variants(grp)
 
         named = {}
