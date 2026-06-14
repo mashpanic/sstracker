@@ -27,6 +27,20 @@ def stat(a, h):
     return f'{a}⚔️ {h}❤️' if a and h else PLACEHOLDER
 
 
+# Internals in the observation CSV that never spawn in any Soul Savior wave
+# (verified against out/waves.json: scan every wave_group/order, collect the
+# internals present, and these aren't among them). Each is a roster-only
+# duplicate of a display name whose *other* internal is the one that actually
+# appears in waves — so dropping these makes the display-name → stats lookup
+# resolve to the enemy you actually fight. Re-derive after a patch (see the
+# duplicate-rows TODO in CLAUDE.md; the real fix is keying waves on Internal).
+EXCLUDE_INTERNALS = {
+    'R3_HeavyT2_Basic',               # Mother's Blade   → spawns as R3_HeavyT1_Basic_Ver2
+    'R4_Heavy_ArmorIfUnblocked_Ver2', # Mother's Amalgam → spawns as RAny_Heavy_T2_BurstIfUnblocked
+    'R3_MageT2_Junker',               # Mother's Supplicant → spawns as R3_MageT3_Junker_Ver2
+}
+
+
 def load_rows(csv_path):
     with open(csv_path, newline='') as f:
         return list(csv.DictReader(f))
@@ -45,8 +59,10 @@ def render_block(rows):
     seen = set()
     for r in rows:
         name = (r.get('Name') or '').strip()
+        if (r.get('Internal') or '').strip() in EXCLUDE_INTERNALS:
+            continue  # roster-only duplicate that never spawns in a wave
         if not name or name in seen:
-            continue  # first row wins for duplicate display names
+            continue  # safety: first row wins for any remaining duplicate name
         seen.add(name)
         vals = [stat(r.get(f'O{n} ATK'), r.get(f'O{n} HP')) for n in (1, 2, 3, 4)]
         lines.append(f'    {json.dumps(name)}: {json.dumps(vals, ensure_ascii=False)},')

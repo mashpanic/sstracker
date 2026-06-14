@@ -11,7 +11,7 @@ Mother's Blade,R3_HeavyT2_Basic,4,60,8,108,,,11,119,,,FALSE
 Mother's Cherub,R2_Support_FeedBuffs_Ver2,0,30,0,41,0,44,0,46,0,49,FALSE
 Mother's Fiend,RAny_Horde_T1_DeathAddsHivemind_Ver2,2,3,,,,,,,,,FALSE
 Mother's Flagellant,R1_HeavyT1_LoseHealthOnMove_Ver2,3,80,5,108,,,,,9,125,FALSE
-Mother's Flautist,R1_EnchanterT1_Speed_Ver2,2,5,2,7,,,,,2,11,FALSE
+Mother's Flautist,R1_EnchanterT1_Speed_Ver2,2,5,2,7,2,9,,,2,11,FALSE
 Mother's Fleshfruit,R2_Support_FeedInfested_T2,0,60,,,,,0,90,0,94,FALSE
 Mother's Glutmass,R2_Heavy_HealGorge_T2,15,250,,,,,29,366,32,381,FALSE
 Mother's Hunter,RAny_Attacker_Hunter_Hivemind_Ver2,3,3,5,5,6,6,8,7,9,9,FALSE
