@@ -3,11 +3,9 @@ Fleshfruit,R2_Support_FeedInfested,0,30,0,41,0,44,,,,,FALSE
 Glutmass,R2_Heavy_HealGorge,8,60,12,51,14,86,15,90,,,FALSE
 Jeermask,R3_Horde_T1_Decoy,0,1,0,2,,,0,5,0,6,FALSE
 Longlash,R3_Attacker_T1_StealthSniper,7,4,11,6,,,,,,,FALSE
-Mother's Amalgam,R4_Heavy_ArmorIfUnblocked_Ver2,5,150,,,,,,,,,FALSE
 Mother's Amalgam,RAny_Heavy_T2_BurstIfUnblocked,8,140,12,189,14,198,15,206,17,215,FALSE
 Mother's Assassin,R4_Attacker_SweepDebuffer_Ver2,4,8,,,8,13,9,14,11,15,FALSE
-Mother's Blade,R3_HeavyT1_Basic_Ver2,5,80,,,,,,,,,FALSE
-Mother's Blade,R3_HeavyT2_Basic,4,60,8,108,,,11,119,,,FALSE
+Mother's Blade,R3_HeavyT1_Basic_Ver2,5,80,8,108,,,11,119,,,FALSE
 Mother's Cherub,R2_Support_FeedBuffs_Ver2,0,30,0,41,0,44,0,46,0,49,FALSE
 Mother's Fiend,RAny_Horde_T1_DeathAddsHivemind_Ver2,2,3,,,,,,,,,FALSE
 Mother's Flagellant,R1_HeavyT1_LoseHealthOnMove_Ver2,3,80,5,108,,,,,9,125,FALSE
@@ -22,7 +20,6 @@ Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,,,,,33,293,38,306,FA
 Mother's Plaguehost,R4_Heavy_SpreadDebuffs_T2,10,160,,,,,,,23,245,FALSE
 Mother's Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker_Ver2,6,3,,,,,,,,,FALSE
 Mother's Spearman,R1_AttackerT1_Spearman_Ver2,9,3,,,,,,,,,FALSE
-Mother's Supplicant,R3_MageT2_Junker,3,4,,,,,,,,,FALSE
 Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,,,,,8,30,,,FALSE
 Mother's Terrifying Amalgam,R3_Heavy_PyreDamageIfUnblocked_Ver2,5,250,,,,,,,,,FALSE
 Mother's Witchwarden,R4_Support_RegenEnemies_T2,22,40,,,,,22,60,22,63,FALSE

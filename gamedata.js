@@ -67,7 +67,7 @@ const ENEMY_STATS = {
     "Longlash": ["11⚔️ 6❤️", null, null, null],
     "Mother's Amalgam": ["12⚔️ 189❤️", "14⚔️ 198❤️", "15⚔️ 206❤️", "17⚔️ 215❤️"],
     "Mother's Assassin": [null, "8⚔️ 13❤️", "9⚔️ 14❤️", "11⚔️ 15❤️"],
-    "Mother's Blade": [null, null, null, null],
+    "Mother's Blade": ["8⚔️ 108❤️", null, "11⚔️ 119❤️", null],
     "Mother's Cherub": ["0⚔️ 41❤️", "0⚔️ 44❤️", "0⚔️ 46❤️", "0⚔️ 49❤️"],
     "Mother's Fiend": [null, null, null, null],
     "Mother's Flagellant": ["5⚔️ 108❤️", null, null, "9⚔️ 125❤️"],
