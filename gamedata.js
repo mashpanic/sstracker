@@ -62,7 +62,7 @@ const BOSS_STATS = {
 // edit the CSV (in Excel), not this block.
 const ENEMY_STATS = {
     "Fleshfruit": ["0⚔️ 41❤️", "0⚔️ 44❤️", null, null],
-    "Glutmass": ["12⚔️ 51❤️", "14⚔️ 86❤️", "15⚔️ 90❤️", "17⚔️ 94❤️"],
+    "Glutmass": ["12⚔️ 81❤️", "14⚔️ 86❤️", "15⚔️ 90❤️", "17⚔️ 94❤️"],
     "Jeermask": ["0⚔️ 2❤️", "0⚔️ 3❤️", "0⚔️ 5❤️", "0⚔️ 6❤️"],
     "Longlash": ["11⚔️ 6❤️", "12⚔️ 7❤️", null, null],
     "Mother's Amalgam": ["12⚔️ 189❤️", "14⚔️ 198❤️", "15⚔️ 206❤️", "17⚔️ 215❤️"],
@@ -70,7 +70,7 @@ const ENEMY_STATS = {
     "Mother's Blade": ["8⚔️ 108❤️", "9⚔️ 114❤️", "11⚔️ 119❤️", "12⚔️ 125❤️"],
     "Mother's Cherub": ["0⚔️ 41❤️", "0⚔️ 44❤️", "0⚔️ 46❤️", "0⚔️ 49❤️"],
     "Mother's Fiend": ["3⚔️ 5❤️", null, null, "6⚔️ 9❤️"],
-    "Mother's Flagellant": ["5⚔️ 108❤️", null, null, "9⚔️ 125❤️"],
+    "Mother's Flagellant": ["5⚔️ 108❤️", "6⚔️ 114❤️", null, "9⚔️ 125❤️"],
     "Mother's Flautist": ["2⚔️ 7❤️", "2⚔️ 9❤️", "2⚔️ 10❤️", "2⚔️ 11❤️"],
     "Mother's Fleshfruit": [null, null, "0⚔️ 90❤️", "0⚔️ 94❤️"],
     "Mother's Glutmass": [null, null, "29⚔️ 366❤️", "32⚔️ 381❤️"],
@@ -79,7 +79,7 @@ const ENEMY_STATS = {
     "Mother's Knight": ["15⚔️ 81❤️", "17⚔️ 86❤️", "20⚔️ 90❤️", "23⚔️ 94❤️"],
     "Mother's Longlash": [null, null, "33⚔️ 19❤️", "38⚔️ 21❤️"],
     "Mother's Ossivane Sentinel": [null, "33⚔️ 293❤️", "33⚔️ 293❤️", "38⚔️ 306❤️"],
-    "Mother's Plaguehost": [null, null, null, "23⚔️ 245❤️"],
+    "Mother's Plaguehost": [null, null, "20⚔️ 235❤️", "23⚔️ 245❤️"],
     "Mother's Sharp-Eye Sniper": [null, null, null, null],
     "Mother's Spearman": [null, null, null, null],
     "Mother's Supplicant": [null, "6⚔️ 29❤️", "8⚔️ 30❤️", "9⚔️ 32❤️"],
@@ -90,7 +90,7 @@ const ENEMY_STATS = {
     "Ossivane Sentinel": ["12⚔️ 81❤️", "14⚔️ 86❤️", null, null],
     "Plaguehost": ["8⚔️ 95❤️", "9⚔️ 99❤️", "11⚔️ 103❤️", null],
     "Sharp-Eye Sniper": ["8⚔️ 3❤️", null, null, null],
-    "Witchwarden": ["10⚔️ 17❤️", "10⚔️ 18❤️", null, null],
+    "Witchwarden": ["10⚔️ 17❤️", "10⚔️ 18❤️", "10⚔️ 19❤️", null],
     "Zephyrite": ["12⚔️ 9❤️", "14⚔️ 10❤️", "15⚔️ 11❤️", null],
 };
 
