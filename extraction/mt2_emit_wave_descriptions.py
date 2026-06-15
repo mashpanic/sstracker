@@ -22,7 +22,11 @@ Usage:  python3 mt2_emit_wave_descriptions.py [--in out] [--write gamedata.js]
 """
 import sys, os, re, json
 
-# wave-set name (WAVE_SET_OPTIONS in gamefacts.js) → scenario key
+# wave-set name (WAVE_SET_OPTIONS in gamefacts.js) → scenario key.
+# The emitted wave string ends with whichever minor boss the extractor found in
+# that scenario, but the boss is chosen independently of the wave set — app.js
+# swapBattleBoss() substitutes the actually-selected battle variant at render
+# time, so don't treat the baked-in boss name here as authoritative.
 WAVESET_TO_SCENARIO = {
     'Dutiful Sentinels': 'SoulSavior_R1_Battle_HealOnShiftHeavy',
     'Favored Ascent':    'SoulSavior_R1_Battle_AscendAttacker',

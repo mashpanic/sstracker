@@ -76,20 +76,20 @@ https://monstertrain2.miraheze.org/wiki/Final_Battle
 
 Section counts per region: `R0` = 2 Battle / 0 BossBattle · `R1`–`R3` = 2 Battle / 3 BossBattle · `R4` = 1 Battle / 3 BossBattle (Ajax shares Qel's Battle) · `R5` = 0 Battle / 3 BossBattle. BossBattle variant families by region: `R1` Maera = `DutifulChild_{AscendDescend,Burst,Heal}` · `R2` Thaddeus = `FavoredChild_{1,2,3}` · `R3` Tivi = `{DuplicateEnemy,Scourge,StealBuffs1}` · `R4` Lylith = `EstrangedChild_{1,2,3}` · `R5` Lifemother = `Lifemother_{Debuffs,Infested,Reanimate}`.
 
-**Minor boss → wave set** (originally derived by finding the minor boss's name in the final wave of each `waves.md` scenario; descriptive names are the `WAVE_SET_OPTIONS` from `index.html`):
+**Wave set → scenario** (descriptive names are the `WAVE_SET_OPTIONS` from `index.html`). The wave-set ↔ `waves.md` scenario link is solid; the **"boss found"** column is just whichever minor boss the extractor happened to find in that scenario's final wave.
 
-> ⚠️ **This table's 1:1 pairing is WRONG — the boss and wave set are independent.** Confirmed by the user's play experience and the Tivi's Region wiki page: for R3, *either* Phalanx *or* The Undying Spirit can appear with *either* Harassing Snipers *or* Rabble-Rousers. So the minor boss is not locked to a wave set; the rows below only record which boss the extractor happened to find in each scenario's final wave, not an exclusive pairing. The same is likely true for the other paired-minor regions (R1 Athane/Korin, R2 Elebor/Quoto, R4 Qel/Ajax). See the TODO "Minor boss ↔ wave set is not a fixed pairing".
+> **The minor boss and the wave set are INDEPENDENT — not a fixed pairing.** Confirmed by play + the Tivi's Region wiki: for R3, *either* Phalanx *or* The Undying Spirit can front *either* Harassing Snipers *or* Rabble-Rousers; the same holds for the other paired-minor regions. So "boss found" below is **not** an exclusive pairing — it's only the boss baked into that scenario's extract. The app handles this correctly: `swapBattleBoss()` in `app.js` shows whichever minor boss you actually selected, regardless of wave set (see the resolved TODO).
 
-| Minor boss | Wave-set name | `waves.md` scenario key |
-|------------|---------------|--------------------------|
-| Korin the Judged | Favored Ascent | `SoulSavior_R1_Battle_AscendAttacker` |
-| Athane the Fallen | Dutiful Sentinels | `SoulSavior_R1_Battle_HealOnShiftHeavy` |
-| Elebor the Unstoppable | Gluttonous Masses | `SoulSavior_R2_Battle_TroopBuffFeed` **and** `SoulSavior_R2_Battle_TroopTitanskin` (Elebor fronts both) |
-| Phalanx | Harassing Snipers | `SoulSavior_R3_Battle_StealthSniper` |
-| The Undying Spirit | Rabble-Rousers | `SoulSavior_R3_Battle_Decoys` |
-| Qel the Malaiser | Plague Legion | `SoulSavior_R4_Battle_MultistrikeDebuffer` |
-| **Quoto the Destroyer** | (shares Elebor's) | reuses Elebor's R2 wave set — no separate wave scenario |
-| **Ajax the Deathbringer** | (shares Qel's) | reuses Qel's R4 wave set — no separate wave scenario |
+| Wave set | `waves.md` scenario key | Boss found in extract (not exclusive) |
+|----------|--------------------------|----------------------------------------|
+| Favored Ascent | `SoulSavior_R1_Battle_AscendAttacker` | Korin the Judged |
+| Dutiful Sentinels | `SoulSavior_R1_Battle_HealOnShiftHeavy` | Athane the Fallen |
+| Gluttonous Masses | `SoulSavior_R2_Battle_TroopBuffFeed` **and** `_TroopTitanskin` | Elebor (fronts both extracts); Quoto reuses this set |
+| Harassing Snipers | `SoulSavior_R3_Battle_StealthSniper` | Phalanx |
+| Rabble-Rousers | `SoulSavior_R3_Battle_Decoys` | The Undying Spirit |
+| Plague Legion | `SoulSavior_R4_Battle_MultistrikeDebuffer` | Qel; Ajax reuses this set |
+
+(R2's `Gluttonous Masses` is the only R2 wave set; R4's `Plague Legion` the only R4 — so the app auto-selects them. Quoto/Ajax don't have their own wave scenario; they reuse the sibling's, and the app swaps in the selected boss name.)
 
 **Alternate bosses (Quoto, Ajax).** Quoto is the alternate to Elebor in `R2`; Ajax is the alternate to Qel in `R4`. Per the user, each shares its sibling's wave set (same trash, swapped boss), which is why neither has its own `waves.md` scenario. **Their boss stat data *is* present in `roster.json`** — only the wave extraction is shared:
 
@@ -208,7 +208,7 @@ Goal: replace the `'Waves: TBD'` placeholders in `index.html` with the wave comp
 - [ ] **Minor-boss HP formula is wrong (Athane issue, 2026-06-14).** `boss_overgrowth_scaled` is applied to **all** `is_boss` enemies, but its large additive HP constants (`+1224/+2703/+3883`) over-inflate the small-base **minor "TrainBoss" bosses** (Athane/Korin/Elebor/Quoto/Phalanx/Undying Spirit/Qel/Ajax). Example — **Athane the Fallen** (base 5/400): emitted O3 = **36⚔️/4667❤️**, but a prior observed value in `gamedata.js` was **44⚔️/2908❤️** (HP ~0.6× the formula). Same pattern on Elebor O4 (obs 66/4867 vs 69/8528) and Ajax O2 (29/1470 vs 30/2012). Region bosses (Maera/Thaddeus/Tivi/Lylith) + Astrael + Lifemother look correct; only the minor TrainBosses are off — they likely scale by a **different formula**. These numbers are emitted anyway (better than `0⚔️ 0❤️`). **Action:** gather ground-truth minor-boss observations (note: `boss_observations.csv` referenced by `mt2_build_outputs.py` is **not in the repo** — only `docs/boss_scaling.md` / `docs/enemy_scaling.md`), derive the minor-boss formula, then split the boss code path in `compute_orders` / `boss_overgrowth_scaled` and re-emit.
   - [ ] **Check Quoto the Destroyer @ 37/4517 (observed).** Sits beside the emitted **O3** value `40⚔️ 4519❤️` (HP ~matches, ATK 37 vs 40). Confirm the order and reconcile — another data point for the minor-boss formula. Currently emitted Quoto = `["12⚔️ 528❤️","25⚔️ 1784❤️","40⚔️ 4519❤️","63⚔️ 8448❤️"]`.
 
-Wave-set → scenario mapping (the wave-set ↔ `waves.md` scenario link is solid; the parenthetical *boss* is **only the one the extractor found in that scenario, NOT an exclusive pairing** — see the ⚠️ correction on the Minor boss → wave set table and the pairing TODO):
+Wave-set → scenario mapping (the wave-set ↔ `waves.md` scenario link is solid; the parenthetical *boss* is **only the one the extractor found in that scenario, NOT an exclusive pairing** — see the "Wave set → scenario" table in Game knowledge and the resolved pairing TODO):
 - `Dutiful Sentinels` → `R1_Battle_HealOnShiftHeavy` (Athane) · `Favored Ascent` → `R1_Battle_AscendAttacker` (Korin)
 - `Gluttonous Masses` → `R2_Battle_TroopBuffFeed` **and** `R2_Battle_TroopTitanskin` (Elebor)
 - `Harassing Snipers` → `R3_Battle_StealthSniper` (Phalanx) · `Rabble-Rousers` → `R3_Battle_Decoys` (Undying Spirit)
