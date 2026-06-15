@@ -223,6 +223,19 @@ function wrapEnemyStats(html, order) {
     });
 }
 
+// A battle row's wave-set description bakes in whichever minor boss the
+// extractor found in that scenario, but the minor boss is chosen independently
+// of the wave set (verified: any R-region boss can front any of its wave sets;
+// and Quoto/Ajax reuse Elebor's/Qel's sets). So replace the baked region
+// candidate in the wave string with the actually-selected battle variant.
+function swapBattleBoss(waves, region, selected) {
+    if (!selected) return waves;
+    (VARIANT_OPTIONS[`${region}-battle-variant`] || []).forEach(name => {
+        if (name !== selected) waves = waves.split(name).join(selected);
+    });
+    return waves;
+}
+
 function getDisplayText(key) {
     const info = encounterInfo[key];
     const variantEl = document.getElementById(`${key}-variant`);
@@ -243,7 +256,7 @@ function getDisplayText(key) {
             const waveEl = document.getElementById(`${region}-wave-set`);
             if (waveEl && waveEl.value) {
                 const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveEl.value], region);
-                if (waves) text += '<br>' + wrapEnemyStats(waves, encounterOrder(key));
+                if (waves) text += '<br>' + wrapEnemyStats(swapBattleBoss(waves, region, variant), encounterOrder(key));
             }
         }
 
@@ -296,6 +309,22 @@ function handleVariantChange(selectEl) {
     if (!row) return;
 
     refreshMutatorBox(selectEl);
+
+    // Auto-select the wave set when the region offers only one (battle rows
+    // only — e.g. Thaddeus/Lylith each have a single wave set shared by both
+    // their minor bosses). Saves the redundant second pick. Done before the
+    // info-box refresh below so it reflects the wave set immediately.
+    if (selectEl.value && selectEl.id.endsWith('-battle-variant')) {
+        const region = selectEl.id.split('-')[0];
+        const opts = WAVE_SET_OPTIONS[region] || [];
+        if (opts.length === 1) {
+            const waveSel = document.getElementById(`${region}-wave-set`);
+            if (waveSel && waveSel.value !== opts[0]) {
+                waveSel.value = opts[0];
+                updateNodeDisplay(waveSel);
+            }
+        }
+    }
 
     // Picking a variant should select its row automatically (as if the
     // user had clicked it), so the info box updates without an extra click.
