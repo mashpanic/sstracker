@@ -1,6 +1,6 @@
 Name,Internal,Base ATK,Base HP,O1 ATK,O1 HP,O2 ATK,O2 HP,O3 ATK,O3 HP,O4 ATK,O4 HP,Reviewed and correct
 Fleshfruit,R2_Support_FeedInfested,0,30,0,41,0,44,,,,,FALSE
-Glutmass,R2_Heavy_HealGorge,8,60,12,51,14,86,15,90,,,FALSE
+Glutmass,R2_Heavy_HealGorge,8,60,12,51,14,86,15,90,17,94,FALSE
 Jeermask,R3_Horde_T1_Decoy,0,1,0,2,0,3,0,5,0,6,FALSE
 Longlash,R3_Attacker_T1_StealthSniper,7,4,11,6,12,7,,,,,FALSE
 Mother's Amalgam,RAny_Heavy_T2_BurstIfUnblocked,8,140,12,189,14,198,15,206,17,215,FALSE
