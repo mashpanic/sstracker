@@ -1,6 +1,7 @@
 # Monster Train 2 Run Tracker
 
 A run tracker for Monster Train 2.
+This tracker only covers Soul Savior Mode at Overgrowth difficulty.
 
 ## Links
 
