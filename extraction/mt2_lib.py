@@ -72,8 +72,13 @@ STAT_HP_INDEX = 3      # re-verify after patch
 STAT_ATK_INDEX = 13    # re-verify after patch
 
 # Characters confirmed unimplemented in the shipped game — excluded from all outputs.
+# Also includes Soul Savior enemy variants that exist in the roster but never
+# spawn in any SS wave (verified against waves.json): the player never fights
+# them, so they shouldn't appear in the SS enemy list / observation set.
 EXCLUDED_INTERNALS = {
     'Boss_SoulSavior_R1_TrainBoss_Athane_V2',
+    'R1_AttackerT1_Spearman_Ver2',          # Mother's Spearman — not in any SS wave
+    'R3_Heavy_PyreDamageIfUnblocked_Ver2',  # Mother's Terrifying Amalgam — not in any SS wave
 }
 
 def read_mname(data, off, le):
