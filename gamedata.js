@@ -78,7 +78,7 @@ const ENEMY_STATS = {
     "Mother's Jeermask": [null, null, null, "0⚔️ 6❤️"],
     "Mother's Knight": ["15⚔️ 81❤️", "17⚔️ 86❤️", "20⚔️ 90❤️", "23⚔️ 94❤️"],
     "Mother's Longlash": [null, null, "33⚔️ 19❤️", "38⚔️ 21❤️"],
-    "Mother's Ossivane Sentinel": [null, "33⚔️ 293❤️", "33⚔️ 293❤️", "38⚔️ 306❤️"],
+    "Mother's Ossivane Sentinel": [null, null, "33⚔️ 293❤️", "38⚔️ 306❤️"],
     "Mother's Plaguehost": [null, null, "20⚔️ 235❤️", "23⚔️ 245❤️"],
     "Mother's Sharp-Eye Sniper": [null, null, null, null],
     "Mother's Spearman": [null, null, null, null],
