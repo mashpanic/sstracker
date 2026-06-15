@@ -280,6 +280,16 @@ def parse_scenario(name, chunk, pid_to_internal, pid_to_display, pid_is_boss, rd
                     continue
                 seen_bosses.add(e["internal"])
             deduped.append(e)
+
+        # Boss placement: bosses spawn at the BACK of the wave in-game. The
+        # display order is storage-reversed, which puts a boss correctly at the
+        # back only when it was stored at the head (single-copy minor boss like
+        # Korin). The designated boss is appended at the *tail* of storage
+        # (doubled in BossBattle; single-copy Astrael), so reversal wrongly
+        # floats it to the front. Move any boss to the end so it always renders
+        # at the back. Idempotent for the already-correct head-stored case.
+        deduped = [e for e in deduped if not e["is_boss"]] + \
+                  [e for e in deduped if e["is_boss"]]
         tiers[tier][-1] = deduped
 
     # Astrael can only be O1; Lifemother can only be O4.
