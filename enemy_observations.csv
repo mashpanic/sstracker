@@ -18,7 +18,7 @@ Mother's Knight,RAny_Heavy_TitaniteUpFront_Ver2,10,60,15,81,17,86,20,90,23,94,FA
 Mother's Longlash,R3_Attacker_T3_StealthSniper_Ver2,18,12,-,-,-,-,33,19,38,21,FALSE
 Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,-,-,,,33,293,38,306,FALSE
 Mother's Plaguehost,R4_Heavy_SpreadDebuffs_T2,10,160,-,-,-,-,20,235,23,245,FALSE
-Mother's Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker_Ver2,6,3,-,-,,,,,,,FALSE
+Mother's Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker_Ver2,6,3,-,-,11,6,,,,,FALSE
 Mother's Spearman,R1_AttackerT1_Spearman_Ver2,9,3,-,-,-,-,-,-,-,-,FALSE
 Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,,,6,29,8,30,9,32,FALSE
 Mother's Terrifying Amalgam,R3_Heavy_PyreDamageIfUnblocked_Ver2,5,250,-,-,-,-,-,-,-,-,FALSE

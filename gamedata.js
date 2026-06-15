@@ -80,7 +80,7 @@ const ENEMY_STATS = {
     "Mother's Longlash": [null, null, "33⚔️ 19❤️", "38⚔️ 21❤️"],
     "Mother's Ossivane Sentinel": [null, null, "33⚔️ 293❤️", "38⚔️ 306❤️"],
     "Mother's Plaguehost": [null, null, "20⚔️ 235❤️", "23⚔️ 245❤️"],
-    "Mother's Sharp-Eye Sniper": [null, null, null, null],
+    "Mother's Sharp-Eye Sniper": [null, "11⚔️ 6❤️", null, null],
     "Mother's Spearman": [null, null, null, null],
     "Mother's Supplicant": [null, "6⚔️ 29❤️", "8⚔️ 30❤️", "9⚔️ 32❤️"],
     "Mother's Terrifying Amalgam": [null, null, null, null],
