@@ -65,10 +65,19 @@ BOSSVARIANT_TO_SCENARIO = {
 
 CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫'
 
+# In-game combatant display names to show under a friendlier label in the wave
+# lists. The Lifemother's Corpseflower form is named "Cycle Ender" in-game,
+# which doesn't match its variant name — show the variant name instead. (The
+# Swarmhost / Undying Bloom combatant names already contain their variant name,
+# so no override is needed for them.)
+DISPLAY_OVERRIDE = {
+    'The Lifemother - Cycle Ender': 'The Corpseflower',
+}
+
 
 def fmt_wave(wave, idx):
     # List every enemy individually (no count consolidation).
-    parts = [e['display'] for e in wave]
+    parts = [DISPLAY_OVERRIDE.get(e['display'], e['display']) for e in wave]
     num = CIRCLED[idx] if idx < len(CIRCLED) else f'({idx+1})'
     return f'{num} ' + ', '.join(parts)
 
