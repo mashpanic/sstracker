@@ -16,11 +16,11 @@ Mother's Hunter,RAny_Attacker_Hunter_Hivemind_Ver2,3,3,5,5,6,6,8,7,9,9,FALSE
 Mother's Jeermask,R3_Horde_T3_Decoy_Ver2,0,1,-,-,-,-,,,0,6,FALSE
 Mother's Knight,RAny_Heavy_TitaniteUpFront_Ver2,10,60,15,81,17,86,20,90,23,94,FALSE
 Mother's Longlash,R3_Attacker_T3_StealthSniper_Ver2,18,12,-,-,-,-,33,19,38,21,FALSE
-Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,-,-,-,-,33,293,38,306,FALSE
+Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,-,-,,,33,293,38,306,FALSE
 Mother's Plaguehost,R4_Heavy_SpreadDebuffs_T2,10,160,-,-,-,-,20,235,23,245,FALSE
 Mother's Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker_Ver2,6,3,-,-,11,6,,,,,FALSE
 Mother's Spearman,R1_AttackerT1_Spearman_Ver2,9,3,-,-,-,-,-,-,-,-,FALSE
-Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,,,6,29,8,30,9,32,FALSE
+Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,5,27,6,29,8,30,9,32,FALSE
 Mother's Terrifying Amalgam,R3_Heavy_PyreDamageIfUnblocked_Ver2,5,250,-,-,-,-,-,-,-,-,FALSE
 Mother's Witchwarden,R4_Support_RegenEnemies_T2,22,40,-,-,-,-,22,60,22,63,FALSE
 Mother's Zealot,R2_Attacker_Zealot_Ver2,14,45,21,61,24,64,27,67,30,69,FALSE
