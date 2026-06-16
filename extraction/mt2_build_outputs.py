@@ -53,9 +53,9 @@ VARIANT_NAMES = {
     'Boss_SoulSavior_R4_Spurned_WitherbloomOnAction': 'Energy Vampire',
     'Boss_SoulSavior_R4_Spurned_ArmorPerDebuff':      'Inoculation',
     # Lifemother
-    'Boss_SoulSavior_Final_Lifemother_Debuffer':      'The Corpseflower',
-    'Boss_SoulSavior_Final_Lifemother_Infested':      'The Swarmhost',
-    'Boss_SoulSavior_Final_Lifemother_HealReanimate': 'The Undying Bloom',
+    'Boss_SoulSavior_Final_Lifemother_Debuffer':      'Corpseflower',
+    'Boss_SoulSavior_Final_Lifemother_Infested':      'Swarmhost',
+    'Boss_SoulSavior_Final_Lifemother_HealReanimate': 'Undying Bloom',
 }
 
 # ---- build the multiplier model from scaling.json ----

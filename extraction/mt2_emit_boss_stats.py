@@ -30,7 +30,7 @@ GROUPS = [
         ("Mother's Flagellant", ASTRAEL_INTERNAL),
         ("Mother's Hunter",     ASTRAEL_INTERNAL)]),
     ('Lifemother (final boss; single fixed stat)', [
-        ('The Corpseflower', None), ('The Swarmhost', None), ('The Undying Bloom', None)]),
+        ('Corpseflower', None), ('Swarmhost', None), ('Undying Bloom', None)]),
     ('Maera Battle', [('Athane the Fallen', None), ('Korin the Judged', None)]),
     ('Maera Boss',   [('Stern Sister', None), ('Sibling Hierarchy', None), ('Eldest Scion', None)]),
     ('Thaddeus Battle', [('Elebor the Unstoppable', None), ('Quoto the Destroyer', None)]),

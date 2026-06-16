@@ -20,7 +20,7 @@ const VARIANT_OPTIONS = {
     'tivi-boss-variant':        ['Duplicitous', 'Mischevious Child', 'Prankster'],
     'lylith-battle-variant':    ['Qel the Malaiser', 'Ajax the Deathbringer'],
     'lylith-boss-variant':      ['Plaguebringer', 'Energy Vampire', 'Inoculation'],
-    'lifemother-variant':       ['The Corpseflower', 'The Swarmhost', 'The Undying Bloom']
+    'lifemother-variant':       ['Corpseflower', 'Swarmhost', 'Undying Bloom']
 };
 
 // ---- Wave set selector options ----
@@ -102,7 +102,7 @@ const variantDescriptions = {
     'Inoculation': 'Lylith gains 3x Armor per Malaise on Strike.',
 
     // Lifemother
-    'The Corpseflower': 'The Lifemother applies Malaise 12 on Strike and spreads Debuff effects on Hellborne Harvest.',
-    'The Swarmhost': 'The Lifemother gains Infested 2 on Harvest.',
-    'The Undying Bloom': 'The Lifemother applies Witherbloom 10 to the front friendly unit and Reanimate 2 to front enemy unit at the end of the turn.'
+    'Corpseflower': 'The Lifemother applies Malaise 12 on Strike and spreads Debuff effects on Hellborne Harvest.',
+    'Swarmhost': 'The Lifemother gains Infested 2 on Harvest.',
+    'Undying Bloom': 'The Lifemother applies Witherbloom 10 to the front friendly unit and Reanimate 2 to front enemy unit at the end of the turn.'
 };

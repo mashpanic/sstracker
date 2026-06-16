@@ -58,20 +58,22 @@ BOSSVARIANT_TO_SCENARIO = {
     'Inoculation':         'SoulSavior_R4_BossBattle_EstrangedChild_2',  # ArmorPerDebuff
     'Energy Vampire':      'SoulSavior_R4_BossBattle_EstrangedChild_3',  # WitherbloomOnAction
     # Lifemother (R5, O4 only) — by mechanic suffix
-    'The Corpseflower':    'SoulSavior_R5_BossBattle_Lifemother_Debuffs',
-    'The Swarmhost':       'SoulSavior_R5_BossBattle_Lifemother_Infested',
-    'The Undying Bloom':   'SoulSavior_R5_BossBattle_Lifemother_Reanimate',
+    'Corpseflower':        'SoulSavior_R5_BossBattle_Lifemother_Debuffs',
+    'Swarmhost':           'SoulSavior_R5_BossBattle_Lifemother_Infested',
+    'Undying Bloom':       'SoulSavior_R5_BossBattle_Lifemother_Reanimate',
 }
 
 CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫'
 
 # In-game combatant display names to show under a friendlier label in the wave
-# lists. The Lifemother's Corpseflower form is named "Cycle Ender" in-game,
-# which doesn't match its variant name — show the variant name instead. (The
-# Swarmhost / Undying Bloom combatant names already contain their variant name,
-# so no override is needed for them.)
+# lists. Standardize the three Lifemother forms to their bare variant names
+# (matching the variant selector) — drop the "The Lifemother - " prefix, and
+# the Corpseflower form's in-game name is "Cycle Ender", which doesn't match at
+# all.
 DISPLAY_OVERRIDE = {
-    'The Lifemother - Cycle Ender': 'The Corpseflower',
+    'The Lifemother - Cycle Ender':   'Corpseflower',
+    'The Lifemother - Swarmhost':     'Swarmhost',
+    'The Lifemother - Undying Bloom': 'Undying Bloom',
 }
 
 
