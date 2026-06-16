@@ -1,0 +1,245 @@
+<!-- Version 3: Last updated 2026-06-07 -->
+<!--
+    Attribution (plain-text version):
+    Game information sourced from the Monster Train 2 Wiki (https://monstertrain2.miraheze.org/wiki/Main_Page).
+    Content is available under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+    (https://creativecommons.org/licenses/by-sa/4.0/) unless otherwise noted.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Soul Savior Run Tracker</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #121214; color: #e1e1e6; padding: 20px; }
+        /* Plain auto table layout: no explicit width or table-layout mode, and
+           no per-column width rules. The browser sizes every column purely from
+           its content (the inner .node-slot/.full-name-slot/.variant-slot boxes
+           still control how wide each selector looks). This is a clean baseline
+           to build column-width tweaks back up from, if needed. */
+        table { border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #29292e; padding: 12px; text-align: left; vertical-align: middle; }
+        th { background: #19191c; }
+
+        select { background: #202024; color: #fff; border: 1px solid #323238; padding: 6px; border-radius: 4px; width: 95%; }
+        button { background: #04d361; color: #000; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        pre { background: #19191c; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #29292e; }
+
+        /* Subtle grouping colors to keep paired rows visually connected */
+        .group-maera { border-left: 4px solid #3b82f6; }
+        .group-thaddeus { border-left: 4px solid #ef4444; }
+        .group-tivi { border-left: 4px solid #10b981; }
+        .group-lylith { border-left: 4px solid #8b5cf6; }
+
+        .disabled-cell { color: #52525b; text-align: center; font-style: italic; background: #161619; }
+
+        /* Invisible dropdown styling */
+        .node-container { display: flex; gap: 6px; }
+        .node-slot {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            background: #202024;
+            border: 1px solid #323238;
+            border-radius: 4px;
+            font-weight: bold;
+            user-select: none;
+            font-size: 0.9em;
+        }
+        .node-slot select {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; -webkit-appearance: none; appearance: none;
+        }
+        .node-slot option { background: #202024; color: #fff; font-size: 14px; }
+        .node-slot:hover { border-color: #04d361; }
+        .node-slot.selected { color: #04d361; border-color: #04d361; background: #19191c; }
+
+        /* Fixed-width slots for selectors that display full names (Central Nodes, Path, Left/Right Track)
+           so longer labels stay aligned, consistent, and readable */
+        .full-name-slot {
+            width: 110px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 4px;
+        }
+
+        /* Variant boxes get ~50% more width than other full-name slots, since
+           variant names tend to run longer (e.g. "Mother's Flagellant") */
+        .variant-slot {
+            width: 165px;
+        }
+
+        /* Mutator indicator shown in boss row variant cells. Red outline/text when active. */
+        .mutator-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 165px;
+            height: 36px;
+            background: #202024;
+            border: 1px solid #323238;
+            border-radius: 4px;
+            font-size: 0.8em;
+            white-space: normal;
+            line-height: 1.15;
+            text-align: center;
+            overflow: hidden;
+            padding: 0 4px;
+            color: #52525b;
+            cursor: default;
+            user-select: none;
+            flex-shrink: 0;
+        }
+        .mutator-box.has-mutator {
+            border-color: #ef4444;
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .selectable-row { cursor: pointer; }
+        .selected-row { background: #1f3a2d !important; }
+        .selected-row td { background: #1f3a2d !important; }
+
+        /* Keep the Order column looking the same whether or not its row is
+           selected -- restore its normal (non-selected) background instead
+           of letting the selection highlight apply to it. Targeted by class
+           (not nth-child) because the order cell spans two rows via rowspan,
+           so its position in the boss row's child list isn't first. */
+        .selected-row td.order-cell { background: #121214 !important; }
+        .selected-row td.order-cell.disabled-cell { background: #161619 !important; }
+
+        #encounter-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #19191c;
+            border: 1px solid #29292e;
+            border-radius: 4px;
+            min-height: 80px;
+        }
+        /* Enemy names in the info-box wave lists carry inline ATK/HP as
+           "(atk/hp)"; dotted underline signals a hover tooltip (full name,
+           room for future in-game text). */
+        #encounter-info .enemy-stat {
+            border-bottom: 1px dotted #52525b;
+            cursor: help;
+        }
+        /* Inline (atk/hp) numbers: muted so the enemy name stays prominent. */
+        #encounter-info .enemy-stat .es-num { color: #8a8a93; }
+        /* Enemy whose ATK/HP for the current order isn't recorded yet —
+           italic + amber (incl. its "(?)") flags "go observe this". */
+        #encounter-info .enemy-stat.unrecorded {
+            font-style: italic;
+            color: #d4a72c;
+            border-bottom: 1px dashed #d4a72c;
+        }
+        #encounter-info .enemy-stat.unrecorded .es-num { color: #d4a72c; }
+
+        #attribution {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #29292e;
+            font-size: 0.8em;
+            color: #71717a;
+        }
+        #attribution a { color: #9d9da3; }
+        #attribution a:hover { color: #04d361; }
+
+        /* Simple mode hides the last 3 columns (Left Track, Right Track, Path).
+           Counting from the end (rather than nth-child(5/6/7)) keeps this correct
+           for boss rows, whose Order cell is covered by a rowspan from the row
+           above -- those rows have one fewer cell, which would otherwise shift
+           nth-child positions and leave a stray column visible. */
+        #simple-mode-toggle {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            color: #e1e1e6;
+            cursor: pointer;
+            user-select: none;
+        }
+        #simple-mode-toggle input { cursor: pointer; }
+
+        /* Subtle, low-emphasis reset control (distinct from the bold green
+           primary button) that clears all selections for the current run. */
+        #reset-grid {
+            margin-top: 12px;
+            background: none;
+            color: #9d9da3;
+            border: 1px solid #323238;
+            padding: 6px 12px;
+            font-weight: normal;
+            font-size: 0.85em;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #reset-grid:hover { color: #ef4444; border-color: #ef4444; }
+
+        table.simple-mode th:nth-last-child(-n+3),
+        table.simple-mode td:nth-last-child(-n+3) {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+
+
+    <table id="encounter-table" class="simple-mode">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Region</th>
+                <th>Variant</th>
+                <th>Central Nodes</th>
+                <th>Left Track</th>
+                <th>Right Track</th>
+                <th>Path</th>
+            </tr>
+        </thead>
+        <tbody id="encounter-tbody"></tbody>
+    </table>
+
+    <div id="encounter-info">
+        Select a battle or boss to see information.
+    </div>
+
+    <label id="simple-mode-toggle">
+        <input type="checkbox" checked onchange="toggleSimpleMode(this)">
+        Simple mode
+    </label>
+
+    <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
+
+    <footer id="attribution">
+        Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.
+        Content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a> unless otherwise noted.
+    </footer>
+
+    <!-- Data + logic, split into separate files. Load order matters and these
+         MUST stay classic <script> (not type="module") so the top-level consts
+         remain visible across files and the page still works opened via file://.
+           gamedata.js  — pipeline-generated stats + wave compositions
+           gamefacts.js — hand-authored wiki facts (mutators, descriptions)
+           app.js       — tracker logic + UI config (depends on both above) -->
+    <script src="gamedata.js"></script>
+    <script src="gamefacts.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+<script>
+try{localStorage.clear()}catch(e){}
+document.getElementById('thaddeus-order').value='2'; refreshOrderOptions();
+document.getElementById('thaddeus-battle-variant').value='Quoto the Destroyer';
+document.getElementById('thaddeus-wave-set').value='Gluttonous Masses';
+const h=getDisplayText('thaddeus-battle');
+const plain=h.replace(/<span[^>]*>/g,'').replace(/<\/span>/g,'').replace(/&nbsp;/g,' ').replace(/<br>/g,'\n   ');
+const pre=document.createElement('pre');pre.id='R';pre.textContent=plain;document.body.appendChild(pre);
+</script>

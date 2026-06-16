@@ -210,23 +210,41 @@ function encounterOrder(key) {
     return Number.isNaN(n) ? null : n;
 }
 
-// Wrap each known enemy name in a wave-list string, showing its observed
-// ATK/HP inline as "(atk/hp)" right after the name so a wave's strength reads
-// at a glance (no hover needed). "Mother's " is abbreviated to "M. " to keep
-// lines short. Unobserved cell (null) → "(?)" in the amber unrecorded style.
-// The title attr holds the full (un-abbreviated) name — kept as a hover hook
-// for future in-game text. Names not in ENEMY_STATS (region bosses, Astrael,
-// Lifemother) are left untouched.
-function wrapEnemyStats(html, order) {
-    return html.replace(ENEMY_NAME_RE, name => {
-        const v = order && ENEMY_STATS[name] ? ENEMY_STATS[name][order - 1] : null;
-        const disp = name.replace("Mother's ", "M. ");
-        const m = v && v.match(/(\d+)\D+(\d+)/);
-        const num = m ? `(${m[1]}/${m[2]})` : '(?)';
-        const cls = v ? 'enemy-stat' : 'enemy-stat unrecorded';
-        return `<span class="${cls}" title="${name}">${disp}<span class="es-num">&nbsp;${num}</span></span>`;
-    });
+// Render one combatant as: abbreviated name + inline "(atk/hp)" (muted), with
+// the full name on the hover title. Missing/unparseable stat → "(?)" in the
+// amber unrecorded style. Used for both trash enemies and the boss (no special
+// emphasis on the boss — it reads like any other unit).
+function enemySpan(name, statStr) {
+    const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
+    const num = m ? `(${m[1]}/${m[2]})` : '(?)';
+    const cls = m ? 'enemy-stat' : 'enemy-stat unrecorded';
+    const disp = name.replace("Mother's ", "M. ");
+    return `<span class="${cls}" title="${name}">${disp}<span class="es-num">&nbsp;${num}</span></span>`;
 }
+
+// Wrap combatant names in a wave-list string with inline ATK/HP so wave
+// strength reads at a glance. Trash enemies use ENEMY_STATS at the given order.
+// The boss appears under its in-game name (not in ENEMY_STATS), so pass it
+// explicitly (bossName + its BOSS_STATS value) to get the same inline treatment.
+function wrapEnemyStats(html, order, bossName, bossStat) {
+    let out = html.replace(ENEMY_NAME_RE, name => {
+        const v = order && ENEMY_STATS[name] ? ENEMY_STATS[name][order - 1] : null;
+        return enemySpan(name, v);
+    });
+    if (bossName && out.includes(bossName)) {
+        out = out.split(bossName).join(enemySpan(bossName, bossStat));
+    }
+    return out;
+}
+
+// In-game display name of each region's boss as it appears in BossBattle wave
+// lists (differs from the variant names — Stern Sister, etc.).
+const REGION_BOSS_DISPLAY = {
+    maera: 'Maera the Dutiful',
+    thaddeus: 'Thaddeus the Indulgent',
+    tivi: 'Tivi the Unruly',
+    lylith: 'Lylith the Spurned',
+};
 
 // A battle row's wave-set description bakes in whichever minor boss the
 // extractor found in that scenario, but the minor boss is chosen independently
@@ -246,34 +264,37 @@ function getDisplayText(key) {
     const variantEl = document.getElementById(`${key}-variant`);
     if (variantEl && variantEl.value) {
         const variant = variantEl.value;
-        const desc = variantDescriptions[variant]
+        const region = key.includes('-') ? key.split('-')[0] : key;
+        const order = encounterOrder(key);
+        // Boss ATK/HP no longer leads the box — it's shown inline in the wave,
+        // like every other unit. BOSS_STATS is a fixed string (Astrael/
+        // Lifemother) or an [O1..O4] array (the four regions).
+        const bossStat = pickByOrder(BOSS_STATS[variant], region);
+        let text = variantDescriptions[variant]
             ? variant + ': ' + variantDescriptions[variant]
             : variant + ' information';
 
-        // Lead the first line with ATK/HP. Fixed stats (Astrael/Lifemother) are
-        // stored as a string; order-scaled stats (four main regions) as an array.
-        const stats = pickByOrder(BOSS_STATS[variant], key.split('-')[0]);
-        let text = stats ? stats + ' — ' + desc : desc;
-
-        // For battle rows, append the selected wave set's composition (order-scaled).
+        // Battle rows: the minor boss is the selected variant (swapBattleBoss
+        // puts it in the wave string); it gets inline stats like any enemy.
         if (key.endsWith('-battle')) {
-            const region = key.split('-')[0];
             const waveEl = document.getElementById(`${region}-wave-set`);
             if (waveEl && waveEl.value) {
                 const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveEl.value], region);
-                if (waves) text += '<br>' + wrapEnemyStats(swapBattleBoss(waves, region, variant), encounterOrder(key));
+                if (waves) text += '<br>' + wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat);
             }
         }
 
         // (Defeat mutator is shown via the mutator box hover on each row, not here.)
 
-        // For boss rows and standalone rows (astrael, lifemother), append the
-        // per-variant wave composition (order-scaled for main regions; a fixed
-        // string for Astrael/Lifemother).
+        // Boss/standalone rows: the boss appears under its in-game name —
+        // region boss (REGION_BOSS_DISPLAY), Astrael, or the Lifemother variant.
         if (key.endsWith('-boss') || !key.includes('-')) {
-            const regionKey = key.includes('-') ? key.split('-')[0] : key;
-            const bossWaves = pickByOrder(BOSS_WAVE_DESCRIPTIONS[variant], regionKey);
-            if (bossWaves) text += '<br>' + wrapEnemyStats(bossWaves, encounterOrder(key));
+            const bossWaves = pickByOrder(BOSS_WAVE_DESCRIPTIONS[variant], region);
+            if (bossWaves) {
+                const bossName = key.endsWith('-boss') ? REGION_BOSS_DISPLAY[region]
+                    : (key === 'astrael' ? 'Astrael the First Reborn' : variant);
+                text += '<br>' + wrapEnemyStats(bossWaves, order, bossName, bossStat);
+            }
         }
 
         return text;
