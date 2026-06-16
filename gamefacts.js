@@ -37,22 +37,23 @@ const WAVE_SET_OPTIONS = {
 // Keyed by boss variant name. Each entry has the mutator name and its effect.
 // Only main-region boss variants grant mutators (not battle bosses).
 const MUTATORS = {
-    // Maera Boss
-    'Stern Sister':      { name: 'Anxious',      effect: 'Enemy units gain Attack on Shift.' },
-    'Sibling Hierarchy': { name: 'Overachiever', effect: 'Bosses enter with Burst.' },
-    'Eldest Scion':      { name: 'Guarded',      effect: 'Enemy units gain Armor equal to their Attack on Slay.' },
+    // Maera Boss   ('short' = terse effect gist shown in the mutator box;
+    //               'name' (flavor) + 'effect' (full) show on hover.)
+    'Stern Sister':      { name: 'Anxious',      short: 'Atk on Shift',   effect: 'Enemy units gain Attack on Shift.' },
+    'Sibling Hierarchy': { name: 'Overachiever', short: 'Boss Burst 3',   effect: 'Bosses enter with Burst.' },
+    'Eldest Scion':      { name: 'Guarded',      short: 'Armor on Slay',  effect: 'Enemy units gain Armor equal to their Attack on Slay.' },
     // Thaddeus Boss
-    'Train Chomper':     { name: 'Glutton',      effect: 'A random floor loses -3 capacity.' },
-    'Thick Skinned':     { name: 'Callous',      effect: 'Enemy units gain Titanskin 3.' },
-    'Insatiable':        { name: 'Spoiled',      effect: 'Enemy units gain Infested 1.' },
+    'Train Chomper':     { name: 'Glutton',      short: '-3 Capacity',    effect: 'A random floor loses -3 capacity.' },
+    'Thick Skinned':     { name: 'Callous',      short: 'Titanskin 3',    effect: 'Enemy units gain Titanskin 3.' },
+    'Insatiable':        { name: 'Spoiled',      short: 'Infested 1',     effect: 'Enemy units gain Infested 1.' },
     // Tivi Boss
-    'Duplicitous':       { name: 'Joker',        effect: 'At start of battle, spawn a Jeermask on each floor.' },
-    'Mischevious Child': { name: 'Insecure',     effect: 'Champions enter with Melee Weakness 3.' },
-    'Prankster':         { name: 'Tormentor',    effect: 'At start of battle, add 4 Tivi\'s Scourge cards to your deck.' },
+    'Duplicitous':       { name: 'Joker',        short: '+Jeermasks',     effect: 'At start of battle, spawn a Jeermask on each floor.' },
+    'Mischevious Child': { name: 'Insecure',     short: 'Melee Weak 3',   effect: 'Champions enter with Melee Weakness 3.' },
+    'Prankster':         { name: 'Tormentor',    short: '+4 Scourge',     effect: 'At start of battle, add 4 Tivi\'s Scourge cards to your deck.' },
     // Lylith Boss
-    'Plaguebringer':     { name: 'Reclusive',    effect: 'Champions enter with Malaise 10.' },
-    'Energy Vampire':    { name: 'Masochist',    effect: 'Enemy units gain Regen 2 when hit.' },
-    'Inoculation':       { name: 'Sadist',       effect: 'Your units enter with Witherbloom 1.' },
+    'Plaguebringer':     { name: 'Reclusive',    short: 'Malaise 10',     effect: 'Champions enter with Malaise 10.' },
+    'Energy Vampire':    { name: 'Masochist',    short: 'Regen 2 on hit', effect: 'Enemy units gain Regen 2 when hit.' },
+    'Inoculation':       { name: 'Sadist',       short: 'Witherbloom 1',  effect: 'Your units enter with Witherbloom 1.' },
 };
 
 // ---- Per-variant descriptions ----

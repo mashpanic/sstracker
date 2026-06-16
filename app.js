@@ -299,8 +299,10 @@ function refreshMutatorBox(variantSelectEl) {
     if (!box) return;
     const mutator = MUTATORS[variantSelectEl.value];
     if (mutator) {
-        box.textContent = mutator.name;
-        box.title = mutator.effect;
+        // Box shows the terse effect gist (wraps to 2 lines if long); the
+        // flavor name + full effect are on hover.
+        box.textContent = mutator.short || mutator.name;
+        box.title = `${mutator.name} — ${mutator.effect}`;
         box.classList.add('has-mutator');
     } else {
         box.textContent = '—';
