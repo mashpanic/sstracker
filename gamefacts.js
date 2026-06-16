@@ -39,7 +39,7 @@ const WAVE_SET_OPTIONS = {
 const MUTATORS = {
     // Maera Boss   ('short' = terse effect gist shown in the mutator box;
     //               'name' (flavor) + 'effect' (full) show on hover.)
-    'Stern Sister':      { name: 'Anxious',      short: 'Atk on Shift',   effect: 'Enemy units gain Attack on Shift.' },
+    'Stern Sister':      { name: 'Anxious',      short: 'Attack on Shift', effect: 'Enemy units gain Attack on Shift.' },
     'Sibling Hierarchy': { name: 'Overachiever', short: 'Boss Burst 3',   effect: 'Bosses enter with Burst.' },
     'Eldest Scion':      { name: 'Guarded',      short: 'Armor on Slay',  effect: 'Enemy units gain Armor equal to their Attack on Slay.' },
     // Thaddeus Boss
@@ -47,9 +47,9 @@ const MUTATORS = {
     'Thick Skinned':     { name: 'Callous',      short: 'Titanskin 3',    effect: 'Enemy units gain Titanskin 3.' },
     'Insatiable':        { name: 'Spoiled',      short: 'Infested 1',     effect: 'Enemy units gain Infested 1.' },
     // Tivi Boss
-    'Duplicitous':       { name: 'Joker',        short: '+Jeermasks',     effect: 'At start of battle, spawn a Jeermask on each floor.' },
-    'Mischevious Child': { name: 'Insecure',     short: 'Melee Weak 3',   effect: 'Champions enter with Melee Weakness 3.' },
-    'Prankster':         { name: 'Tormentor',    short: '+4 Scourge',     effect: 'At start of battle, add 4 Tivi\'s Scourge cards to your deck.' },
+    'Duplicitous':       { name: 'Joker',        short: 'Add Jeermasks',  effect: 'At start of battle, spawn a Jeermask on each floor.' },
+    'Mischevious Child': { name: 'Insecure',     short: 'Melee Weakness 3', effect: 'Champions enter with Melee Weakness 3.' },
+    'Prankster':         { name: 'Tormentor',    short: 'Add 4 Scourges', effect: 'At start of battle, add 4 Tivi\'s Scourge cards to your deck.' },
     // Lylith Boss
     'Plaguebringer':     { name: 'Reclusive',    short: 'Malaise 10',     effect: 'Champions enter with Malaise 10.' },
     'Energy Vampire':    { name: 'Masochist',    short: 'Regen 2 on hit', effect: 'Enemy units gain Regen 2 when hit.' },
