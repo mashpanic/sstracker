@@ -210,16 +210,21 @@ function encounterOrder(key) {
     return Number.isNaN(n) ? null : n;
 }
 
-// Wrap each known enemy name in a wave-list string with a hover title showing
-// its observed ATK/HP at the given order. Unobserved cell (null) or unknown
-// order → the title says the stat isn't recorded yet. Names not in ENEMY_STATS
-// (region bosses, Astrael, Lifemother) are left untouched.
+// Wrap each known enemy name in a wave-list string, showing its observed
+// ATK/HP inline as "(atk/hp)" right after the name so a wave's strength reads
+// at a glance (no hover needed). "Mother's " is abbreviated to "M. " to keep
+// lines short. Unobserved cell (null) → "(?)" in the amber unrecorded style.
+// The title attr holds the full (un-abbreviated) name — kept as a hover hook
+// for future in-game text. Names not in ENEMY_STATS (region bosses, Astrael,
+// Lifemother) are left untouched.
 function wrapEnemyStats(html, order) {
     return html.replace(ENEMY_NAME_RE, name => {
         const v = order && ENEMY_STATS[name] ? ENEMY_STATS[name][order - 1] : null;
-        const title = v || `${name} — ATK/HP not yet recorded${order ? ' for O' + order : ''}`;
+        const disp = name.replace("Mother's ", "M. ");
+        const m = v && v.match(/(\d+)\D+(\d+)/);
+        const num = m ? `(${m[1]}/${m[2]})` : '(?)';
         const cls = v ? 'enemy-stat' : 'enemy-stat unrecorded';
-        return `<span class="${cls}" title="${title}">${name}</span>`;
+        return `<span class="${cls}" title="${name}">${disp}<span class="es-num">&nbsp;${num}</span></span>`;
     });
 }
 

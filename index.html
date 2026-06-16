@@ -120,19 +120,23 @@
             border-radius: 4px;
             min-height: 80px;
         }
-        /* Enemy names in the info-box wave lists: dotted underline signals a
-           hover tooltip (native title) showing observed ATK/HP by order. */
+        /* Enemy names in the info-box wave lists carry inline ATK/HP as
+           "(atk/hp)"; dotted underline signals a hover tooltip (full name,
+           room for future in-game text). */
         #encounter-info .enemy-stat {
             border-bottom: 1px dotted #52525b;
             cursor: help;
         }
+        /* Inline (atk/hp) numbers: muted so the enemy name stays prominent. */
+        #encounter-info .enemy-stat .es-num { color: #8a8a93; }
         /* Enemy whose ATK/HP for the current order isn't recorded yet —
-           italic + amber dashed underline flags "go observe this". */
+           italic + amber (incl. its "(?)") flags "go observe this". */
         #encounter-info .enemy-stat.unrecorded {
             font-style: italic;
             color: #d4a72c;
             border-bottom: 1px dashed #d4a72c;
         }
+        #encounter-info .enemy-stat.unrecorded .es-num { color: #d4a72c; }
 
         #attribution {
             margin-top: 30px;
