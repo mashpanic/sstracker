@@ -24,7 +24,7 @@ Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,5,27,6,29,8,30,9,32,FALSE
 Mother's Terrifying Amalgam,R3_Heavy_PyreDamageIfUnblocked_Ver2,5,250,-,-,-,-,-,-,-,-,FALSE
 Mother's Witchwarden,R4_Support_RegenEnemies_T2,22,40,-,-,-,-,22,60,22,63,FALSE
 Mother's Zealot,R2_Attacker_Zealot_Ver2,14,45,21,61,24,64,27,67,30,69,FALSE
-Mother's Zephyrite,R1_Attacker_AscendGainAtk_Ver2,24,20,-,-,-,-,,,50,32,FALSE
+Mother's Zephyrite,R1_Attacker_AscendGainAtk_Ver2,24,20,-,-,-,-,45,30,50,32,FALSE
 Ossivane Sentinel,R1_Heavy_HealOnShift,8,60,12,81,14,86,-,-,-,-,FALSE
 Plaguehost,R4_Heavy_SpreadDebuffs,5,70,8,95,9,99,11,103,-,-,FALSE
 Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker,5,2,8,3,-,-,-,-,-,-,FALSE

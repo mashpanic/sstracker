@@ -86,7 +86,7 @@ const ENEMY_STATS = {
     "Mother's Terrifying Amalgam": [null, null, null, null],
     "Mother's Witchwarden": [null, null, "22⚔️ 60❤️", "22⚔️ 63❤️"],
     "Mother's Zealot": ["21⚔️ 61❤️", "24⚔️ 64❤️", "27⚔️ 67❤️", "30⚔️ 69❤️"],
-    "Mother's Zephyrite": [null, null, null, "50⚔️ 32❤️"],
+    "Mother's Zephyrite": [null, null, "45⚔️ 30❤️", "50⚔️ 32❤️"],
     "Ossivane Sentinel": ["12⚔️ 81❤️", "14⚔️ 86❤️", null, null],
     "Plaguehost": ["8⚔️ 95❤️", "9⚔️ 99❤️", "11⚔️ 103❤️", null],
     "Sharp-Eye Sniper": ["8⚔️ 3❤️", null, null, null],
