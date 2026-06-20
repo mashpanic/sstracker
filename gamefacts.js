@@ -76,7 +76,7 @@ const variantDescriptions = {
     'Eldest Scion': 'Maera applies Armor to enemy units equal to their Attack on Resolve.',
 
     // Thaddeus Battle (wiki pages not yet written)
-    'Elebor the Unstoppable': '',
+    'Elebor the Unstoppable': 'Resolve: Gain Titanskin 5.',
     'Quoto the Destroyer': '',
 
     // Thaddeus Boss
