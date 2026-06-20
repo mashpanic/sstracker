@@ -85,7 +85,7 @@ const variantDescriptions = {
     'Insatiable': 'Thaddeus triggers Gorge on Slay.',
 
     // Tivi Battle (wiki pages not yet written)
-    'Phalanx': '',
+    'Phalanx': 'Spikes 8. Strike: Lose 1 Spike.',
     'The Undying Spirit': '',
 
     // Tivi Boss
