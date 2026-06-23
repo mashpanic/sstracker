@@ -86,7 +86,7 @@ const variantDescriptions = {
 
     // Tivi Battle (wiki pages not yet written)
     'Phalanx': 'Spikes 8. Strike: Lose 1 Spike.',
-    'The Undying Spirit': '',
+    'The Undying Spirit': 'Reanimate 6. Infested 6. Strike: Gain Infested 2.',
 
     // Tivi Boss
     'Duplicitous': 'Tivi creates a copy of the front enemy unit on the floor at end of turn. If no enemy units, creates a Jeermask.',
