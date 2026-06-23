@@ -13,7 +13,7 @@ Mother's Flautist,R1_EnchanterT1_Speed_Ver2,2,5,2,7,2,9,2,10,2,11,FALSE
 Mother's Fleshfruit,R2_Support_FeedInfested_T2,0,60,-,-,-,-,0,90,0,94,FALSE
 Mother's Glutmass,R2_Heavy_HealGorge_T2,15,250,-,-,-,-,29,366,32,381,FALSE
 Mother's Hunter,RAny_Attacker_Hunter_Hivemind_Ver2,3,3,5,5,6,6,8,7,9,9,FALSE
-Mother's Jeermask,R3_Horde_T3_Decoy_Ver2,0,1,-,-,-,-,,,0,6,FALSE
+Mother's Jeermask,R3_Horde_T3_Decoy_Ver2,0,1,-,-,-,-,0,6,0,6,FALSE
 Mother's Knight,RAny_Heavy_TitaniteUpFront_Ver2,10,60,15,81,17,86,20,90,23,94,FALSE
 Mother's Longlash,R3_Attacker_T3_StealthSniper_Ver2,18,12,-,-,-,-,33,19,38,21,FALSE
 Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,-,-,-,-,33,293,38,306,FALSE
