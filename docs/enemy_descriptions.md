@@ -41,3 +41,6 @@ The full in-game tooltip also has a **leading starting-keyword** (Glutmass's "Tr
 3. From `paramInt`, fill `[effectN.power]` (resolves all the `{?}`).
 4. (Optional, option C) prepend starting keywords + trigger label.
 5. Then this becomes a real pipeline step emitting an `ENEMY_DESCRIPTIONS` block (likely into `gamedata.js`), surfaced on the enemy hover (`wrapEnemyStats` already holds the full name in the `title` as the hook).
+
+## Line-break convention
+While hand-reviewing/filling descriptions in `enemy_observations.csv`, represent line breaks as a literal **`<br>`** in the cell. The info box renders via `innerHTML` and `<br>` is the app's line-break token everywhere (wave lists, and the game's own `descriptionKey` templates already contain `<br>`), so it needs **no conversion** and keeps each enemy on one CSV row (clean diffs). (Avoid real in-cell newlines / Alt+Enter — they force CSV quoting and embedded newlines, and would need a `\n → <br>` step. If that editing style is ever preferred, have the description-emit normalize `\n` to `<br>`.)

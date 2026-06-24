@@ -1,5 +1,5 @@
 Name,Internal,Base ATK,Base HP,O1 ATK,O1 HP,O2 ATK,O2 HP,O3 ATK,O3 HP,O4 ATK,O4 HP,Description (filled)
-Fleshfruit,R2_Support_FeedInfested,0,30,0,41,0,44,-,-,-,-,Grant Infested ?. / Deal {?} damage to self.
+Fleshfruit,R2_Support_FeedInfested,0,30,0,41,0,44,,,-,-,Grant Infested ?. / Deal {?} damage to self.
 Glutmass,R2_Heavy_HealGorge,8,60,12,81,14,86,15,90,17,94,Gain Titanskin 3 and restore {?} health.
 Jeermask,R3_Horde_T1_Decoy,0,1,0,2,0,3,0,5,0,6,Apply Dazed 2 to the attacker.
 Longlash,R3_Attacker_T1_StealthSniper,7,4,11,6,12,7,-,-,-,-,
@@ -19,9 +19,7 @@ Mother's Longlash,R3_Attacker_T3_StealthSniper_Ver2,18,12,-,-,-,-,33,19,38,21,Ap
 Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,-,-,-,-,33,293,38,306,Gain 20 Armor.
 Mother's Plaguehost,R4_Heavy_SpreadDebuffs_T2,10,160,-,-,-,-,20,235,23,245,Apply Malaise 5 and Witherbloom 5 to your front unit.
 Mother's Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker_Ver2,6,3,-,-,11,6,14,9,,,Gain ? Rage.
-Mother's Spearman,R1_AttackerT1_Spearman_Ver2,9,3,-,-,-,-,-,-,-,-,
 Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,5,27,6,29,8,30,9,32,Add a Soulscourge card to the top of your draw pile and to a random location in your draw pile.
-Mother's Terrifying Amalgam,R3_Heavy_PyreDamageIfUnblocked_Ver2,5,250,-,-,-,-,-,-,-,-,"If you have no units on the floor, gain Burst 2."
 Mother's Witchwarden,R4_Support_RegenEnemies_T2,22,40,-,-,-,-,22,60,22,63,Enemy units gain Armor 10 and Regen 3.
 Mother's Zealot,R2_Attacker_Zealot_Ver2,14,45,21,61,24,64,27,67,30,69,Gain Multistrike 1.
 Mother's Zephyrite,R1_Attacker_AscendGainAtk_Ver2,24,20,-,-,-,-,45,30,50,32,Gain Burst 1.
