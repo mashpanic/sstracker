@@ -18,6 +18,9 @@ Usage:  python3 mt2_emit_enemy_stats.py [--csv enemy_observations.csv] [--write 
 """
 import sys, os, re, csv, json
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from mt2_lib import EXCLUDED_INTERNALS  # never-spawned/unimplemented chars (shared with the extractors)
+
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PLACEHOLDER = None  # JSON null for an unobserved order
 
@@ -45,7 +48,7 @@ EXCLUDE_INTERNALS = {
     'R3_HeavyT2_Basic',               # Mother's Blade   → spawns as R3_HeavyT1_Basic_Ver2
     'R4_Heavy_ArmorIfUnblocked_Ver2', # Mother's Amalgam → spawns as RAny_Heavy_T2_BurstIfUnblocked
     'R3_MageT2_Junker',               # Mother's Supplicant → spawns as R3_MageT3_Junker_Ver2
-}
+} | EXCLUDED_INTERNALS                 # + extract-wide never-spawned chars (Mother's Spearman, Terrifying Amalgam, …)
 
 
 def load_rows(csv_path):
