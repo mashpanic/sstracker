@@ -80,7 +80,7 @@ const variantDescriptions = {
     'Quoto the Destroyer': '',
 
     // Thaddeus Boss
-    'Train Chomper': 'Thaddeus reduces Armor by 1 and triggers Gorge on Resolve.',
+    'Train Chomper': 'Thaddeus reduces Space by 1 and triggers Gorge on Resolve.',
     'Thick Skinned': 'Thaddeus enters with Titanskin 3 and gains Titanskin 3 on Gorge.',
     'Insatiable': 'Thaddeus triggers Gorge on Slay.',
 
