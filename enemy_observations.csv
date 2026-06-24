@@ -1,30 +1,30 @@
-Name,Internal,Base ATK,Base HP,O1 ATK,O1 HP,O2 ATK,O2 HP,O3 ATK,O3 HP,O4 ATK,O4 HP,Description (filled)
-Fleshfruit,R2_Support_FeedInfested,0,30,0,41,0,44,,,-,-,Grant Infested ?. / Deal {?} damage to self.
-Glutmass,R2_Heavy_HealGorge,8,60,12,81,14,86,15,90,17,94,Gain Titanskin 3 and restore {?} health.
-Jeermask,R3_Horde_T1_Decoy,0,1,0,2,0,3,0,5,0,6,Apply Dazed 2 to the attacker.
-Longlash,R3_Attacker_T1_StealthSniper,7,4,11,6,12,7,-,-,-,-,
-Mother's Amalgam,RAny_Heavy_T2_BurstIfUnblocked,8,140,12,189,14,198,15,206,17,215,"If you have no units on the floor, deals {?} damage to the Pyre and gains Burst 1."
-Mother's Assassin,R4_Attacker_SweepDebuffer_Ver2,4,8,-,-,8,13,9,14,11,15,Apply Malaise 4 
-Mother's Blade,R3_HeavyT1_Basic_Ver2,5,80,8,108,9,114,11,119,12,125,Gain Infested ?.
-Mother's Cherub,R2_Support_FeedBuffs_Ver2,0,30,0,41,0,44,0,46,0,49,"Grant Damage Shield ?, Spell Shield ?, and Lifesteal ?.  / Deal {?} damage to self."
-Mother's Fiend,RAny_Horde_T1_DeathAddsHivemind_Ver2,2,3,3,5,-,-,-,-,6,9,Apply Infested ? to enemy units.
-Mother's Flagellant,R1_HeavyT1_LoseHealthOnMove_Ver2,3,80,5,108,6,114,8,119,9,125,Take {?} damage. 
-Mother's Flautist,R1_EnchanterT1_Speed_Ver2,2,5,2,7,2,9,2,10,2,11,Grant enemy units Haste.
-Mother's Fleshfruit,R2_Support_FeedInfested_T2,0,60,-,-,-,-,0,90,0,94,Grant Burst ? and Infested ?.  / Deal {?} damage to self.
-Mother's Glutmass,R2_Heavy_HealGorge_T2,15,250,-,-,-,-,29,366,32,381,"Gain Rage ?, Titanskin 5, and restore {?} health."
-Mother's Hunter,RAny_Attacker_Hunter_Hivemind_Ver2,3,3,5,5,6,6,8,7,9,9,
-Mother's Jeermask,R3_Horde_T3_Decoy_Ver2,0,1,-,-,-,-,0,6,0,6,Apply Dazed 2 and Melee Weakness ? to the attacker.
-Mother's Knight,RAny_Heavy_TitaniteUpFront_Ver2,10,60,15,81,17,86,20,90,23,94,Gain Titanite.
-Mother's Longlash,R3_Attacker_T3_StealthSniper_Ver2,18,12,-,-,-,-,33,19,38,21,Apply Emberdrain ?.
-Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,-,-,-,-,33,293,38,306,Gain 20 Armor.
-Mother's Plaguehost,R4_Heavy_SpreadDebuffs_T2,10,160,-,-,-,-,20,235,23,245,Apply Malaise 5 and Witherbloom 5 to your front unit.
-Mother's Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker_Ver2,6,3,-,-,11,6,14,9,,,Gain ? Rage.
-Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,5,27,6,29,8,30,9,32,Add a Soulscourge card to the top of your draw pile and to a random location in your draw pile.
-Mother's Witchwarden,R4_Support_RegenEnemies_T2,22,40,-,-,-,-,22,60,22,63,Enemy units gain Armor 10 and Regen 3.
-Mother's Zealot,R2_Attacker_Zealot_Ver2,14,45,21,61,24,64,27,67,30,69,Gain Multistrike 1.
-Mother's Zephyrite,R1_Attacker_AscendGainAtk_Ver2,24,20,-,-,-,-,45,30,50,32,Gain Burst 1.
-Ossivane Sentinel,R1_Heavy_HealOnShift,8,60,12,81,14,86,-,-,-,-,Gain 15 Armor.
-Plaguehost,R4_Heavy_SpreadDebuffs,5,70,8,95,9,99,11,103,-,-,Apply Witherbloom 3 to your front unit.
-Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker,5,2,8,3,-,-,-,-,-,-,Gain ? Rage.
-Witchwarden,R4_Support_RegenEnemies,10,12,10,17,10,18,10,19,-,-,Enemy units gain Regen 3.
-Zephyrite,R1_Attacker_AscendGainAtk,8,6,12,9,14,10,15,11,-,-,Gain Burst 1.
+Name,Internal,Base ATK,Base HP,O1 ATK,O1 HP,O2 ATK,O2 HP,O3 ATK,O3 HP,O4 ATK,O4 HP,Description (filled),
+Fleshfruit,R2_Support_FeedInfested,0,30,0,41,0,44,,,-,-,Eaten: Grant Infested 3. Deal 10 damage to self.<br>Buffet 3<br>Infested 2,x
+Glutmass,R2_Heavy_HealGorge,8,60,12,81,14,86,15,90,17,94,Gain Titanskin 3 and restore {?} health.,
+Jeermask,R3_Horde_T1_Decoy,0,1,0,2,0,3,0,5,0,6,Apply Dazed 2 to the attacker.,
+Longlash,R3_Attacker_T1_StealthSniper,7,4,11,6,12,7,-,-,-,-,,
+Mother's Amalgam,RAny_Heavy_T2_BurstIfUnblocked,8,140,12,189,14,198,15,206,17,215,"If you have no units on the floor, deals {?} damage to the Pyre and gains Burst 1.",
+Mother's Assassin,R4_Attacker_SweepDebuffer_Ver2,4,8,-,-,8,13,9,14,11,15,Apply Malaise 4 ,
+Mother's Blade,R3_HeavyT1_Basic_Ver2,5,80,8,108,9,114,11,119,12,125,Infested 3<br>Hellborne Harvest: Gain Infested 6.,x
+Mother's Cherub,R2_Support_FeedBuffs_Ver2,0,30,0,41,0,44,0,46,0,49,"Eaten: Grant Damage Shield 1, Spell Shield 1, and Lifesteal 1.   Deal 10 damage to self.<br>Buffet 3",x
+Mother's Fiend,RAny_Horde_T1_DeathAddsHivemind_Ver2,2,3,3,5,-,-,-,-,6,9,Apply Infested ? to enemy units.,
+Mother's Flagellant,R1_HeavyT1_LoseHealthOnMove_Ver2,3,80,5,108,6,114,8,119,9,125,Take {?} damage. ,
+Mother's Flautist,R1_EnchanterT1_Speed_Ver2,2,5,2,7,2,9,2,10,2,11,Grant enemy units Haste.,
+Mother's Fleshfruit,R2_Support_FeedInfested_T2,0,60,-,-,-,-,0,90,0,94,Grant Burst ? and Infested ?.  / Deal {?} damage to self.,
+Mother's Glutmass,R2_Heavy_HealGorge_T2,15,250,-,-,-,-,29,366,32,381,"Gain Rage ?, Titanskin 5, and restore {?} health.",
+Mother's Hunter,RAny_Attacker_Hunter_Hivemind_Ver2,3,3,5,5,6,6,8,7,9,9,Infested 2,x
+Mother's Jeermask,R3_Horde_T3_Decoy_Ver2,0,1,-,-,-,-,0,5,0,6,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,x
+Mother's Knight,RAny_Heavy_TitaniteUpFront_Ver2,10,60,15,81,17,86,20,90,23,94,Gain Titanite.,
+Mother's Longlash,R3_Attacker_T3_StealthSniper_Ver2,18,12,-,-,-,-,33,19,38,21,Apply Emberdrain ?.,
+Mother's Ossivane Sentinel,R1_Heavy_HealOnShift_Ver2,18,200,-,-,-,-,33,293,38,306,Gain 20 Armor.,
+Mother's Plaguehost,R4_Heavy_SpreadDebuffs_T2,10,160,-,-,-,-,20,235,23,245,Apply Malaise 5 and Witherbloom 5 to your front unit.,
+Mother's Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker_Ver2,6,3,-,-,11,6,14,9,,,Slay: Gain 5 Rage.,x
+Mother's Supplicant,R3_MageT3_Junker_Ver2,3,20,5,27,6,29,8,30,9,32,Add a Soulscourge card to the top of your draw pile and to a random location in your draw pile.,
+Mother's Witchwarden,R4_Support_RegenEnemies_T2,22,40,-,-,-,-,22,60,22,63,Enemy units gain Armor 10 and Regen 3.,
+Mother's Zealot,R2_Attacker_Zealot_Ver2,14,45,21,61,24,64,27,67,30,69,Gain Multistrike 1.,
+Mother's Zephyrite,R1_Attacker_AscendGainAtk_Ver2,24,20,-,-,-,-,45,30,50,32,Gain Burst 1.,
+Ossivane Sentinel,R1_Heavy_HealOnShift,8,60,12,81,14,86,-,-,-,-,Gain 15 Armor.,
+Plaguehost,R4_Heavy_SpreadDebuffs,5,70,8,95,9,99,11,103,-,-,Apply Witherbloom 3 to your front unit.,
+Sharp-Eye Sniper,R3_AttackerT2_HunterSeeker,5,2,8,3,-,-,-,-,-,-,Gain ? Rage.,
+Witchwarden,R4_Support_RegenEnemies,10,12,10,17,10,18,10,19,-,-,Enemy units gain Regen 3.,
+Zephyrite,R1_Attacker_AscendGainAtk,8,6,12,9,14,10,15,11,-,-,Gain Burst 1.,
