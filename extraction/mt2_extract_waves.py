@@ -69,6 +69,14 @@ def find_rd_pid_map(data, objs, le):
 
 # ── scenario object finder ───────────────────────────────────────────────────
 
+# Soul Savior scenarios present in the bundle but that never actually spawn in
+# a run (confirmed by watching the in-game battle-name banner). Excluded from
+# all wave outputs, like a never-spawned enemy in EXCLUDED_INTERNALS.
+#   - TroopTitanskin = the "Forbidden Fruit" wave set (battleNameKey). Its only
+#     unique data was base Fleshfruit at O3; that cell is now N/A. Thaddeus's
+#     only real battle wave set is "Gluttonous Masses" (TroopBuffFeed).
+EXCLUDED_SCENARIOS = {'SoulSavior_R2_Battle_TroopTitanskin'}
+
 def find_scenario_objects(data, objs, le, ss_only=True):
     results = []
     for (pid, off, size, cid, tid) in objs:
@@ -77,6 +85,8 @@ def find_scenario_objects(data, objs, le, ss_only=True):
         try:
             name, _ = read_mname(data, off, le)
         except Exception:
+            continue
+        if name in EXCLUDED_SCENARIOS:
             continue
         is_ss    = re.match(r"SoulSavior_R\d+_(Boss)?Battle_", name)
         is_level = re.match(r"(Level|TestEndless_Level)\d+Battle", name)
