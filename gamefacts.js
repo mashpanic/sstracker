@@ -77,7 +77,7 @@ const variantDescriptions = {
 
     // Thaddeus Battle (wiki pages not yet written)
     'Elebor the Unstoppable': 'Resolve: Gain Titanskin 5.',
-    'Quoto the Destroyer': '',
+    'Quoto the Destroyer': 'Titanskin 10. Revenge: Lose Titanskin 1 and Gain Rage 2.',
 
     // Thaddeus Boss
     'Train Chomper': 'Thaddeus reduces Space by 1 and triggers Gorge on Resolve.',
