@@ -63,8 +63,8 @@ const MUTATORS = {
 // blank ('') to keep showing the generic placeholder until you fill it in.
 const variantDescriptions = {
     // Astrael
-    "Mother's Flagellant": 'Sap 6 Infest 3',
-    "Mother's Hunter": 'Sap 6 Infest 3',
+    "Mother's Flagellant": 'Sap 9 Infested 6',
+    "Mother's Hunter": 'Sap 9 Infested 6',
 
     // Maera Battle
     'Athane the Fallen': 'Applies Rage 1 to enemy units on Incant.',
