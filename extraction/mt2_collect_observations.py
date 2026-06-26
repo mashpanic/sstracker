@@ -33,6 +33,10 @@ Usage:  python3 extraction/mt2_collect_observations.py [--out FILE] [--reseed]
         python3 extraction/mt2_collect_observations.py --prefill-base DIFFICULTY
 """
 import sys, os, re, csv, ast, json
+try:
+    import readline  # enables left/right arrow cursor editing + history in input()
+except ImportError:
+    pass  # not available on some platforms; input() just loses line editing
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
