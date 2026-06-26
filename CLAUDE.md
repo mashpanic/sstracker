@@ -14,10 +14,18 @@ A Soul Savior run is a specific mode of Monster Train 2.  Most web searches will
     Unique enemies set.
     Unique map and node set.
 
-A Soul Savior run has one of three difficultly levels.  This project is only concerned with Overgrowth difficulty.
-    Bloom
-    Tangle
-    Overgrowth
+A Soul Savior run has one of three difficulty levels, **in order from easiest to hardest: Bloom → Tangle → Overgrowth.**
+    Bloom       (easiest)
+    Tangle      (medium)
+    Overgrowth  (hardest)
+
+The **app and scaling pipeline target Overgrowth** (`mt2_emit_enemy_stats.py` /
+`mt2_emit_boss_stats.py` emit Overgrowth into `gamedata.js`). **Observations,
+however, are collected for all three** difficulties via
+`mt2_collect_observations.py` → `difficulty_observations.csv` (the wiki-facing
+dataset; `DIFFICULTIES` there lists all three in this easy→hard order). Note:
+Bloom non-boss enemies appear to sit at base stats (tentative — see
+`roster.json` note).
 
 A Soul Savior run passes through six regions in a fixed order. Each region is named after its boss; the first and last are fixed encounters. These are the `R0`–`R5` indices used in the extracts (`mt2_extract_waves.py`, `R#_Battle_*` keys):
 
