@@ -38,6 +38,31 @@ try:
 except ImportError:
     pass  # not available on some platforms; input() just loses line editing
 
+# ---- TODO (collector) ----
+# - Remove the "(skip remaining mid regions)" choice from run_walk's region
+#   menu: a real run always visits all four mid regions, so skipping is not a
+#   valid option.
+# - Astrael "Mother's Hunter" wave-set (SoulSavior_R0_Battle_Infested) offers
+#   Mother's Fiend (RAny_Horde_T1_DeathAddsHivemind_Ver2), but it never spawns
+#   in that battle in-game — likely a waves.json extraction artifact. Confirm
+#   and exclude it so it isn't prompted (fix in the wave extractor, or filter
+#   here). Observed in-game composition: 3 waves of 2x Mother's Hunter, then a
+#   final wave of Astrael + 1 Mother's Hunter (no Mother's Fiend at all).
+# - Do status-effect amounts in enemy descriptions scale with difficulty?
+#   Plaguehost's Witherbloom is 3 at Bloom — check Tangle/Overgrowth. If these
+#   amounts vary by difficulty, the description/note isn't a single per-enemy
+#   string and we'd need per-difficulty description capture.
+# - Add "Purified Soul" to the roster — appears to be a Soul Savior unit missing
+#   from out/roster.json (so the collector never offers it). Check whether it's
+#   filtered out by is_soul_savior() in mt2_extract_roster.py and add it (e.g.
+#   via the SOUL_SAVIOR_EXTRA set) if so.
+# - Investigate O5 scaling (Lifemother). Some abilities (e.g. Apply Witherbloom)
+#   may scale up beyond O4 — and Lifemother may actually sit at O5, not O4 (the
+#   unresolved tier/ring reconciliation). The whole data model currently caps at
+#   O1–O4 (collector orders, difficulty_observations.csv, ENEMY_STATS/BOSS_STATS
+#   arrays). If O5 is real, add an O5 order across the collector and the emitters
+#   and collect O5 entries for each enemy that can appear there.
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
