@@ -34,9 +34,16 @@ Usage:  python3 extraction/mt2_collect_observations.py [--out FILE] [--reseed]
 """
 import sys, os, re, csv, ast, json
 try:
-    import readline  # enables left/right arrow cursor editing + history in input()
-except ImportError:
-    pass  # not available on some platforms; input() just loses line editing
+    import gnureadline as readline   # GNU readline; on macOS replaces the default
+except ImportError:                  # libedit and supports pre-filling the line
+    try:
+        import readline              # stdlib (libedit on macOS — arrow editing +
+    except ImportError:              # history, but no prefill)
+        readline = None
+
+# Pre-loading an existing value into the editable line ("prefill") only works on
+# GNU readline, not macOS's libedit. Used to edit notes in place; see prompt_note.
+CAN_PREFILL = readline is not None and 'libedit' not in (getattr(readline, '__doc__', '') or '')
 
 # ---- TODO (collector) ----
 # - Remove the "(skip remaining mid regions)" choice from run_walk's region
@@ -288,11 +295,25 @@ class Back(Exception):
     """Raised by prompts when the user types 'b' to step back a level."""
 
 
-def prompt(msg, default=None):
-    """One line of input. 'q' quits the program; 'b' raises Back."""
-    suffix = f' [{default}]' if default not in (None, '') else ''
+def prompt(msg, default=None, prefill=None):
+    """One line of input. 'q' quits the program; 'b' raises Back.
+
+    If `prefill` is given and the readline backend supports it (GNU readline, not
+    macOS libedit), it is pre-loaded into the editable line so it can be tweaked
+    in place; the returned value is whatever the line holds (so a cleared line
+    returns ''). Otherwise a `[default]` hint shows and a blank entry returns the
+    default."""
+    use_prefill = prefill is not None and CAN_PREFILL
+    suffix = '' if use_prefill else (f' [{default}]' if default not in (None, '') else '')
     try:
-        raw = input(f'{msg}{suffix}: ').strip()
+        if use_prefill:
+            readline.set_startup_hook(lambda: readline.insert_text(prefill))
+            try:
+                raw = input(f'{msg}{suffix}: ').strip()
+            finally:
+                readline.set_startup_hook()
+        else:
+            raw = input(f'{msg}{suffix}: ').strip()
     except (EOFError, KeyboardInterrupt):
         print('\nbye.')
         sys.exit(0)
@@ -301,6 +322,8 @@ def prompt(msg, default=None):
         sys.exit(0)
     if raw.lower() == 'b':
         raise Back
+    if use_prefill:
+        return raw
     return raw if raw else (str(default) if default is not None else '')
 
 
@@ -382,12 +405,36 @@ def collect_battle(store, scen, difficulty, scenario_key, order, title, bosses=(
         record_enemy(store, difficulty, internal, display, order)
 
 
+def prompt_note(current):
+    """Edit an observation's note without retyping the whole thing.
+
+    With GNU readline (e.g. `pip install gnureadline` on macOS) the existing note
+    is pre-loaded into the editable line for true inline editing — arrow around
+    and tweak it, Enter to keep, clear it to blank. On libedit (no prefill) it
+    falls back to a keep/clear/append/replace mini-syntax."""
+    if not current:
+        return prompt('  note (blank=none)')
+    if CAN_PREFILL:
+        return prompt('  note', prefill=current)
+    print(f'  current note: {current}')
+    raw = prompt("  note — Enter=keep · '-'=clear · '+ TEXT'=append · else replace",
+                 default=current)
+    if raw == current:           # blank → default(current) → keep
+        return current
+    if raw == '-':
+        return ''
+    if raw.startswith('+'):
+        add = raw[1:].strip()
+        return f'{current} {add}'.strip() if add else current
+    return raw                    # replace
+
+
 def record_enemy(store, difficulty, internal, display, order):
     rec = store.get(difficulty, internal, order)
     try:
         atk = prompt(f'  {display} ATK', rec['atk'] if rec else None)
         hp = prompt(f'  {display} HP', rec['hp'] if rec else None)
-        note = prompt('  note (blank=skip)', rec['note'] if rec else None)
+        note = prompt_note(rec['note'] if rec else '')
     except Back:
         print('  (cancelled)')
         return
