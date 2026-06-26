@@ -117,8 +117,16 @@ Point scripts at the game's `Contents/Resources/Data` folder (contains `sharedas
 OUT=./out
 python3 extraction/mt2_extract_roster.py  "Contents/Resources/Data" --out $OUT
 python3 extraction/mt2_extract_scaling.py "Contents/Resources/Data" --out $OUT
-python3 extraction/mt2_build_outputs.py   --in $OUT --difficulty Overgrowth
+python3 extraction/mt2_build_outputs.py   --in $OUT --difficulty Overgrowth   # optional — see note
 ```
+
+> **`mt2_build_outputs.py` is now optional.** Its standalone outputs
+> (`scaled_<difficulty>.xlsx`, the boss sheet, `scaling_page.html`) are
+> **deprecated** — superseded by the app (`index.html` + `gamedata.js`); the
+> last copies are archived in `deprecated/`. The script is **kept** because its
+> scaling math (`build_model`/`compute_orders`) is imported by
+> `mt2_emit_boss_stats.py`. Run it only if you actually want to regenerate those
+> legacy spreadsheets/page.
 
 The wave/scenario extractor is a separate, self-contained pass (not part of the stat pipeline above):
 
@@ -145,14 +153,18 @@ Writes `out/waves.json` + `out/waves.md` — per-scenario wave composition (enem
 mt2_lib.py                 ← shared SerializedFile parser + helpers (only place with parsing logic)
 mt2_extract_roster.py      → out/roster.json (+ roster.xlsx)
 mt2_extract_scaling.py     → out/scaling.json
-mt2_build_outputs.py       ← reads both JSONs → scaled_<difficulty>.xlsx + scaling_page.html
+mt2_build_outputs.py       ← owns the scaling math (build_model/compute_orders, imported by mt2_emit_boss_stats); its scaled_<difficulty>.xlsx + scaling_page.html outputs are DEPRECATED (archived in deprecated/)
 mt2_extract_waves.py       → out/waves.json + out/waves.md  (standalone, not wired to build_outputs)
 mt2_emit_wave_descriptions.py → rewrites the BOSS_WAVE_DESCRIPTIONS + WAVE_SET_DESCRIPTIONS blocks in gamedata.js from out/waves.json (first piece of the "pipeline emits gamedata.js" job)
 mt2_emit_boss_stats.py     → rewrites the BOSS_STATS block in gamedata.js from roster.json + scaling.json (reuses mt2_build_outputs.compute_orders for the math)
-mt2_emit_enemy_stats.py    → rewrites the ENEMY_STATS block in gamedata.js from enemy_observations.csv (OBSERVED non-boss stats; not computed — non-boss scaling is unsolved)
+mt2_emit_enemy_stats.py    → rewrites the ENEMY_STATS block in gamedata.js from difficulty_observations.csv (Overgrowth, non-boss rows; OBSERVED — non-boss scaling is unsolved)
+mt2_collect_observations.py → guided TUI collector → difficulty_observations.csv (Bloom/Tangle/Overgrowth enemy AND boss ATK/HP + notes). --check validator; --prefill-base DIFF. See its module docstring.
 mt2_extract_descriptions.py → out/enemy_descriptions.xlsx — PARTIAL per-enemy ability text from CharacterData descriptionKey (templates 100%; some amounts unresolved). See docs/enemy_descriptions.md
-enemy_observations.csv     ← hand-maintained (Excel) SS-enemy ATK/HP by order; committed source of truth for ENEMY_STATS
+difficulty_observations.csv ← hand-collected SS enemy+boss ATK/HP by difficulty×order (long format); source of truth for ENEMY_STATS, and the wiki-facing dataset
+roster.json (out/)         ← authoritative BASE stats for every char (Bloom non-boss ≈ base, tentative)
 ```
+
+**Authoritative sources (post-2026-06-25 cleanup).** `out/roster.json` = base stats; `difficulty_observations.csv` = observed scaled/per-difficulty/boss stats. Legacy/superseded artifacts live in `deprecated/` (git-ignored, local-only): `enemy_observations.csv` (ATK/HP role moved to difficulty_observations.csv; its `Description (filled)` column is still the active home for the descriptions TODO), the old boss spreadsheets `Observations.xlsx` / `Expected_Boss_Values.xlsx`, and the deprecated `mt2_build_outputs.py` outputs `scaled_Overgrowth_SoulSavior.xlsx` / `scaling_page.html`. **Ignore `deprecated/` unless a task specifically asks about it.**
 
 `mt2_lib.py` owns: `parse_assets()` (SerializedFile v22 reader), `Localizer` (resolves localization keys from `resources.assets`), `iter_characters()` (yields CharacterData dicts), `STAT_HP_INDEX`/`STAT_ATK_INDEX` constants.
 
@@ -208,7 +220,7 @@ Goal: replace the `'Waves: TBD'` placeholders in `index.html` with the wave comp
 - [x] **Quoto (R2) and Ajax (R4) resolved.** Both are alternate bosses that **reuse their sibling's wave set** (Quoto↔Elebor, Ajax↔Qel) — no separate wave scenario, by design. Their **boss stat data is present in `roster.json`** (`…R2_TrainBoss_Titanskin` / `…R4_TrainBoss_EmberGranter`). `Gluttonous Masses` covers both R2 battle scenarios. See the Game knowledge "Alternate bosses" note.
 - [x] **Minor boss ↔ wave set not a fixed pairing — display FIXED (2026-06-15).** Boss and wave set are chosen independently (verified for R3: either Phalanx or The Undying Spirit can front either Harassing Snipers or Rabble-Rousers). The wave-set string used to bake in whichever minor boss the extractor found, so a mismatched (or alt-boss) combo showed the wrong boss. Fix: `swapBattleBoss(waves, region, variant)` in `app.js` replaces the baked region candidate (from `VARIANT_OPTIONS['<region>-battle-variant']`) with the actually-selected battle variant, applied in `getDisplayText`'s battle branch. Now any boss×wave-set combination renders the correct boss. Verified headless: Maera+Korin on Athane's `Dutiful Sentinels` → shows Korin; alt bosses below also fixed. **Still optional/open:** (a) confirm the boss×wave-set independence for R1/R2/R4 against wiki/play (display is already correct regardless); (b) the `mt2_emit_wave_descriptions.py` pairing dicts and the Game-knowledge tables still describe a 1:1 pairing — informational only now, but could be reworded.
 - [x] **Alt-boss wave shows the sibling's name — FIXED (subsumed by the swap above).** Quoto (reuses Elebor's `Gluttonous Masses`) and Ajax (reuses Qel's `Plague Legion`) are region battle candidates, so `swapBattleBoss` swaps the sibling's name for the selected alt. Verified headless: selecting Quoto → final wave ends in **Quoto the Destroyer**; Ajax → **Ajax the Deathbringer**.
-- [ ] **Finish per-enemy ability descriptions (partial extractor exists).** `extraction/mt2_extract_descriptions.py` resolves each enemy's `descriptionKey` template and fills keyword names + inline status powers, but leaves `?` (statuses stored as `PPtr` refs, not inline) and `{?}` (non-status `paramInt` amounts like Heal). Full method + how-to-finish in `docs/enemy_descriptions.md`. User is reviewing/hand-filling in-game via `enemy_observations.csv`; eventual goal is an `ENEMY_DESCRIPTIONS` block surfaced on the enemy hover (the `title` in `wrapEnemyStats` is the hook).
+- [ ] **Finish per-enemy ability descriptions (partial extractor exists).** `extraction/mt2_extract_descriptions.py` resolves each enemy's `descriptionKey` template and fills keyword names + inline status powers, but leaves `?` (statuses stored as `PPtr` refs, not inline) and `{?}` (non-status `paramInt` amounts like Heal). Full method + how-to-finish in `docs/enemy_descriptions.md`. User is reviewing/hand-filling in-game via the `Description (filled)` column of `deprecated/enemy_observations.csv` (still the active home for descriptions, even though the file's ATK/HP role is deprecated); eventual goal is an `ENEMY_DESCRIPTIONS` block surfaced on the enemy hover (the `title` in `wrapEnemyStats` is the hook).
 - [ ] **Collect descriptions for 2 minor bosses (currently the "… information" placeholder).** These have empty `''` values in `variantDescriptions` (gamefacts.js), so the info box shows e.g. "Qel the Malaiser information" instead of a mechanic blurb: **Qel the Malaiser** & **Ajax the Deathbringer** (R4 Lylith). Done: Maera's Athane/Korin; R3 **Phalanx**, **The Undying Spirit**; R2 **Elebor** = "Resolve: Gain Titanskin 5." and **Quoto** = "Titanskin 10. Revenge: Lose Titanskin 1 and Gain Rage 2." (2026-06-24). **Action:** observe each minor boss's ability/mechanic in-game (wiki pages not yet written) and fill the `variantDescriptions` strings — hand-authored, same style as the others (e.g. "Applies Rage 1 to enemy units on Incant.").
 - [x] **Auto-select the wave set when only one exists for a battle — DONE (2026-06-15).** `handleVariantChange()` in `app.js`: when a `*-battle-variant` is chosen and `WAVE_SET_OPTIONS[region]` has exactly one entry (Thaddeus `Gluttonous Masses`, Lylith `Plague Legion`), it sets `#<region>-wave-set` to that option and calls `updateNodeDisplay`; `saveState` follows via the existing flow. Judged by region option count, not per boss. Verified headless: picking Quoto auto-selects Gluttonous Masses; Ajax auto-selects Plague Legion.
 - [x] **Thaddeus's second battle wave set "Forbidden Fruit" does NOT appear in game — RESOLVED (2026-06-24).** R2's Thaddeus battle has two scenarios in `waves.json` — `R2_Battle_TroopBuffFeed` and `R2_Battle_TroopTitanskin` — with **different trash** and **different in-game names** (resolved from each scenario's `battleNameKey` via the Localizer):
@@ -241,14 +253,16 @@ Wave-set → scenario mapping (the wave-set ↔ `waves.md` scenario link is soli
 
 ## TODO — enemy stat hover (observation table)
 
+> **Superseded (2026-06-25).** The wide `enemy_observations.csv` workflow below is historical. Observations are now collected via `extraction/mt2_collect_observations.py` into `difficulty_observations.csv` (long format, all three difficulties + bosses, with `--check` validation and `--prefill-base`). `mt2_emit_enemy_stats.py` reads that file's Overgrowth non-boss rows. The bullets below are kept for context (and the deprecated file still hosts the descriptions column).
+
 Goal: hovering an enemy name in the info box's wave lists shows that enemy's ATK/HP. Every wave-list name resolves to a roster entry, so the data exists — but the values must be **observed, not computed**.
 
 **Why a custom observation table (not a formula).** The non-boss O2–O4 scaling formula has never been solved (see `docs/enemy_scaling.md` — ~77% ATK / 57% HP match, best-effort only). So enemy order-scaled stats can't be trusted from the pipeline. Instead, maintain a hand-curated **observation table** of ground-truth ATK/HP by Oversoul order (O1–O4), scoped to **Soul Savior enemies only** (the full roster has 382 chars; SS is ~35 enemies).
 
-- **Source of truth = `enemy_observations.csv`** (repo root, committed — *not* under gitignored `data/`), **hand-edited directly in Excel**, no app or UI. Columns: `Name, Internal, Base ATK, Base HP, O1 ATK, O1 HP, O2 ATK, O2 HP, O3 ATK, O3 HP, O4 ATK, O4 HP, Reviewed and correct`. `extraction/mt2_emit_enemy_stats.py` reads it to emit `ENEMY_STATS`; the user fills/corrects cells in Excel and commits the CSV, then re-runs the emit.
+- **Source of truth = `difficulty_observations.csv`** (repo root, long format, collected via `mt2_collect_observations.py`) — **superseded `enemy_observations.csv`** (now in `deprecated/`) as of 2026-06-25. `mt2_emit_enemy_stats.py` reads its **Overgrowth, non-boss** rows to emit `ENEMY_STATS`. The historical wide-CSV details below describe the deprecated file; kept for the descriptions column it still hosts. Columns of the legacy file: `Name, Internal, Base ATK, Base HP, O1..O4 ATK/HP, Description (filled), Reviewed and correct`.
 - **Keyed by `Internal`, not Subtype.** Internal name is unique across all 34 SS-enemy rows, so it cleanly distinguishes the duplicate display names (`Mother's Amalgam` / `Blade` / `Supplicant` each have two distinct internals). The CSV itself is unambiguous; only the *wave-list reference* (display name) is still ambiguous — see the duplicate-rows note below.
 - **`Reviewed and correct` column:** one flag per enemy row, marking the row's values were confirmed in-game. Per-row, not per-order. (Currently informational — the emit doesn't gate on it.)
-- **Provenance:** the seed CSV was built from a `data/Enemy-Observations.xlsx` (~46% of order-cells already filled with real hand-observed values that differed from the formula) — *not* the formula tab — preserving those observations; blank cells = not yet observed (emitted as `null`). That xlsx has since been **deleted** to avoid confusion: `enemy_observations.csv` is now the sole authoritative source.
+- **Provenance:** the seed CSV was built from a `data/Enemy-Observations.xlsx` (~46% of order-cells already filled with real hand-observed values that differed from the formula) — *not* the formula tab — preserving those observations; blank cells = not yet observed (emitted as `null`). That xlsx has since been **deleted** to avoid confusion. (`enemy_observations.csv` was the authoritative source at the time; since 2026-06-25 it's deprecated and superseded by `difficulty_observations.csv` — see the banner at the top of this section.)
 
 - [x] **Seed CSV built — DONE.** `enemy_observations.csv` generated from `data/Enemy-Observations.xlsx` (real observations preserved, `Internal` key, `Reviewed and correct`=FALSE everywhere). Hand-maintained in Excel thereafter.
 - [x] **`ENEMY_STATS` in `gamedata.js` — DONE** via `extraction/mt2_emit_enemy_stats.py --write gamedata.js`. Keyed by display name → `[O1,O2,O3,O4]` of `'ATK⚔️ HP❤️'`, `null` per unobserved order. Same string/array shape as `BOSS_STATS` (so `pickByOrder` semantics apply). **Re-run after editing the CSV.**

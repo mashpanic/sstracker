@@ -1,6 +1,6 @@
 # Boss Scaling Formula (Soul Savior — Overgrowth)
 
-Derived from `out/scaling.json` and verified against `data/Expected_Boss_Values.xlsx`.
+Derived from `out/scaling.json` and verified against `deprecated/Expected_Boss_Values.xlsx`.
 
 ## Rounding
 
@@ -84,4 +84,4 @@ The gap is not explained by any SoulSavior asset object — checked all five mut
 
 ## Verification
 
-All 26 boss rows in `data/Expected_Boss_Values.xlsx` match exactly using the formulas above.
+All 26 boss rows in `deprecated/Expected_Boss_Values.xlsx` match exactly using the formulas above.

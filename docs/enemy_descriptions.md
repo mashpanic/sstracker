@@ -2,7 +2,7 @@
 
 Goal: per-enemy ability text like **"Trample. Gorge: Gain Titanskin 3 and restore 20 health."**, eventually shown on hover in the tracker. This documents a *partial* extraction (the `?`/`{?}` numbers are not all resolved). The working script is `extraction/mt2_extract_descriptions.py`; it writes a review spreadsheet `out/enemy_descriptions.xlsx`.
 
-Status (2026-06-24): **review is being done in-game** and the partial data was copied into `enemy_observations.csv` for hand-completion. This file is so the binary half can be resumed/finished later.
+Status (2026-06-24): **review is being done in-game** and the partial data was copied into the `Description (filled)` column of `enemy_observations.csv` for hand-completion. That file has since been deprecated to `deprecated/enemy_observations.csv` (git-ignored, local-only) — its ATK/HP role moved to `difficulty_observations.csv`, but the descriptions column still lives there. This doc is so the binary half can be resumed/finished later.
 
 ## Where the description lives
 
@@ -43,4 +43,4 @@ The full in-game tooltip also has a **leading starting-keyword** (Glutmass's "Tr
 5. Then this becomes a real pipeline step emitting an `ENEMY_DESCRIPTIONS` block (likely into `gamedata.js`), surfaced on the enemy hover (`wrapEnemyStats` already holds the full name in the `title` as the hook).
 
 ## Line-break convention
-While hand-reviewing/filling descriptions in `enemy_observations.csv`, represent line breaks as a literal **`<br>`** in the cell. The info box renders via `innerHTML` and `<br>` is the app's line-break token everywhere (wave lists, and the game's own `descriptionKey` templates already contain `<br>`), so it needs **no conversion** and keeps each enemy on one CSV row (clean diffs). (Avoid real in-cell newlines / Alt+Enter — they force CSV quoting and embedded newlines, and would need a `\n → <br>` step. If that editing style is ever preferred, have the description-emit normalize `\n` to `<br>`.)
+While hand-reviewing/filling descriptions in `deprecated/enemy_observations.csv`, represent line breaks as a literal **`<br>`** in the cell. The info box renders via `innerHTML` and `<br>` is the app's line-break token everywhere (wave lists, and the game's own `descriptionKey` templates already contain `<br>`), so it needs **no conversion** and keeps each enemy on one CSV row (clean diffs). (Avoid real in-cell newlines / Alt+Enter — they force CSV quoting and embedded newlines, and would need a `\n → <br>` step. If that editing style is ever preferred, have the description-emit normalize `\n` to `<br>`.)

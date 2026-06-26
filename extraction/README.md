@@ -9,7 +9,7 @@ work without it).
 - `mt2_lib.py` — shared SerializedFile parser + helpers (the only file with the parsing logic).
 - `mt2_extract_roster.py` — every enemy → `roster.json` (+ `roster.xlsx`).
 - `mt2_extract_scaling.py` — difficulty + region scaling tables → `scaling.json` (+ console).
-- `mt2_build_outputs.py` — combines the two → `scaled_<difficulty>.xlsx`, a one-page boss sheet, and `scaling_page.html`.
+- `mt2_build_outputs.py` — owns the scaling math (`build_model`/`compute_orders`), imported by `mt2_emit_boss_stats.py`. Its standalone outputs (`scaled_<difficulty>.xlsx`, a one-page boss sheet, `scaling_page.html`) are **deprecated** — superseded by the app (`gamedata.js`); run only to regenerate those legacy artifacts.
 
 ## Usage
 Point them at the game's `.../Contents/Resources/Data` folder (contains `sharedassets0.assets`

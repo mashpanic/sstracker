@@ -7,6 +7,9 @@ out/
 # Working observation spreadsheets — local only
 data/
 
+# Deprecated/legacy data — superseded sources, kept locally for reference, not versioned
+deprecated/
+
 # Python
 __pycache__/
 *.py[cod]

@@ -42,7 +42,7 @@ Status at last run (2026-06-24): ~15/31 fully auto-filled, ~10 with a `?`,
 ~7 with a `{?}`; Longlash / Mother's Hunter have no descriptionKey (basic
 attackers), Mother's Spearman is excluded from extraction.
 
-Usage:  python3 mt2_extract_descriptions.py ["Contents/Resources/Data"] [--csv enemy_observations.csv] [--out out]
+Usage:  python3 mt2_extract_descriptions.py ["Contents/Resources/Data"] [--csv deprecated/enemy_observations.csv] [--out out]
 """
 import sys, os, re, csv, struct
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -96,7 +96,7 @@ def fill(tmpl, chunk):
 
 def main():
     argv = sys.argv[1:]
-    csv_path = argv[argv.index('--csv') + 1] if '--csv' in argv else 'enemy_observations.csv'
+    csv_path = argv[argv.index('--csv') + 1] if '--csv' in argv else 'deprecated/enemy_observations.csv'
     outdir = argv[argv.index('--out') + 1] if '--out' in argv else 'out'
     pos = [a for a in argv if not a.startswith('--') and a not in (csv_path, outdir)]
     data_dir = pos[0] if pos else find_data_dir('.')
