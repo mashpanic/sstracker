@@ -158,7 +158,7 @@ mt2_extract_waves.py       → out/waves.json + out/waves.md  (standalone, not w
 mt2_emit_wave_descriptions.py → rewrites the BOSS_WAVE_DESCRIPTIONS + WAVE_SET_DESCRIPTIONS blocks in gamedata.js from out/waves.json (first piece of the "pipeline emits gamedata.js" job)
 mt2_emit_boss_stats.py     → rewrites the BOSS_STATS block in gamedata.js from roster.json + scaling.json (reuses mt2_build_outputs.compute_orders for the math)
 mt2_emit_enemy_stats.py    → rewrites the ENEMY_STATS block in gamedata.js from difficulty_observations.csv (Overgrowth, non-boss rows; OBSERVED — non-boss scaling is unsolved)
-mt2_collect_observations.py → guided TUI collector → difficulty_observations.csv (Bloom/Tangle/Overgrowth enemy AND boss ATK/HP + notes). --check validator; --prefill-base DIFF. See its module docstring.
+mt2_collect_observations.py → guided TUI collector → difficulty_observations.csv (Bloom/Tangle/Overgrowth enemy AND boss ATK/HP + notes). Maintenance modes: --check (validator), --prefill-base DIFF (seed a difficulty from roster base), --tidy-notes (drop 'base?' markers + propagate each enemy's note across its orders/difficulties). See its module docstring.
 mt2_extract_descriptions.py → out/enemy_descriptions.xlsx — PARTIAL per-enemy ability text from CharacterData descriptionKey (templates 100%; some amounts unresolved). See docs/enemy_descriptions.md
 difficulty_observations.csv ← hand-collected SS enemy+boss ATK/HP by difficulty×order (long format); source of truth for ENEMY_STATS, and the wiki-facing dataset
 roster.json (out/)         ← authoritative BASE stats for every char (Bloom non-boss ≈ base, tentative)

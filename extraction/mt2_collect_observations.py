@@ -31,6 +31,7 @@ Output: difficulty_observations.csv at repo root, columns
 Usage:  python3 extraction/mt2_collect_observations.py [--out FILE] [--reseed]
         python3 extraction/mt2_collect_observations.py --check [--out FILE]
         python3 extraction/mt2_collect_observations.py --prefill-base DIFFICULTY
+        python3 extraction/mt2_collect_observations.py --tidy-notes [--out FILE]
 """
 import sys, os, re, csv, ast, json
 try:
@@ -287,6 +288,41 @@ def prefill_base(store, scen, difficulty):
     if missing:
         print('  (no roster base for: ' + ', '.join(sorted(missing)) + ')')
     return added
+
+
+def tidy_notes(store):
+    """Two-pass note cleanup, keyed by internal:
+      1. Blank every 'base?' prefill marker (left by --prefill-base).
+      2. Fill blank notes from each enemy's single note, copied across ALL its
+         orders and difficulties — never overwriting an existing note.
+    An enemy whose rows hold two different notes is skipped (reported) so a real
+    discrepancy isn't flattened. Pass 1 runs first so 'base?' is never treated as
+    a note to propagate. Returns (cleared, filled, conflicting_internals).
+
+    NOTE: cross-difficulty copies carry the source amount (e.g. Witherbloom 3) to
+    every difficulty — fix any that turn out to scale (see the O5/scaling TODO)."""
+    from collections import defaultdict
+    cleared = filled = 0
+    for r in store.rows.values():
+        if r['note'].strip() == 'base?':
+            r['note'] = ''
+            cleared += 1
+    notes = defaultdict(set)
+    for r in store.rows.values():
+        if r['note'].strip():
+            notes[r['internal']].add(r['note'].strip())
+    conflicts = []
+    for internal, distinct in notes.items():
+        if len(distinct) > 1:
+            conflicts.append(internal)
+            continue
+        note = next(iter(distinct))
+        for r in store.rows.values():
+            if r['internal'] == internal and r['note'].strip() == '':
+                r['note'] = note
+                filled += 1
+    store.save()
+    return cleared, filled, conflicts
 
 
 # ───────────────────────── TUI helpers ─────────────────────────
@@ -623,6 +659,15 @@ def main():
             sys.exit(f'ERROR: difficulty must be one of {DIFFICULTIES}')
         n = prefill_base(store, scen, difficulty)
         print(f'Prefilled {n} {difficulty} non-boss cells with roster base stats (note "base?").')
+        return
+
+    if '--tidy-notes' in argv:
+        cleared, filled, conflicts = tidy_notes(store)
+        print(f'Cleared {cleared} "base?" markers; filled {filled} blank notes by propagation.')
+        if conflicts:
+            print('Skipped these internals (conflicting notes — resolve by hand):')
+            for i in conflicts:
+                print('  ', i)
         return
 
     if reseed or not store.rows:
