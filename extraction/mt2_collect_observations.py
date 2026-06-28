@@ -735,6 +735,13 @@ def run_walk(store, scen, astrael, mids, lifemother):
         variants = [(lbl, lbl) for lbl, _ in r['battles'][1]['options']]
         boss_choice[r['key']] = choose(f'{r["name"]} boss?', variants, allow_back=False)
 
+    # Lifemother's variant is also known up front, so pick it here with the
+    # region bosses; it's collected at the end of the run (preselected, not
+    # re-asked). manual_collect prompts the variant separately and is unaffected.
+    lm_battle = lifemother['battles'][0]
+    lm_variant = choose('Lifemother variant?',
+                        [(lbl, lbl) for lbl, _ in lm_battle['options']], allow_back=False)
+
     # Astrael — fixed O1.
     try:
         visit_region(store, scen, difficulty, astrael, astrael['fixed_order'])
@@ -767,9 +774,10 @@ def run_walk(store, scen, astrael, mids, lifemother):
         todo.remove(region)
         slot += 1
 
-    # Lifemother — fixed O4.
+    # Lifemother — fixed O4, variant preselected up front.
     try:
-        visit_region(store, scen, difficulty, lifemother, lifemother['fixed_order'])
+        visit_region(store, scen, difficulty, lifemother, lifemother['fixed_order'],
+                     boss_preselect=lm_variant)
     except Back:
         pass
 
