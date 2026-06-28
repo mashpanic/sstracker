@@ -643,18 +643,25 @@ def pick_scenario(battle, preselect=None):
     return choose(f'{battle["title"]} — which one did you fight?', labels)
 
 
+def collect_single(store, scen, difficulty, region, battle, order, boss_preselect=None):
+    """Resolve one battle's scenario + boss(es) and collect it at `order`. The
+    per-battle unit of work shared by the full walk (visit_region) and manual
+    mode. May raise Back if you step out of a scenario/boss prompt."""
+    preselect = boss_preselect if (battle['kind'] == 'boss'
+                                   and not battle.get('astrael')) else None
+    label, scenario_key = pick_scenario(battle, preselect)
+    bosses = resolve_bosses(battle, scenario_key, label, region['orders'])
+    collect_battle(store, scen, difficulty, scenario_key, order,
+                   f'{battle["title"]}: {label}', bosses=bosses)
+
+
 def visit_region(store, scen, difficulty, region, order, boss_preselect=None):
     print(f'\n══════ {region["name"]}  —  Oversoul O{order} ({difficulty}) ══════')
     for battle in region['battles']:
         try:
-            preselect = boss_preselect if (battle['kind'] == 'boss'
-                                           and not battle.get('astrael')) else None
-            label, scenario_key = pick_scenario(battle, preselect)
-            bosses = resolve_bosses(battle, scenario_key, label, region['orders'])
+            collect_single(store, scen, difficulty, region, battle, order, boss_preselect)
         except Back:
             return
-        collect_battle(store, scen, difficulty, scenario_key, order,
-                       f'{battle["title"]}: {label}', bosses=bosses)
 
 
 def resolve_bosses(battle, scenario_key, label, region_orders):
@@ -734,6 +741,42 @@ def run_walk(store, scen, astrael, mids, lifemother):
     run_validator(store, scen)
 
 
+def manual_collect(store, scen, mids, lifemother):
+    """Targeted manual collection (top-level menu). Jump straight to any region's
+    battle/boss — or a specific Lifemother variant — and record it at a chosen
+    order, instead of walking a full run in visit order. After each collection it
+    returns to the region menu; b (back) there returns to the main menu.
+
+    (Astrael is not offered here — it's a single fixed O1 fight; collect it via
+    the full walk. The region menu is the four mid regions + Lifemother = 1-5.)"""
+    difficulty = choose('Manual collection — difficulty?',
+                        [(d, d) for d in DIFFICULTIES], allow_back=False)
+    regions = mids + [lifemother]               # Maera-Lylith = 1-4, Lifemother = 5
+    while True:
+        try:
+            region = choose(f'Manual collection ({difficulty}) — pick a region',
+                            [(r['name'], r) for r in regions])
+        except Back:
+            return
+        try:
+            if region is lifemother:
+                # Lifemother: pick the variant (1-3); fixed order (O4).
+                battle = lifemother['battles'][0]
+                variant = choose('Lifemother — which variant?',
+                                 [(lbl, lbl) for lbl, _ in battle['options']])
+                collect_single(store, scen, difficulty, lifemother, battle,
+                               lifemother['fixed_order'], boss_preselect=variant)
+            else:
+                # Mid region: battle (minor) or boss (1-2), then an order (1-4).
+                battle = choose(f'{region["name"]} — battle or boss?',
+                                [(b['title'], b) for b in region['battles']])
+                order = choose('Which order?',
+                               [(f'O{o}', o) for o in region['orders']])
+                collect_single(store, scen, difficulty, region, battle, order)
+        except Back:
+            continue                            # back out of a sub-prompt → region menu
+
+
 # ───────────────────────── main ─────────────────────────
 
 def main():
@@ -802,13 +845,16 @@ def main():
     while True:
         action = choose('Main menu', [
             ('Walk a run (collect observations)', 'walk'),
+            ('Manual collection (pick an encounter)', 'manual'),
             ('Coverage summary', 'summary'),
             ('Quit', 'quit'),
         ], allow_back=False)
         if action == 'quit':
             break
-        if action == 'summary':
+        elif action == 'summary':
             print_summary(store, scen, astrael, mids, lifemother)
+        elif action == 'manual':
+            manual_collect(store, scen, mids, lifemother)
         else:
             try:
                 run_walk(store, scen, astrael, mids, lifemother)
