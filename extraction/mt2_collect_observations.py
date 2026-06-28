@@ -26,12 +26,17 @@ with the rest of the project. On first run the Overgrowth column is seeded from
 enemy_observations.csv.
 
 Output: difficulty_observations.csv at repo root, columns
-    difficulty, internal, display, order, atk, hp, note
+    difficulty, internal, display, order, atk, hp, note, verified
+where verified is Yes/No — Yes once a value has been entered/confirmed through
+the run-walk (the act of observing in-game); No for bulk-seeded/prefilled rows
+that still need confirmation.
 
 Usage:  python3 extraction/mt2_collect_observations.py [--out FILE] [--reseed]
         python3 extraction/mt2_collect_observations.py --check [--out FILE]
         python3 extraction/mt2_collect_observations.py --prefill-base DIFFICULTY
         python3 extraction/mt2_collect_observations.py --tidy-notes [--out FILE]
+        python3 extraction/mt2_collect_observations.py --seed-notes SRC DST
+        python3 extraction/mt2_collect_observations.py --seed-bosses-from-computed
 """
 import sys, os, re, csv, ast, json
 try:
@@ -79,13 +84,14 @@ from mt2_emit_wave_descriptions import WAVESET_TO_SCENARIO, BOSSVARIANT_TO_SCENA
 WAVES_JSON   = os.path.join(REPO, 'out', 'waves.json')
 ROSTER_JSON  = os.path.join(REPO, 'out', 'roster.json')
 GAMEFACTS_JS = os.path.join(REPO, 'gamefacts.js')
+GAMEDATA_JS  = os.path.join(REPO, 'gamedata.js')
 # Legacy wide Overgrowth CSV — deprecated; kept only as the one-time bootstrap
 # seed for difficulty_observations.csv (now the master, so this rarely runs).
 SEED_CSV     = os.path.join(REPO, 'deprecated', 'enemy_observations.csv')
 OUT_CSV      = os.path.join(REPO, 'difficulty_observations.csv')
 
 DIFFICULTIES = ['Bloom', 'Tangle', 'Overgrowth']
-FIELDS = ['difficulty', 'internal', 'display', 'order', 'atk', 'hp', 'note']
+FIELDS = ['difficulty', 'internal', 'display', 'order', 'atk', 'hp', 'note', 'verified']
 NA_CELLS = {'', '-', '—', 'n/a', 'na'}
 
 # Minor bosses with no Soul Savior wave scenario (each is the alternate of a
@@ -214,16 +220,19 @@ class Store:
         if os.path.exists(path):
             for r in csv.DictReader(open(path, newline='')):
                 key = (r['difficulty'], r['internal'], int(r['order']))
+                r.setdefault('verified', 'No')          # tolerate pre-migration files
+                if not (r.get('verified') or '').strip():
+                    r['verified'] = 'No'
                 self.rows[key] = r
                 self.display[r['internal']] = r['display']
 
     def get(self, difficulty, internal, order):
         return self.rows.get((difficulty, internal, order))
 
-    def upsert(self, difficulty, internal, display, order, atk, hp, note):
+    def upsert(self, difficulty, internal, display, order, atk, hp, note, verified='No'):
         self.rows[(difficulty, internal, order)] = {
             'difficulty': difficulty, 'internal': internal, 'display': display,
-            'order': order, 'atk': atk, 'hp': hp, 'note': note,
+            'order': order, 'atk': atk, 'hp': hp, 'note': note, 'verified': verified,
         }
         self.display[internal] = display
         self.save()
@@ -264,11 +273,12 @@ def seed_overgrowth(store):
 
 def prefill_base(store, scen, difficulty):
     """Fill every reachable non-boss (enemy, order) cell for `difficulty` that
-    isn't already recorded with the enemy's roster BASE stats, tagged note
-    'base?'. Used to seed Bloom under the hypothesis that Bloom enemies don't
-    scale (sit at base) — so they read as ✓ and can be eyeballed against the
-    game while collecting bosses; correct one by re-recording it. Existing
-    observations are left untouched. Bosses are excluded (they scale)."""
+    isn't already recorded with the enemy's roster BASE stats, left
+    verified='No'. Used to seed Bloom under the hypothesis that Bloom enemies
+    don't scale (sit at base) — so they can be eyeballed against the game while
+    collecting bosses; confirm one by re-recording it in the walk (which flips
+    it to verified='Yes'). Existing observations are left untouched. Bosses are
+    excluded (they scale)."""
     roster = {e['internal']: e for e in json.load(open(ROSTER_JSON))}
     cells = {}                                  # (internal, order) -> display
     for tiers in scen.values():
@@ -283,7 +293,7 @@ def prefill_base(store, scen, difficulty):
         if not e:
             missing.add(internal)
             continue
-        store.upsert(difficulty, internal, display, order, str(e['atk']), str(e['hp']), 'base?')
+        store.upsert(difficulty, internal, display, order, str(e['atk']), str(e['hp']), '')
         added += 1
     if missing:
         print('  (no roster base for: ' + ', '.join(sorted(missing)) + ')')
@@ -291,22 +301,16 @@ def prefill_base(store, scen, difficulty):
 
 
 def tidy_notes(store):
-    """Two-pass note cleanup, keyed by internal:
-      1. Blank every 'base?' prefill marker (left by --prefill-base).
-      2. Fill blank notes from each enemy's single note, copied across ALL its
-         orders and difficulties — never overwriting an existing note.
-    An enemy whose rows hold two different notes is skipped (reported) so a real
-    discrepancy isn't flattened. Pass 1 runs first so 'base?' is never treated as
-    a note to propagate. Returns (cleared, filled, conflicting_internals).
+    """Note cleanup, keyed by internal: fill blank notes from each enemy's single
+    note, copied across ALL its orders and difficulties — never overwriting an
+    existing note. An enemy whose rows hold two different notes is skipped
+    (reported) so a real discrepancy isn't flattened. Returns (cleared, filled,
+    conflicting_internals); `cleared` is retained as 0 for the caller's print.
 
     NOTE: cross-difficulty copies carry the source amount (e.g. Witherbloom 3) to
     every difficulty — fix any that turn out to scale (see the O5/scaling TODO)."""
     from collections import defaultdict
     cleared = filled = 0
-    for r in store.rows.values():
-        if r['note'].strip() == 'base?':
-            r['note'] = ''
-            cleared += 1
     notes = defaultdict(set)
     for r in store.rows.values():
         if r['note'].strip():
@@ -323,6 +327,87 @@ def tidy_notes(store):
                 filled += 1
     store.save()
     return cleared, filled, conflicts
+
+
+def seed_notes(store, src, dst):
+    """Pre-seed `dst`'s notes from `src` (e.g. --seed-notes Bloom Tangle) so a
+    fresh run on `dst` already shows each enemy's note for inline editing during
+    collection. For every `src` row with a note, copy that note onto the matching
+    (internal, order) `dst` row — creating the row with BLANK atk/hp if it
+    doesn't exist, or filling an existing `dst` row's blank note. Never
+    overwrites an existing `dst` note or any `dst` atk/hp. The notes-only rows
+    don't count as recorded (see recorded()), so the walk still prompts for their
+    stats and they still show in 'remaining' counts. Returns (created, filled)."""
+    created = filled = 0
+    for (diff, internal, order), r in list(store.rows.items()):
+        if diff != src or not r['note'].strip():
+            continue
+        existing = store.get(dst, internal, order)
+        if existing is None:
+            store.upsert(dst, internal, r['display'], order, '', '', r['note'])
+            created += 1
+        elif not existing['note'].strip():
+            existing['note'] = r['note']
+            filled += 1
+    store.save()
+    return created, filled
+
+
+def seed_bosses_from_computed(store, variant_opts, wave_set_opts):
+    """Bridge-seed Overgrowth boss rows from the computed BOSS_STATS block in
+    gamedata.js (the soon-to-be-deprecated automated scaling path) as a
+    provisional baseline — written verified='No' so it reads as unconfirmed and
+    gets observed-and-overwritten in the walk. Uses the collector's own boss
+    model to map each BOSS_STATS variant key -> roster internal, and the CSV's
+    existing display name for that internal where known (so Astrael's two keys
+    'Mother's Flagellant'/'Mother's Hunter' collapse onto the single row
+    'Astrael the First Reborn', and Swarmhost gets its CSV name). Notes are left
+    blank — run --tidy-notes afterward to propagate each boss's note from Bloom.
+    Existing Overgrowth boss rows are NOT clobbered. Returns (created, skipped)."""
+    js = open(GAMEDATA_JS).read()
+    m = re.search(r'const BOSS_STATS = \{(.*?)\n\};', js, re.S)
+    if not m:
+        sys.exit('ERROR: could not find BOSS_STATS in gamedata.js')
+    body = m.group(1)
+
+    # variant key -> (internal, orders) via the run model
+    astrael, mids, lifemother = build_run_model(variant_opts, wave_set_opts)
+    vmap = {}
+    for region in [astrael, *mids, lifemother]:
+        for b in region['battles']:
+            if b['kind'] == 'boss':
+                for label, sk in b['options']:
+                    bb = BOSSES.get(sk)
+                    if bb:
+                        vmap[label] = (bb[0], sorted(bb[2]))
+            else:
+                for variant in b['boss_variants']:
+                    internal = MINORBOSS.get(variant)
+                    if internal:
+                        vmap[variant] = (internal, list(region['orders']))
+
+    created = skipped = 0
+    for key in re.findall(r'"([^"]+)":', body):
+        if key not in vmap:
+            continue
+        internal, orders = vmap[key]
+        display = store.display.get(internal) or key
+        raw = re.search(r'"%s":\s*(\[[^\]]*\]|"[^"]*")' % re.escape(key), body).group(1)
+        if raw.startswith('['):                       # region/minor boss: [O1..O4]
+            arr = ast.literal_eval(raw)
+            cells = {i + 1: v for i, v in enumerate(arr) if v}
+        else:                                          # Astrael (O1) / Lifemother (O4)
+            cells = {(orders[0] if orders else 1): ast.literal_eval(raw)}
+        for order, cell in cells.items():
+            if store.get('Overgrowth', internal, order):
+                skipped += 1
+                continue
+            nums = re.findall(r'\d+', cell)
+            if len(nums) < 2:
+                continue
+            store.upsert('Overgrowth', internal, display, order, nums[0], nums[1], '', verified='No')
+            created += 1
+    return created, skipped
 
 
 # ───────────────────────── TUI helpers ─────────────────────────
@@ -376,11 +461,28 @@ def choose(title, options, allow_back=True):
         print('  ? enter a number from the list.')
 
 
+def recorded(rec):
+    """True when a row carries both ATK and HP (verified or not). A notes-only
+    seed row (blank stats, left by --seed-notes) is NOT recorded."""
+    return bool(rec and (rec['atk'] or '').strip() and (rec['hp'] or '').strip())
+
+
+def is_verified(rec):
+    """True when a row's stats were confirmed in-game (verified=Yes). The walk
+    keys its ✓ mark and 'remaining' counts on THIS, not on `recorded`, so a
+    bulk-seeded row (verified=No, even with provisional ATK/HP) still shows as
+    needing attention until you confirm it in the walk."""
+    return bool(rec and (rec.get('verified') or '').strip() == 'Yes')
+
+
 def stat_label(rec):
     if not rec:
         return '—'
     note = f'  · {rec["note"]}' if rec.get('note') else ''
-    return f'{rec["atk"]}⚔️ {rec["hp"]}❤️{note}'
+    if not recorded(rec):
+        return f'—{note}'           # notes-only seed row: stats not collected yet
+    flag = '' if is_verified(rec) else ' (unverified)'
+    return f'{rec["atk"]}⚔️ {rec["hp"]}❤️{flag}{note}'
 
 
 def fmt_orders(orders):
@@ -423,7 +525,7 @@ def collect_battle(store, scen, difficulty, scenario_key, order, title, bosses=(
         print(f'\n── {title}  (O{order}) ──')
         for i, (internal, display, is_boss) in enumerate(here, 1):
             rec = store.get(difficulty, internal, order)
-            mark = '✓' if rec else ' '
+            mark = '✓' if is_verified(rec) else ('~' if recorded(rec) else ' ')
             tag = '★ ' if is_boss else '  '
             print(f'  {mark}{i:2d}. {tag}{display:24s} [{fmt_orders(ranges[internal])}]  {stat_label(rec)}')
         if gated:
@@ -477,8 +579,8 @@ def record_enemy(store, difficulty, internal, display, order):
     if atk == '' or hp == '':
         print('  (skipped — need both ATK and HP)')
         return
-    store.upsert(difficulty, internal, display, order, atk, hp, note)
-    print(f'  saved {display}: {atk}⚔️ {hp}❤️ @ O{order} {difficulty}')
+    store.upsert(difficulty, internal, display, order, atk, hp, note, verified='Yes')
+    print(f'  saved {display}: {atk}⚔️ {hp}❤️ @ O{order} {difficulty} ✓verified')
 
 
 def region_cells(region, scen, boss_variant=None):
@@ -511,17 +613,17 @@ def region_cells(region, scen, boss_variant=None):
 
 def remaining(store, difficulty, region, scen, boss_variant=None):
     return sum(1 for (i, o) in region_cells(region, scen, boss_variant)
-               if not store.get(difficulty, i, o))
+               if not is_verified(store.get(difficulty, i, o)))
 
 
 def boss_orders_needed(store, difficulty, region, variant):
-    """Orders of `variant` (the region's chosen boss) not yet recorded — the
+    """Orders of `variant` (the region's chosen boss) not yet verified — the
     'can I still pick this boss up here?' hint for the routing menu."""
     b = BOSSES.get(BOSSVARIANT_TO_SCENARIO.get(variant, ''))
     if not b:
         return []
     return [o for o in sorted(b[2] & set(region['orders']))
-            if not store.get(difficulty, b[0], o)]
+            if not is_verified(store.get(difficulty, b[0], o))]
 
 
 def pick_scenario(battle, preselect=None):
@@ -658,12 +760,32 @@ def main():
         if difficulty not in DIFFICULTIES:
             sys.exit(f'ERROR: difficulty must be one of {DIFFICULTIES}')
         n = prefill_base(store, scen, difficulty)
-        print(f'Prefilled {n} {difficulty} non-boss cells with roster base stats (note "base?").')
+        print(f'Prefilled {n} {difficulty} non-boss cells with roster base stats (verified=No).')
+        return
+
+    if '--seed-bosses-from-computed' in argv:
+        created, skipped = seed_bosses_from_computed(store, variant_opts, wave_set_opts)
+        print(f'Seeded {created} Overgrowth boss rows from computed BOSS_STATS '
+              f'(verified=No, notes blank); skipped {skipped} already present.')
+        print('Next: run --tidy-notes to propagate boss notes from Bloom.')
+        return
+
+    if '--seed-notes' in argv:
+        i = argv.index('--seed-notes')
+        if i + 2 >= len(argv):
+            sys.exit('ERROR: --seed-notes needs SRC and DST, e.g. --seed-notes Bloom Tangle')
+        src, dst = argv[i + 1], argv[i + 2]
+        for d in (src, dst):
+            if d not in DIFFICULTIES:
+                sys.exit(f'ERROR: difficulty must be one of {DIFFICULTIES}')
+        created, filled = seed_notes(store, src, dst)
+        print(f'Seeded {created} new {dst} note rows + filled {filled} blank {dst} notes '
+              f'from {src} (atk/hp left blank).')
         return
 
     if '--tidy-notes' in argv:
         cleared, filled, conflicts = tidy_notes(store)
-        print(f'Cleared {cleared} "base?" markers; filled {filled} blank notes by propagation.')
+        print(f'Filled {filled} blank notes by propagation.')
         if conflicts:
             print('Skipped these internals (conflicting notes — resolve by hand):')
             for i in conflicts:
@@ -692,6 +814,7 @@ def main():
                 run_walk(store, scen, astrael, mids, lifemother)
             except Back:
                 pass
+    note_divergence_warning(store)
     print('bye.')
 
 
@@ -721,12 +844,20 @@ def validate(store, scen):
       NUM   — ATK/HP isn't a non-negative integer (blocks the other checks)
       REACH — a cell is recorded for an (enemy, order) that never appears in
               waves.json (recorded against the wrong order, or a data gap)
+      NOTE  — an enemy carries >1 distinct note across its rows. Notes are
+              assumed difficulty- and order-invariant (see CLAUDE.md), so a
+              divergence is usually a typo to reconcile — but could be a genuine
+              per-order/per-difficulty ability change worth recording instead.
     """
     from collections import defaultdict
     reach = reachable_cells(scen)
     series = defaultdict(dict)                  # (difficulty, internal) -> {order: row}
+    notes = defaultdict(set)                    # internal -> set of distinct non-empty notes
     for (diff, internal, order), row in store.rows.items():
         series[(diff, internal)][order] = row
+        n = (row['note'] or '').strip()
+        if n:
+            notes[internal].add(n)
 
     def num(v):
         v = (v or '').strip()
@@ -752,6 +883,11 @@ def validate(store, scen):
                 if prev_v is not None and v < prev_v:
                     issues.append(('MONO', f'{diff} · {disp} {stat.upper()}: O{prev_o}={prev_v} → O{order}={v} (decreases; should only rise or hold)'))
                 prev_o, prev_v = order, v
+    for internal, distinct in sorted(notes.items()):
+        if len(distinct) > 1:
+            disp = store.display.get(internal, internal)
+            joined = ' || '.join(sorted(distinct))
+            issues.append(('NOTE', f'{disp} ({internal}): {len(distinct)} distinct notes — {joined}'))
     return issues
 
 
@@ -762,11 +898,36 @@ def run_validator(store, scen):
         print('No issues found. ✓')
         return
     from collections import Counter
-    order = {'NUM': 0, 'PAIR': 1, 'MONO': 2, 'REACH': 3}
+    order = {'NUM': 0, 'PAIR': 1, 'MONO': 2, 'REACH': 3, 'NOTE': 4}
     for cat, msg in sorted(issues, key=lambda x: (order.get(x[0], 9), x[1])):
         print(f'  [{cat:5s}] {msg}')
     counts = Counter(c for c, _ in issues)
     print('\n' + ', '.join(f'{n} {c}' for c, n in counts.most_common()) + f'  ({len(issues)} total)')
+
+
+def note_divergence_warning(store):
+    """Auto-run on exit from the interactive collector: warn if any enemy now
+    carries >1 distinct note across its rows. Notes are assumed difficulty- and
+    order-invariant (see CLAUDE.md), so a divergence is usually a typo to
+    reconcile — but could be a genuine per-order/difficulty ability change worth
+    keeping. Scoped to NOTE only (no MONO/REACH noise); run --check for the rest."""
+    from collections import defaultdict
+    notes = defaultdict(set)
+    for (_, internal, _), row in store.rows.items():
+        n = (row['note'] or '').strip()
+        if n:
+            notes[internal].add(n)
+    diverged = {i: d for i, d in notes.items() if len(d) > 1}
+    if not diverged:
+        return
+    print(f'\n⚠️  NOTE divergence: {len(diverged)} enemy(ies) have >1 distinct note '
+          f'across orders/difficulties (typo, or a real per-order change?):')
+    for internal, distinct in sorted(diverged.items()):
+        disp = store.display.get(internal, internal)
+        print(f'  · {disp} ({internal}):')
+        for n in sorted(distinct):
+            print(f'      | {n}')
+    print('  → reconcile by hand, or run --check for full validation.')
 
 
 def print_summary(store, scen, astrael, mids, lifemother):

@@ -1,30 +1,46 @@
 #!/usr/bin/env python3
 """
-mt2_emit_boss_stats.py — emit the BOSS_STATS block for gamedata.js from
-roster.json + scaling.json, reusing mt2_build_outputs.compute_orders so the
-scaling math has a single source of truth.
+mt2_emit_boss_stats.py — emit the BOSS_STATS block for gamedata.js from the
+OBSERVED boss rows of difficulty_observations.csv (now the authoritative stat
+source). This replaces the former computed path (roster.json + scaling.json +
+mt2_build_outputs.compute_orders), which is DEPRECATED — boss ATK/HP is now
+hand-observed exactly like enemy stats. compute_orders still lives in
+mt2_build_outputs only as a one-time reseed generator
+(`mt2_collect_observations.py --seed-bosses-from-computed`).
 
 BOSS_STATS is keyed by the boss *variant* name shown in the app dropdowns:
-  - Main-region bosses + minor "battle" bosses → order-scaled ['O1','O2','O3','O4']
-    of 'ATK⚔️ HP❤️'.
-  - Astrael (O1 only) and Lifemother (O4/O5 only) → a single fixed 'ATK⚔️ HP❤️'.
+  - Main-region + minor "battle" bosses → ['O1','O2','O3','O4'] of 'ATK⚔️ HP❤️'
+    (null for an order not yet observed).
+  - Astrael (O1 only) and Lifemother (O4 only) → a single 'ATK⚔️ HP❤️' string.
 
-⚠️ Known issue (CLAUDE.md TODO): the minor "TrainBoss" bosses (Athane/Korin/
-Elebor/Quoto/Phalanx/Undying Spirit/Qel/Ajax) currently run through the same
-boss_overgrowth_scaled formula as the region bosses, which over-inflates their
-HP. Their numbers are emitted anyway (tracked for a formula fix).
+CSV display names are authoritative, so Astrael's row is 'Astrael the First
+Reborn' (remapped onto BOTH dropdown keys "Mother's Flagellant"/"Mother's
+Hunter" here) and Lifemother's rows are Corpseflower/Swarmhost/Undying Bloom.
+TODO: rename the BOSS_STATS keys + app dropdowns to the CSV names and drop the
+Astrael remap (then this file keys straight off the CSV display name).
 
-Usage:  python3 mt2_emit_boss_stats.py [--in out] [--difficulty Overgrowth] [--write gamedata.js]
+Usage:  python3 mt2_emit_boss_stats.py [--csv difficulty_observations.csv]
+                                       [--difficulty Overgrowth] [--write gamedata.js]
 """
-import sys, os, re, json
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import mt2_build_outputs as B
+import sys, os, re, csv, json
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(HERE)
+DEFAULT_CSV = os.path.join(REPO, 'difficulty_observations.csv')
 
 ASTRAEL_INTERNAL = 'Boss_SoulSavior_R0_TrainBoss_Defensive'
+LIFEMOTHER_INTERNALS = {
+    'Boss_SoulSavior_Final_Lifemother_Debuffer',
+    'Boss_SoulSavior_Final_Lifemother_Infested',
+    'Boss_SoulSavior_Final_Lifemother_HealReanimate',
+}
+# Bosses whose BOSS_STATS value is a single string (one fixed order), not [O1..O4].
+SINGLE_ORDER_INTERNALS = {ASTRAEL_INTERNAL} | LIFEMOTHER_INTERNALS
 
 # Ordered (comment, [(variant_key, internal_or_None)]) groups — mirrors the app's
-# VARIANT_OPTIONS. internal=None → resolve via VARIANT_NAMES (region/Lifemother
-# variants, shared display name) or by roster display name (battle bosses).
+# VARIANT_OPTIONS and fixes the emitted key order. internal=None → resolve via the
+# CSV display name (which == the variant key for every boss except Astrael, whose
+# two dropdown keys both map to the single 'Astrael the First Reborn' CSV row).
 GROUPS = [
     ('Astrael (O1 only; both combats are the same Astrael fight)', [
         ("Mother's Flagellant", ASTRAEL_INTERNAL),
@@ -41,48 +57,56 @@ GROUPS = [
     ('Lylith Boss',   [('Plaguebringer', None), ('Energy Vampire', None), ('Inoculation', None)]),
 ]
 
-PLACEHOLDER = '0⚔️ 0❤️'
+
+def load_csv(path, diff):
+    """Return (obs, disp2int): obs[internal][order]=(atk,hp) for filled boss rows
+    at `diff`; disp2int maps each boss display name -> internal (any difficulty)."""
+    obs, disp2int = {}, {}
+    for r in csv.DictReader(open(path, newline='')):
+        if not r['internal'].startswith('Boss_'):
+            continue
+        disp2int.setdefault(r['display'], r['internal'])
+        if r['difficulty'] != diff:
+            continue
+        a, h = (r['atk'] or '').strip(), (r['hp'] or '').strip()
+        if a and h:
+            obs.setdefault(r['internal'], {})[int(r['order'])] = (a, h)
+    return obs, disp2int
 
 
-def stat(a, h):
-    return PLACEHOLDER if a is None or h is None else f'{a}⚔️ {h}❤️'
+def stat(cell):
+    return None if cell is None else f'{cell[0]}⚔️ {cell[1]}❤️'
 
 
-def value_for(e, diff, total_pct):
-    """Return a single string (one applicable order) or a 4-element [O1..O4] list."""
-    o = B.compute_orders(e, diff, total_pct)
-    present = [n for n in (1, 2, 3, 4, 5) if o.get(f'o{n}a') is not None]
-    if present == [1]:
-        return stat(o['o1a'], o['o1h'])          # Astrael
-    if present == [5]:
-        return stat(o['o5a'], o['o5h'])          # Lifemother
-    return [stat(o[f'o{n}a'], o[f'o{n}h']) for n in (1, 2, 3, 4)]
+def value_for(internal, obs):
+    cells = obs.get(internal, {})
+    if internal in SINGLE_ORDER_INTERNALS:        # one fixed order (Astrael O1 / Lifemother O4)
+        if not cells:
+            return None
+        return stat(cells[sorted(cells)[0]])
+    return [stat(cells.get(o)) for o in (1, 2, 3, 4)]
 
 
-def render_block(roster, diff, total_pct):
-    by_internal = {e['internal']: e for e in roster}
-    by_name = {e['name']: e for e in roster}
-    display_to_internal = {v: k for k, v in B.VARIANT_NAMES.items()}
-
+def render_block(obs, disp2int):
     lines = [
-        '// ---- Per-variant stats by visit order ----',
+        '// ---- Per-variant observed stats by visit order ----',
         '// Keyed by variant name. Main-region + minor bosses store',
-        "// ['O1','O2','O3','O4'] of 'ATK⚔️ HP❤️'; Astrael (O1) and Lifemother",
-        '// (final) store a single fixed string. Generated by',
-        '// extraction/mt2_emit_boss_stats.py — do not hand-edit.',
+        "// ['O1','O2','O3','O4'] of 'ATK⚔️ HP❤️' (null = order not yet observed);",
+        '// Astrael (O1) and Lifemother (final) store a single string. OBSERVED,',
+        '// from difficulty_observations.csv (boss rows). Generated by',
+        '// extraction/mt2_emit_boss_stats.py — edit that file, not this block.',
         'const BOSS_STATS = {',
     ]
     missing = []
     for comment, entries in GROUPS:
         lines.append(f'    // {comment}')
         for key, internal in entries:
-            internal = internal or display_to_internal.get(key)
-            e = by_internal.get(internal) if internal else by_name.get(key)
-            if not e:
+            internal = internal or disp2int.get(key)
+            if not internal:
                 missing.append(key)
-                val = PLACEHOLDER
+                val = None
             else:
-                val = value_for(e, diff, total_pct)
+                val = value_for(internal, obs)
             lines.append(f'    {json.dumps(key)}: {json.dumps(val, ensure_ascii=False)},')
     lines.append('};')
     return '\n'.join(lines), missing
@@ -90,15 +114,12 @@ def render_block(roster, diff, total_pct):
 
 def main():
     argv = sys.argv[1:]
-    indir = argv[argv.index('--in') + 1] if '--in' in argv else 'out'
+    csv_path = argv[argv.index('--csv') + 1] if '--csv' in argv else DEFAULT_CSV
     diff = argv[argv.index('--difficulty') + 1] if '--difficulty' in argv else 'Overgrowth'
     target = argv[argv.index('--write') + 1] if '--write' in argv else None
 
-    roster = json.load(open(os.path.join(indir, 'roster.json')))
-    scaling = json.load(open(os.path.join(indir, 'scaling.json')))
-    total_pct = B.build_model(scaling)
-
-    block, missing = render_block(roster, diff, total_pct)
+    obs, disp2int = load_csv(csv_path, diff)
+    block, missing = render_block(obs, disp2int)
     if missing:
         print('WARNING: unresolved variants ->', missing, file=sys.stderr)
 
@@ -113,7 +134,7 @@ def main():
     if n != 1:
         sys.exit(f'ERROR: could not locate BOSS_STATS block in {target}')
     open(target, 'w').write(src)
-    print(f'Updated {target} ({diff})')
+    print(f'Updated {target} ({diff} observed boss stats)')
 
 
 if __name__ == '__main__':

@@ -210,29 +210,47 @@ function encounterOrder(key) {
     return Number.isNaN(n) ? null : n;
 }
 
-// Render one combatant as: abbreviated name + inline "(atk/hp)" (muted), with
-// the full name on the hover title. Missing/unparseable stat → "(?)" in the
-// amber unrecorded style. Used for both trash enemies and the boss (no special
-// emphasis on the boss — it reads like any other unit).
-function enemySpan(name, statStr) {
+// Render one combatant as: abbreviated name + inline "(atk/hp)" (muted).
+// Missing/unparseable stat → "(?)" in the amber unrecorded style. Used for both
+// trash enemies and the boss (no special emphasis on the boss — it reads like
+// any other unit). `noteKey` (defaults to `name`) keys ENEMY_NOTES for the
+// ability-text popover; a boss passes its variant key since the wave-list name
+// (e.g. "Maera the Dutiful") differs from the note key (e.g. "Sibling Hierarchy").
+// When a note exists the span gets data-note-key/data-full-name (read by the
+// popover handlers) and drops the native title to avoid a double tooltip; with
+// no note, the full name stays on the native title as before.
+function enemySpan(name, statStr, noteKey) {
     const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
     const num = m ? `(${m[1]}/${m[2]})` : '(?)';
     const cls = m ? 'enemy-stat' : 'enemy-stat unrecorded';
     const disp = name.replace("Mother's ", "M. ");
-    return `<span class="${cls}" title="${name}">${disp}<span class="es-num">&nbsp;${num}</span></span>`;
+    const key = noteKey || name;
+    const hasNote = typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[key];
+    const attrs = hasNote
+        ? ` data-note-key="${escapeAttr(key)}" data-full-name="${escapeAttr(name)}"`
+        : ` title="${escapeAttr(name)}"`;
+    return `<span class="${cls}"${attrs}>${disp}<span class="es-num">&nbsp;${num}</span></span>`;
+}
+
+// Minimal HTML-attribute escaper for names/keys placed in double-quoted attrs.
+function escapeAttr(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+                    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 // Wrap combatant names in a wave-list string with inline ATK/HP so wave
 // strength reads at a glance. Trash enemies use ENEMY_STATS at the given order.
 // The boss appears under its in-game name (not in ENEMY_STATS), so pass it
 // explicitly (bossName + its BOSS_STATS value) to get the same inline treatment.
-function wrapEnemyStats(html, order, bossName, bossStat) {
+function wrapEnemyStats(html, order, bossName, bossStat, bossNoteKey) {
     let out = html.replace(ENEMY_NAME_RE, name => {
         const v = order && ENEMY_STATS[name] ? ENEMY_STATS[name][order - 1] : null;
         return enemySpan(name, v);
     });
     if (bossName && out.includes(bossName)) {
-        out = out.split(bossName).join(enemySpan(bossName, bossStat));
+        // The boss's note is keyed by its variant (bossNoteKey), not its
+        // wave-list display name — pass it so the popover resolves.
+        out = out.split(bossName).join(enemySpan(bossName, bossStat, bossNoteKey));
     }
     return out;
 }
@@ -270,9 +288,23 @@ function getDisplayText(key) {
         // like every other unit. BOSS_STATS is a fixed string (Astrael/
         // Lifemother) or an [O1..O4] array (the four regions).
         const bossStat = pickByOrder(BOSS_STATS[variant], region);
+        // Lead with the boss name given the same inline-stat + note-popover
+        // treatment as the final-wave boss. Note key is the variant (which is
+        // also the note key for region/minor bosses and Lifemother); Astrael's
+        // variant is a featured-enemy label, so point it at Astrael's own note.
+        const leadNoteKey = key === 'astrael' ? 'Astrael the First Reborn' : variant;
+        const bossLabel = enemySpan(variant, bossStat, leadNoteKey);
         let text = variantDescriptions[variant]
-            ? variant + ': ' + variantDescriptions[variant]
-            : variant + ' information';
+            ? bossLabel + ': ' + variantDescriptions[variant]
+            : bossLabel + ' information';
+
+        // Mid-run regions need an Order before wave/stat lines can resolve
+        // (encounterOrder is null until the dropdown is set; Astrael/Lifemother
+        // are fixed and never null). Lead with a prompt so the empty wave list
+        // is explained.
+        if (order === null) {
+            text = '<span class="order-hint">Select an Order for complete information</span><br>' + text;
+        }
 
         // Battle rows: the minor boss is the selected variant (swapBattleBoss
         // puts it in the wave string); it gets inline stats like any enemy.
@@ -280,7 +312,7 @@ function getDisplayText(key) {
             const waveEl = document.getElementById(`${region}-wave-set`);
             if (waveEl && waveEl.value) {
                 const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveEl.value], region);
-                if (waves) text += '<br>' + wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat);
+                if (waves) text += '<br>' + wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat, variant);
             }
         }
 
@@ -293,7 +325,11 @@ function getDisplayText(key) {
             if (bossWaves) {
                 const bossName = key.endsWith('-boss') ? REGION_BOSS_DISPLAY[region]
                     : (key === 'astrael' ? 'Astrael the First Reborn' : variant);
-                text += '<br>' + wrapEnemyStats(bossWaves, order, bossName, bossStat);
+                // Note key: region bosses fight under their region display name
+                // but their note is keyed by variant (Sibling Hierarchy, …);
+                // Astrael/Lifemother fight under a name that IS the note key.
+                const bossNoteKey = key.endsWith('-boss') ? variant : bossName;
+                text += '<br>' + wrapEnemyStats(bossWaves, order, bossName, bossStat, bossNoteKey);
             }
         }
 
@@ -639,3 +675,46 @@ reorderGroups();
 
 // Refresh mutator boxes after state is restored.
 document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(sel));
+
+// ----- Enemy ability-note popover (hover) -----
+// A single floating element reused for every enemy span. Notes may be
+// multi-line (<br>), so the popover renders the note as innerHTML. Hovering an
+// enemy/boss with a recorded note shows it immediately (no native-title delay);
+// moving off hides it. (Click-to-pin was dropped — the instant hover made it
+// redundant.)
+(function setupNotePopover() {
+    const infoBox = document.getElementById('encounter-info');
+    if (!infoBox) return;
+    const pop = document.createElement('div');
+    pop.className = 'note-popover';
+    pop.style.display = 'none';
+    document.body.appendChild(pop);
+
+    function show(span) {
+        const key = span.dataset.noteKey;
+        const note = key && typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[key];
+        if (!note) return;
+        const name = span.dataset.fullName || key;
+        pop.innerHTML = `<strong>${escapeAttr(name)}</strong><br>${note}`;
+        pop.style.display = 'block';
+        // Position under the span, clamped to the viewport horizontally.
+        const r = span.getBoundingClientRect();
+        const top = window.scrollY + r.bottom + 6;
+        const maxLeft = window.scrollX + document.documentElement.clientWidth - pop.offsetWidth - 8;
+        const left = Math.min(window.scrollX + r.left, Math.max(window.scrollX + 8, maxLeft));
+        pop.style.top = top + 'px';
+        pop.style.left = left + 'px';
+    }
+    function hide() { pop.style.display = 'none'; }
+
+    infoBox.addEventListener('mouseover', e => {
+        const span = e.target.closest('.enemy-stat[data-note-key]');
+        if (span) show(span);
+    });
+    infoBox.addEventListener('mouseout', e => {
+        const span = e.target.closest('.enemy-stat[data-note-key]');
+        if (span && !span.contains(e.relatedTarget)) hide();
+    });
+    // Any info-box rebuild (order/variant/wave change) dismisses the popover.
+    new MutationObserver(hide).observe(infoBox, { childList: true });
+})();
