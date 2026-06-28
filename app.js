@@ -719,17 +719,38 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
         new MutationObserver(hide).observe(infoBox, { childList: true });
     }
 
-    // Boss defeat-mutator "curse" boxes (red). Flavor name + full effect.
+    // Boss-selection dropdown (green note popover, with ATK/HP appended in
+    // parens here — the stats aren't shown on the select otherwise). Astrael's
+    // variant is a featured-enemy label, so name/note key on Astrael itself.
+    function showBossSelect(sel) {
+        const variant = sel.value;
+        if (!variant || typeof BOSS_STATS === 'undefined' || !(variant in BOSS_STATS)) return;
+        const key = sel.id.replace(/-variant$/, '');
+        const region = key.includes('-') ? key.split('-')[0] : key;
+        const name = key === 'astrael' ? 'Astrael the First Reborn' : variant;
+        const statStr = pickByOrder(BOSS_STATS[variant], region);
+        const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
+        const parens = m ? ` (${m[1]}/${m[2]})` : ' (?)';
+        const note = (typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[name]) || '';
+        showAt(sel, `<strong>${escapeAttr(name)}</strong>${parens}${note ? '<br>' + note : ''}`, false);
+    }
+
+    // Encounter-table hovers: boss defeat-mutator "curse" boxes (red) and the
+    // boss-variant selects (green note + appended ATK/HP).
     if (table) {
         table.addEventListener('mouseover', e => {
             const box = e.target.closest('.mutator-box[data-curse-key]');
-            if (!box) return;
-            const m = typeof MUTATORS !== 'undefined' && MUTATORS[box.dataset.curseKey];
-            if (m) showAt(box, `<strong>${escapeAttr(m.name)}</strong><br>${escapeAttr(m.effect)}`, true);
+            if (box) {
+                const m = typeof MUTATORS !== 'undefined' && MUTATORS[box.dataset.curseKey];
+                if (m) showAt(box, `<strong>${escapeAttr(m.name)}</strong><br>${escapeAttr(m.effect)}`, true);
+                return;
+            }
+            const sel = e.target.closest('.variant-select');
+            if (sel) showBossSelect(sel);
         });
         table.addEventListener('mouseout', e => {
-            const box = e.target.closest('.mutator-box[data-curse-key]');
-            if (box && !box.contains(e.relatedTarget)) hide();
+            const t = e.target.closest('.mutator-box[data-curse-key], .variant-select');
+            if (t && !t.contains(e.relatedTarget)) hide();
         });
     }
 })();
