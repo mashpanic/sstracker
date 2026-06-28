@@ -46,6 +46,10 @@ except ImportError:                  # libedit and supports pre-filling the line
         import readline              # stdlib (libedit on macOS — arrow editing +
     except ImportError:              # history, but no prefill)
         readline = None
+try:
+    import termios, tty              # POSIX raw-mode single-keypress menus (choose)
+except ImportError:                  # non-POSIX: fall back to typed-line menus
+    termios = tty = None
 
 # Pre-loading an existing value into the editable line ("prefill") only works on
 # GNU readline, not macOS's libedit. Used to edit notes in place; see prompt_note.
@@ -448,17 +452,50 @@ def prompt(msg, default=None, prefill=None):
     return raw if raw else (str(default) if default is not None else '')
 
 
+def read_key():
+    """Read one keypress without Enter (POSIX cbreak mode). Returns the char;
+    '' on EOF (Ctrl-D). Ctrl-C still raises KeyboardInterrupt under cbreak."""
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setcbreak(fd)
+        return sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+
 def choose(title, options, allow_back=True):
-    """Numbered menu. options = list of (label, value). Returns chosen value."""
+    """Numbered menu. options = list of (label, value). Returns chosen value.
+
+    On an interactive TTY with <=9 options a single keypress selects (no Enter);
+    bigger menus or non-interactive stdin (piped input/tests) fall back to a
+    typed line via prompt()."""
     print(f'\n{title}')
     for i, (label, _) in enumerate(options, 1):
         print(f'  {i}. {label}')
     hint = '#' + (', b=back, q=quit' if allow_back else ', q=quit')
+    one_key = termios is not None and sys.stdin.isatty() and len(options) <= 9
     while True:
-        raw = prompt(f'Select {hint}')
+        if one_key:
+            sys.stdout.write(f'Select {hint}: ')
+            sys.stdout.flush()
+            try:
+                ch = read_key()
+            except KeyboardInterrupt:
+                print('\nbye.')
+                sys.exit(0)
+            print(ch if ch.isprintable() else '')   # echo the keypress
+            if ch in ('', 'q', 'Q', '\x03', '\x04'):
+                print('bye.')
+                sys.exit(0)
+            if allow_back and ch in ('b', 'B'):
+                raise Back
+            raw = ch
+        else:
+            raw = prompt(f'Select {hint}')
         if raw.isdigit() and 1 <= int(raw) <= len(options):
             return options[int(raw) - 1][1]
-        print('  ? enter a number from the list.')
+        print('  ? press the number of a listed option.')
 
 
 def recorded(rec):
