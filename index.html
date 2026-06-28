@@ -99,6 +99,7 @@
             border-color: #ef4444;
             color: #ef4444;
             font-weight: bold;
+            cursor: help;
         }
 
         .selectable-row { cursor: pointer; }
@@ -160,6 +161,9 @@
             pointer-events: none;
         }
         .note-popover strong { color: #04d361; }
+        /* Red variant for boss defeat-mutator ("curse") popovers. */
+        .note-popover--curse { border-color: #ef4444; }
+        .note-popover--curse strong { color: #ef4444; }
         /* Inline (atk/hp) numbers: muted so the enemy name stays prominent. */
         #encounter-info .enemy-stat .es-num { color: #8a8a93; }
         /* Enemy whose ATK/HP for the current order isn't recorded yet —

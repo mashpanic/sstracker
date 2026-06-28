@@ -357,13 +357,14 @@ function refreshMutatorBox(variantSelectEl) {
     const mutator = MUTATORS[variantSelectEl.value];
     if (mutator) {
         // Box shows the terse effect gist (wraps to 2 lines if long); the
-        // flavor name + full effect are on hover.
+        // flavor name + full effect appear in the red hover popover (keyed by
+        // the variant value via data-curse-key — see setupPopovers).
         box.textContent = mutator.short || mutator.name;
-        box.title = `${mutator.name} — ${mutator.effect}`;
+        box.dataset.curseKey = variantSelectEl.value;
         box.classList.add('has-mutator');
     } else {
         box.textContent = '—';
-        box.title = '';
+        delete box.dataset.curseKey;
         box.classList.remove('has-mutator');
     }
 }
@@ -565,7 +566,7 @@ const variantCell = id => {
 const bossVariantCell = (bossKey) => {
     return cell(container(
         slot(`${bossKey}-variant`, 'variant-select', { variant: true, variantHandler: true, aria: `${labelFor(bossKey)} variant` }),
-        `<div class="mutator-box" id="${bossKey}-mutator-box" title="">—</div>`
+        `<div class="mutator-box" id="${bossKey}-mutator-box">—</div>`
     ));
 };
 
@@ -676,45 +677,59 @@ reorderGroups();
 // Refresh mutator boxes after state is restored.
 document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(sel));
 
-// ----- Enemy ability-note popover (hover) -----
-// A single floating element reused for every enemy span. Notes may be
-// multi-line (<br>), so the popover renders the note as innerHTML. Hovering an
-// enemy/boss with a recorded note shows it immediately (no native-title delay);
-// moving off hides it. (Click-to-pin was dropped — the instant hover made it
-// redundant.)
-(function setupNotePopover() {
+// ----- Floating popover (hover) -----
+// One shared element serves two uses: enemy/boss ability notes in the info-box
+// wave lists (green) and boss defeat-mutator "curses" on the encounter rows
+// (red, via .note-popover--curse). Both show instantly on hover (no native-
+// title delay) and hide on mouse-out; an info-box rebuild also clears it.
+(function setupPopovers() {
     const infoBox = document.getElementById('encounter-info');
-    if (!infoBox) return;
+    const table = document.getElementById('encounter-table');
     const pop = document.createElement('div');
     pop.className = 'note-popover';
     pop.style.display = 'none';
     document.body.appendChild(pop);
 
-    function show(span) {
-        const key = span.dataset.noteKey;
-        const note = key && typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[key];
-        if (!note) return;
-        const name = span.dataset.fullName || key;
-        pop.innerHTML = `<strong>${escapeAttr(name)}</strong><br>${note}`;
+    function showAt(el, html, curse) {
+        pop.className = 'note-popover' + (curse ? ' note-popover--curse' : '');
+        pop.innerHTML = html;
         pop.style.display = 'block';
-        // Position under the span, clamped to the viewport horizontally.
-        const r = span.getBoundingClientRect();
-        const top = window.scrollY + r.bottom + 6;
+        // Position under the target, clamped to the viewport horizontally.
+        const r = el.getBoundingClientRect();
         const maxLeft = window.scrollX + document.documentElement.clientWidth - pop.offsetWidth - 8;
         const left = Math.min(window.scrollX + r.left, Math.max(window.scrollX + 8, maxLeft));
-        pop.style.top = top + 'px';
+        pop.style.top = (window.scrollY + r.bottom + 6) + 'px';
         pop.style.left = left + 'px';
     }
     function hide() { pop.style.display = 'none'; }
 
-    infoBox.addEventListener('mouseover', e => {
-        const span = e.target.closest('.enemy-stat[data-note-key]');
-        if (span) show(span);
-    });
-    infoBox.addEventListener('mouseout', e => {
-        const span = e.target.closest('.enemy-stat[data-note-key]');
-        if (span && !span.contains(e.relatedTarget)) hide();
-    });
-    // Any info-box rebuild (order/variant/wave change) dismisses the popover.
-    new MutationObserver(hide).observe(infoBox, { childList: true });
+    // Enemy/boss ability notes (green). Note text may contain <br> → innerHTML.
+    if (infoBox) {
+        infoBox.addEventListener('mouseover', e => {
+            const span = e.target.closest('.enemy-stat[data-note-key]');
+            if (!span) return;
+            const key = span.dataset.noteKey;
+            const note = key && typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[key];
+            if (note) showAt(span, `<strong>${escapeAttr(span.dataset.fullName || key)}</strong><br>${note}`, false);
+        });
+        infoBox.addEventListener('mouseout', e => {
+            const span = e.target.closest('.enemy-stat[data-note-key]');
+            if (span && !span.contains(e.relatedTarget)) hide();
+        });
+        new MutationObserver(hide).observe(infoBox, { childList: true });
+    }
+
+    // Boss defeat-mutator "curse" boxes (red). Flavor name + full effect.
+    if (table) {
+        table.addEventListener('mouseover', e => {
+            const box = e.target.closest('.mutator-box[data-curse-key]');
+            if (!box) return;
+            const m = typeof MUTATORS !== 'undefined' && MUTATORS[box.dataset.curseKey];
+            if (m) showAt(box, `<strong>${escapeAttr(m.name)}</strong><br>${escapeAttr(m.effect)}`, true);
+        });
+        table.addEventListener('mouseout', e => {
+            const box = e.target.closest('.mutator-box[data-curse-key]');
+            if (box && !box.contains(e.relatedTarget)) hide();
+        });
+    }
 })();
