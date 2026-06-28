@@ -289,11 +289,11 @@ function getDisplayText(key) {
         // Lifemother) or an [O1..O4] array (the four regions).
         const bossStat = pickByOrder(BOSS_STATS[variant], region);
         // Lead with the boss name given the same inline-stat + note-popover
-        // treatment as the final-wave boss. Note key is the variant (which is
-        // also the note key for region/minor bosses and Lifemother); Astrael's
-        // variant is a featured-enemy label, so point it at Astrael's own note.
-        const leadNoteKey = key === 'astrael' ? 'Astrael the First Reborn' : variant;
-        const bossLabel = enemySpan(variant, bossStat, leadNoteKey);
+        // treatment as the final-wave boss. The variant IS the boss name for
+        // region/minor bosses and Lifemother; Astrael's variant is a wave-set/
+        // featured-enemy label, so show (and key the note on) Astrael's own name.
+        const leadName = key === 'astrael' ? 'Astrael the First Reborn' : variant;
+        const bossLabel = enemySpan(leadName, bossStat, leadName);
         let text = variantDescriptions[variant]
             ? bossLabel + ': ' + variantDescriptions[variant]
             : bossLabel + ' information';
