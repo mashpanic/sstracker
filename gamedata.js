@@ -33,7 +33,7 @@ const BOSS_STATS = {
     "Sibling Hierarchy": ["23⚔️ 1485❤️", "36⚔️ 2799❤️", "51⚔️ 5591❤️", "74⚔️ 9606❤️"],
     "Eldest Scion": ["18⚔️ 1650❤️", "31⚔️ 2974❤️", "46⚔️ 5777❤️", "69⚔️ 9805❤️"],
     // Thaddeus Battle
-    "Elebor the Unstoppable": ["18⚔️ 594❤️", "31⚔️ 1854❤️", "46⚔️ 4593❤️", "69⚔️ 8528❤️"],
+    "Elebor the Unstoppable": ["18⚔️ 594❤️", "31⚔️ 1854❤️", "46⚔️ 4591❤️", "69⚔️ 8528❤️"],
     "Quoto the Destroyer": ["12⚔️ 528❤️", "25⚔️ 1784❤️", "40⚔️ 4519❤️", "59⚔️ 8442❤️"],
     // Thaddeus Boss
     "Train Chomper": ["18⚔️ 1815❤️", "31⚔️ 3149❤️", "46⚔️ 5962❤️", "69⚔️ 10004❤️"],
@@ -104,7 +104,9 @@ const ENEMY_NOTES = {
     "Athane the Fallen": "Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.",
     "Corpseflower": "Trample.<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.",
     "Eldest Scion": "Resolve: Enemy units gain armor equal to their attack.",
+    "Elebor the Unstoppable": "Resolve: Gain Titanskin 5",
     "Energizing Flautist": "Enchant: Grant enemy units haste.",
+    "Energy Vampire": "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.",
     "Fleshfruit": "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.",
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
     "Inoculation": "Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.",
@@ -140,6 +142,8 @@ const ENEMY_NOTES = {
     "Quoto the Destroyer": "Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.",
     "Sharp-Eye Sniper": "Slay: Gain Rage 1.",
     "Sibling Hierarchy": "Shift: Apply Rage 3 to enemy units",
+    "Stern Sister": "Resolve: Apply Burst 1 to self and enemy units.",
+    "Thick Skinned": "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.",
     "Undying Bloom": "Trample<br>Resolve: Apply Witherbloom 15 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.",
     "Witchwarden": "Witherbloom 1<br>Revenge: Enemy units gain Regen 3.",
     "Zephyrite": "Armor 6.<br>Shift: Gain Burst 1.",
