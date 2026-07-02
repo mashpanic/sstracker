@@ -289,10 +289,10 @@ Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,0,90,Buffet 3<br>Eat
 Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,0,94,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,Yes
 Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,3,29,366,"Gorge: Gain Rage 8, Titanskin 5 and restore 50 health.",Yes
 Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,4,32,381,"Infested 3. Gorge: Gain Rage 9, Titanskin 5 and restore 50 health.",Yes
-Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,1,5,5,Infested 2,Yes
+Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,1,5,5,Infested 2,No
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,2,6,6,Infested 1,No
-Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,3,8,7,Infested 1,Yes
-Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,4,9,9,Infested 3,Yes
+Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,3,8,7,Infested 1,No
+Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,4,9,9,Infested 3,No
 Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,3,0,5,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,4,0,6,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,Yes
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,1,15,81,Vanguard: Gain Titanite.,Yes
