@@ -42,10 +42,10 @@ Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,3,80,Resolve: Take 
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,4,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
-Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,2,5,Enchant: Grant enemy units haste.,No
-Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,2,2,5,Enchant: Grant enemy units haste.,No
-Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,2,5,Enchant: Grant enemy units haste.,No
-Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,2,5,Enchant: Grant enemy units haste.,No
+Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,2,5,Haste<br>Enchant: Grant enemy units haste.,No
+Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,2,2,5,Haste<br>Enchant: Grant enemy units haste.,No
+Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,2,5,Haste<br>Enchant: Grant enemy units haste.,No
+Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,2,5,Haste<br>Enchant: Grant enemy units haste.,No
 Bloom,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,0,60,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Bloom,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,0,60,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Bloom,R2_Heavy_HealGorge_T2,Mother's Glutmass,3,15,250,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
@@ -146,10 +146,10 @@ Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,,,Resolve: Take 20
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,4,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
-Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,,,Enchant: Grant enemy units haste.,No
-Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,2,,,Enchant: Grant enemy units haste.,No
-Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,,,Enchant: Grant enemy units haste.,No
-Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,,,Enchant: Grant enemy units haste.,No
+Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,,,Haste<br>Enchant: Grant enemy units haste.,No
+Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,2,,,Haste<br>Enchant: Grant enemy units haste.,No
+Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,,,Haste<br>Enchant: Grant enemy units haste.,No
+Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,,,Haste<br>Enchant: Grant enemy units haste.,No
 Tangle,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,,,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Tangle,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,,,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Tangle,R2_Heavy_HealGorge_T2,Mother's Glutmass,3,,,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
@@ -225,7 +225,7 @@ Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,1,18,1650,Resolve: Enem
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,31,2974,Resolve: Enemy units gain armor equal to their attack.,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,3,46,5777,Resolve: Enemy units gain armor equal to their attack.,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,4,69,9805,Resolve: Enemy units gain armor equal to their attack.,Yes
-Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,1,18,594,Resolve: Gain Titanskin 5.,Yes
+Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,1,18,594,Resolve: Gain Titanskin 5,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,2,31,1854,,No
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,3,46,4591,Resolve: Gain Titanskin 5,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,4,69,8528,,No
@@ -281,9 +281,9 @@ Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,5,108,Resolve:
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,6,114,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,8,119,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,4,9,125,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
-Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,2,7,Enchant: Grant enemy units haste.,No
+Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,2,7,Haste<br>Enchant: Grant enemy units haste.,No
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,2,2,9,Haste<br>Enchant: Grant enemy units haste.,Yes
-Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,2,10,Enchant: Grant enemy units haste.,No
+Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,2,10,Haste<br>Enchant: Grant enemy units haste.,No
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,2,11,Haste<br>Enchant: Grant enemy units haste.,Yes
 Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,0,90,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,Yes
 Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,0,94,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,Yes
