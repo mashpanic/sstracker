@@ -99,7 +99,7 @@ const variantDescriptions = {
 
     // Lylith Boss
     'Plaguebringer': 'Lylith gains Dualism at 50% health.',
-    'Energy Vampire': 'Lylith applies Witherbloom X to your units on Action.',
+    'Energy Vampire': 'Lylith applies Witherbloom 2 to your units on Action.',
     'Inoculation': 'Lylith gains 3x Armor per Malaise on Strike.',
 
     // Lifemother
