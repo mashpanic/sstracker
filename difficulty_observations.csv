@@ -5,8 +5,8 @@ Bloom,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,22,1100,Incant: Ap
 Bloom,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,34,2600,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Bloom,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,92,13200,Trample.<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
 Bloom,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,22,1700,Resolve: Enemy units gain armor equal to their attack.,No
-Bloom,EnchanterT1_Speed,Energizing Flautist,1,0,1,Enchant: Grant enemy units haste.,No
-Bloom,EnchanterT1_Speed,Energizing Flautist,2,0,1,Enchant: Grant enemy units haste.,No
+Bloom,EnchanterT1_Speed,Energizing Flautist,1,0,1,Haste<br>Enchant: Grant enemy units haste.,No
+Bloom,EnchanterT1_Speed,Energizing Flautist,2,0,1,Haste<br>Enchant: Grant enemy units haste.,No
 Bloom,R2_Support_FeedInfested,Fleshfruit,1,0,30,Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,No
 Bloom,R2_Support_FeedInfested,Fleshfruit,2,0,30,Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,No
 Bloom,R2_Heavy_HealGorge,Glutmass,1,8,60,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,No
@@ -109,8 +109,8 @@ Tangle,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,,,Incant: Apply R
 Tangle,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,,,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Tangle,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,,,Trample.<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
 Tangle,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,,,Resolve: Enemy units gain armor equal to their attack.,No
-Tangle,EnchanterT1_Speed,Energizing Flautist,1,,,Enchant: Grant enemy units haste.,No
-Tangle,EnchanterT1_Speed,Energizing Flautist,2,,,Enchant: Grant enemy units haste.,No
+Tangle,EnchanterT1_Speed,Energizing Flautist,1,,,Haste<br>Enchant: Grant enemy units haste.,No
+Tangle,EnchanterT1_Speed,Energizing Flautist,2,,,Haste<br>Enchant: Grant enemy units haste.,No
 Tangle,R2_Support_FeedInfested,Fleshfruit,1,,,Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,No
 Tangle,R2_Support_FeedInfested,Fleshfruit,2,,,Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,No
 Tangle,R2_Heavy_HealGorge,Glutmass,1,,,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,No

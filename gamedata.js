@@ -106,7 +106,7 @@ const ENEMY_NOTES = {
     "Duplicitous": "Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",
     "Eldest Scion": "Resolve: Enemy units gain armor equal to their attack.",
     "Elebor the Unstoppable": "Resolve: Gain Titanskin 5",
-    "Energizing Flautist": "Enchant: Grant enemy units haste.",
+    "Energizing Flautist": "Haste<br>Enchant: Grant enemy units haste.",
     "Energy Vampire": "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.",
     "Fleshfruit": "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.",
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
