@@ -27,9 +27,9 @@ const BOSS_STATS = {
     "Undying Bloom": "123⚔️ 27824❤️",
     // Maera Battle
     "Athane the Fallen": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8608❤️"],
-    "Korin the Judged": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4667❤️", "69⚔️ 8608❤️"],
+    "Korin the Judged": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4667❤️", "69⚔️ 8602❤️"],
     // Maera Boss
-    "Stern Sister": ["24⚔️ 1320❤️", "37⚔️ 2624❤️", "52⚔️ 5407❤️", "75⚔️ 9406❤️"],
+    "Stern Sister": ["24⚔️ 1320❤️", "37⚔️ 2624❤️", "52⚔️ 5407❤️", "75⚔️ 9404❤️"],
     "Sibling Hierarchy": ["23⚔️ 1485❤️", "36⚔️ 2799❤️", "51⚔️ 5591❤️", "74⚔️ 9606❤️"],
     "Eldest Scion": ["18⚔️ 1650❤️", "31⚔️ 2974❤️", "46⚔️ 5777❤️", "69⚔️ 9805❤️"],
     // Thaddeus Battle
@@ -112,7 +112,9 @@ const ENEMY_NOTES = {
     "Inoculation": "Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.",
     "Insatiable": "Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.",
     "Jeermask": "Apply Dazed 2 to the attacker.",
+    "Korin the Judged": "Summon: Descend all friendly units to this floor and Retreat.",
     "Longlash": "Sniper<br>Stealth 1",
+    "Mischevious Child": "Sniper<br>Strike: Advance the attacked unit.",
     "Mother's Amalgam": "Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",
     "Mother's Assassin": "Strike: Apply Malaise 5",
     "Mother's Blade": "Infested 2. Hellborne Harvest: Gain Infested 4.",

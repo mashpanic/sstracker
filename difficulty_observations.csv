@@ -233,7 +233,7 @@ Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,1,21,14
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,2,34,2799,,No
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,3,49,5592,,No
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,4,72,9606,,No
-Overgrowth,R2_Support_FeedInfested,Fleshfruit,1,0,41,Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,No
+Overgrowth,R2_Support_FeedInfested,Fleshfruit,1,0,41,Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,Yes
 Overgrowth,R2_Support_FeedInfested,Fleshfruit,2,0,44,Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,No
 Overgrowth,R2_Heavy_HealGorge,Glutmass,1,12,81,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,No
 Overgrowth,R2_Heavy_HealGorge,Glutmass,2,14,86,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,No
@@ -247,20 +247,20 @@ Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,1,20,1815,Trample
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,2,33,3149,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,3,48,5962,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,4,71,10005,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
-Overgrowth,R3_Horde_T1_Decoy,Jeermask,1,0,2,Apply Dazed 2 to the attacker.,No
+Overgrowth,R3_Horde_T1_Decoy,Jeermask,1,0,2,Apply Dazed 2 to the attacker.,Yes
 Overgrowth,R3_Horde_T1_Decoy,Jeermask,2,0,3,Apply Dazed 2 to the attacker.,No
 Overgrowth,R3_Horde_T1_Decoy,Jeermask,3,0,5,Apply Dazed 2 to the attacker.,No
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,1,18,660,,No
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,2,31,1924,,No
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,3,46,4667,,No
-Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,4,69,8608,,No
-Overgrowth,R3_Attacker_T1_StealthSniper,Longlash,1,11,6,Sniper<br>Stealth 1,No
+Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,4,69,8602,Summon: Descend all friendly units to this floor and Retreat.,Yes
+Overgrowth,R3_Attacker_T1_StealthSniper,Longlash,1,11,6,Sniper<br>Stealth 1,Yes
 Overgrowth,R3_Attacker_T1_StealthSniper,Longlash,2,12,7,Sniper<br>Stealth 1,No
-Overgrowth,Boss_SoulSavior_R3_Unruly_SniperAdvance,Mischevious Child,1,21,1320,,No
+Overgrowth,Boss_SoulSavior_R3_Unruly_SniperAdvance,Mischevious Child,1,21,1320,Sniper<br>Strike: Advance the attacked unit.,Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_SniperAdvance,Mischevious Child,2,34,2624,,No
 Overgrowth,Boss_SoulSavior_R3_Unruly_SniperAdvance,Mischevious Child,3,49,5407,,No
 Overgrowth,Boss_SoulSavior_R3_Unruly_SniperAdvance,Mischevious Child,4,72,9406,,No
-Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,1,12,189,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
+Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,1,12,189,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",Yes
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,2,14,198,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,3,15,206,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,4,17,215,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
@@ -271,24 +271,24 @@ Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,1,8,108,Infested 2. Hellborne Ha
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,2,9,114,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,3,11,119,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,4,12,125,Infested 2. Hellborne Harvest: Gain Infested 4.,No
-Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,1,0,41,"Buffet 3.<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
+Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,1,0,41,"Buffet 3.<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,2,0,44,"Buffet 3.<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,3,0,46,"Buffet 3.<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,4,0,49,"Buffet 3.<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
 Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,3,5,Extinguish: Apply Infested 2 to enemy units.,Yes
 Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,6,9,Extinguish: Apply Infested 5 to enemy units.,No
-Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,5,108,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
+Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,5,108,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,6,114,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,8,119,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
-Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,4,9,125,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
+Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,4,9,125,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,2,7,Enchant: Grant enemy units haste.,No
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,2,2,9,Haste<br>Enchant: Grant enemy units haste.,Yes
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,2,10,Enchant: Grant enemy units haste.,No
-Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,2,11,Enchant: Grant enemy units haste.,No
+Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,2,11,Haste<br>Enchant: Grant enemy units haste.,Yes
 Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,0,90,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,Yes
 Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,0,94,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,Yes
 Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,3,29,366,"Gorge: Gain Rage 8, Titanskin 5 and restore 50 health.",Yes
-Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,4,32,381,"Infested 3. Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
+Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,4,32,381,"Infested 3. Gorge: Gain Rage 9, Titanskin 5 and restore 50 health.",Yes
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,1,5,5,Infested 2,Yes
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,2,6,6,Infested 1,No
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,3,8,7,Infested 1,Yes
@@ -298,11 +298,11 @@ Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,4,0,6,Spell Shield 1<br>Reve
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,1,15,81,Vanguard: Gain Titanite.,No
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,2,17,86,Vanguard: Gain Titanite.,No
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,3,20,90,Vanguard: Gain Titanite.,Yes
-Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,4,23,94,Vanguard: Gain Titanite.,No
+Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,4,23,94,Vanguard: Gain Titanite.,Yes
 Overgrowth,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,3,33,19,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
 Overgrowth,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,4,38,21,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
 Overgrowth,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,3,33,293,Shift: Gain Armor 30.,Yes
-Overgrowth,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,4,38,306,Shift: Gain Armor 36.,No
+Overgrowth,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,4,38,306,Shift: Gain Armor 36.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,3,20,235,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
 Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,4,23,245,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
 Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,2,11,6,Slay: Gain Rage 3.,No
@@ -316,9 +316,9 @@ Overgrowth,R4_Support_RegenEnemies_T2,Mother's Witchwarden,4,22,63,Witherbloom 2
 Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,1,21,61,Gorge: Gain Multistrike 1.,No
 Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,2,24,64,Gorge: Gain Multistrike 1.,No
 Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,3,27,67,Gorge: Gain Multistrike 1.,Yes
-Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,4,30,69,Gorge: Gain Multistrike 1.,No
+Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,4,30,69,Gorge: Gain Multistrike 1.,Yes
 Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,3,45,30,Armor 30. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 15.,Yes
-Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,4,50,32,Armor 34. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 18.,No
+Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,4,50,32,Armor 34. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 18.,Yes
 Overgrowth,R1_Heavy_HealOnShift,Ossivane Sentinel,1,12,81,Shift: Gain Armor 15.,No
 Overgrowth,R1_Heavy_HealOnShift,Ossivane Sentinel,2,14,86,Shift: Gain Armor 23.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,1,18,825,Spikes 8.<br>Strike: Lose Spikes 1.,No
@@ -352,7 +352,7 @@ Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,4,74,9606,
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,1,24,1320,,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,2,37,2624,Resolve: Apply Burst 1 to self and enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,3,52,5407,,No
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9406,,No
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9404,Resolve: Apply Burst 1 to self and friendly units.,Yes
 Overgrowth,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,4,123,25821,,No
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,1,11,413,,No
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,24,1662,,No
