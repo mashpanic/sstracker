@@ -26,11 +26,11 @@ const BOSS_STATS = {
     "Swarmhost": "123⚔️ 25821❤️",
     "Undying Bloom": "123⚔️ 27824❤️",
     // Maera Battle
-    "Athane the Fallen": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8608❤️"],
+    "Athane the Fallen": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8602❤️"],
     "Korin the Judged": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4667❤️", "69⚔️ 8602❤️"],
     // Maera Boss
     "Stern Sister": ["24⚔️ 1320❤️", "37⚔️ 2624❤️", "52⚔️ 5407❤️", "75⚔️ 9404❤️"],
-    "Sibling Hierarchy": ["23⚔️ 1485❤️", "36⚔️ 2799❤️", "51⚔️ 5591❤️", "74⚔️ 9606❤️"],
+    "Sibling Hierarchy": ["23⚔️ 1485❤️", "36⚔️ 2799❤️", "51⚔️ 5591❤️", "74⚔️ 9603❤️"],
     "Eldest Scion": ["18⚔️ 1650❤️", "31⚔️ 2974❤️", "46⚔️ 5777❤️", "69⚔️ 9805❤️"],
     // Thaddeus Battle
     "Elebor the Unstoppable": ["18⚔️ 594❤️", "31⚔️ 1854❤️", "46⚔️ 4591❤️", "69⚔️ 8528❤️"],
@@ -43,7 +43,7 @@ const BOSS_STATS = {
     "Phalanx": ["18⚔️ 825❤️", "31⚔️ 2099❤️", "46⚔️ 4852❤️", "69⚔️ 8808❤️"],
     "The Undying Spirit": ["11⚔️ 413❤️", "24⚔️ 1662❤️", "39⚔️ 4390❤️", "62⚔️ 8309❤️"],
     // Tivi Boss
-    "Duplicitous": ["18⚔️ 1320❤️", "31⚔️ 2624❤️", "46⚔️ 5407❤️", "69⚔️ 9406❤️"],
+    "Duplicitous": ["18⚔️ 1320❤️", "31⚔️ 2624❤️", "46⚔️ 5406❤️", "69⚔️ 9406❤️"],
     "Mischevious Child": ["21⚔️ 1320❤️", "34⚔️ 2624❤️", "49⚔️ 5407❤️", "72⚔️ 9406❤️"],
     "Prankster": ["20⚔️ 1485❤️", "33⚔️ 2799❤️", "48⚔️ 5592❤️", "71⚔️ 9606❤️"],
     // Lylith Battle
@@ -103,8 +103,9 @@ const ENEMY_NOTES = {
     "Astrael the First Reborn": "Sap 6. Infested 4.",
     "Athane the Fallen": "Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.",
     "Corpseflower": "Trample.<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.",
+    "Duplicitous": "Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",
     "Eldest Scion": "Resolve: Enemy units gain armor equal to their attack.",
-    "Elebor the Unstoppable": "Resolve: Gain Titanskin 5",
+    "Elebor the Unstoppable": "Resolve: Gain Titanskin 5.",
     "Energizing Flautist": "Enchant: Grant enemy units haste.",
     "Energy Vampire": "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.",
     "Fleshfruit": "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.",
