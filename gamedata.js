@@ -27,7 +27,7 @@ const BOSS_STATS = {
     "Undying Bloom": "123⚔️ 27824❤️",
     // Maera Battle
     "Athane the Fallen": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8602❤️"],
-    "Korin the Judged": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4667❤️", "69⚔️ 8602❤️"],
+    "Korin the Judged": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8602❤️"],
     // Maera Boss
     "Stern Sister": ["24⚔️ 1320❤️", "37⚔️ 2624❤️", "52⚔️ 5407❤️", "75⚔️ 9404❤️"],
     "Sibling Hierarchy": ["23⚔️ 1485❤️", "36⚔️ 2799❤️", "51⚔️ 5591❤️", "74⚔️ 9603❤️"],
@@ -41,13 +41,13 @@ const BOSS_STATS = {
     "Insatiable": ["20⚔️ 1815❤️", "33⚔️ 3149❤️", "48⚔️ 5962❤️", "71⚔️ 10005❤️"],
     // Tivi Battle
     "Phalanx": ["18⚔️ 825❤️", "31⚔️ 2099❤️", "46⚔️ 4852❤️", "69⚔️ 8808❤️"],
-    "The Undying Spirit": ["11⚔️ 413❤️", "24⚔️ 1662❤️", "39⚔️ 4390❤️", "62⚔️ 8309❤️"],
+    "The Undying Spirit": ["11⚔️ 413❤️", "24⚔️ 1662❤️", "39⚔️ 4390❤️", "57⚔️ 8302❤️"],
     // Tivi Boss
     "Duplicitous": ["18⚔️ 1320❤️", "31⚔️ 2624❤️", "46⚔️ 5406❤️", "69⚔️ 9406❤️"],
-    "Mischevious Child": ["21⚔️ 1320❤️", "34⚔️ 2624❤️", "49⚔️ 5407❤️", "72⚔️ 9406❤️"],
+    "Mischevious Child": ["21⚔️ 1320❤️", "34⚔️ 2624❤️", "49⚔️ 5407❤️", "72⚔️ 9404❤️"],
     "Prankster": ["20⚔️ 1485❤️", "33⚔️ 2799❤️", "48⚔️ 5592❤️", "71⚔️ 9606❤️"],
     // Lylith Battle
-    "Qel the Malaiser": ["18⚔️ 627❤️", "31⚔️ 1889❤️", "46⚔️ 4630❤️", "69⚔️ 8568❤️"],
+    "Qel the Malaiser": ["18⚔️ 627❤️", "31⚔️ 1890❤️", "46⚔️ 4630❤️", "69⚔️ 8568❤️"],
     "Ajax the Deathbringer": ["17⚔️ 743❤️", "30⚔️ 2012❤️", "45⚔️ 4757❤️", "68⚔️ 8708❤️"],
     // Lylith Boss
     "Plaguebringer": ["24⚔️ 1980❤️", "37⚔️ 3324❤️", "52⚔️ 6147❤️", "75⚔️ 10204❤️"],
@@ -114,7 +114,7 @@ const ENEMY_NOTES = {
     "Energy Vampire": "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.",
     "Fleshfruit": ["Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", null, null],
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
-    "Inoculation": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise."],
+    "Inoculation": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise."],
     "Insatiable": ["Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge."],
     "Jeermask": "Apply Dazed 2 to the attacker.",
     "Korin the Judged": "Summon: Descend all friendly units to this floor and Retreat.",
@@ -122,7 +122,7 @@ const ENEMY_NOTES = {
     "Mischevious Child": "Sniper<br>Strike: Advance the attacked unit.",
     "Mother's Amalgam": "Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",
     "Mother's Assassin": [null, "Strike: Apply Malaise 6.", "Strike: Apply Malaise 6", "Strike: Apply Malaise 5"],
-    "Mother's Blade": ["Infested 2. Hellborne Harvest: Gain Infested 4.", "Infested 2. Hellborne Harvest: Gain Infested 4.", "Infested 2. Hellborne Harvest: Gain Infested 6.", "Infested 2. Hellborne Harvest: Gain Infested 4."],
+    "Mother's Blade": ["Infested 2. Hellborne Harvest: Gain Infested 4.", "Infested 2. Hellborne Harvest: Gain Infested 4.", "Infested 2. Hellborne Harvest: Gain Infested 6.", "Infested 4. Hellborne Harvest: Gain Infested 8."],
     "Mother's Cherub": "Buffet 3.<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",
     "Mother's Fiend": ["Extinguish: Apply Infested 2 to enemy units.", null, null, "Extinguish: Apply Infested 5 to enemy units."],
     "Mother's Flagellant": "Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.",
@@ -146,15 +146,16 @@ const ENEMY_NOTES = {
     "Plaguehost": "Extinguish: Apply Witherbloom 5 to your front unit.",
     "Prankster": "Siphon: Add Tivi's Scourge to your hand.",
     "Qel the Malaiser": "Incant: Apply Witherbloom 2 and Malaise 3 to your units.",
-    "Quoto the Destroyer": ["Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.", "Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.", "Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.", "Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 3."],
+    "Quoto the Destroyer": ["Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.", "Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.", "Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 3."],
     "Sharp-Eye Sniper": "Slay: Gain Rage 1.",
-    "Sibling Hierarchy": ["Shift: Apply Rage 5 to enemy units", "Shift: Apply Rage 3 to enemy units", "Shift: Apply Rage 3 to enemy units", "Shift: Apply Rage 6 to enemy units"],
+    "Sibling Hierarchy": ["Shift: Apply Rage 5 to enemy units", "Shift: Apply Rage 3 to enemy units", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 6 to enemy units"],
     "Stern Sister": "Resolve: Apply Burst 1 to self and enemy units.",
     "Swarmhost": "Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.",
-    "Thick Skinned": ["Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample.<br>Gorge: Gain Rage 6 and Titanskin 6."],
+    "The Undying Spirit": "Infested 7. Reanimate 6. Strike: Gain Infested 3.",
+    "Thick Skinned": ["Trample<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample.<br>Gorge: Gain Rage 6 and Titanskin 6."],
     "Undying Bloom": "Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.",
     "Witchwarden": "Witherbloom 2<br>Revenge: Enemy units gain Regen 3.",
-    "Zephyrite": ["Armor 9.<br>Shift: Gain Burst 1.", "Armor 9.<br>Shift: Gain Burst 1.", "Armor 6.<br>Shift: Gain Burst 1.", null],
+    "Zephyrite": "Armor 9.<br>Shift: Gain Burst 1.",
 };
 
 // ---- Boss wave descriptions ----
