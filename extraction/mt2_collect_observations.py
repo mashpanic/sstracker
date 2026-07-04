@@ -34,8 +34,6 @@ that still need confirmation.
 Usage:  python3 extraction/mt2_collect_observations.py [--out FILE] [--reseed]
         python3 extraction/mt2_collect_observations.py --check [--out FILE]
         python3 extraction/mt2_collect_observations.py --prefill-base DIFFICULTY
-        python3 extraction/mt2_collect_observations.py --tidy-notes [--out FILE]
-        python3 extraction/mt2_collect_observations.py --seed-notes SRC DST
         python3 extraction/mt2_collect_observations.py --seed-bosses-from-computed
 """
 import sys, os, re, csv, ast, json
@@ -304,59 +302,6 @@ def prefill_base(store, scen, difficulty):
     return added
 
 
-def tidy_notes(store):
-    """Note cleanup, keyed by internal: fill blank notes from each enemy's single
-    note, copied across ALL its orders and difficulties — never overwriting an
-    existing note. An enemy whose rows hold two different notes is skipped
-    (reported) so a real discrepancy isn't flattened. Returns (cleared, filled,
-    conflicting_internals); `cleared` is retained as 0 for the caller's print.
-
-    NOTE: cross-difficulty copies carry the source amount (e.g. Witherbloom 3) to
-    every difficulty — fix any that turn out to scale (see the O5/scaling TODO)."""
-    from collections import defaultdict
-    cleared = filled = 0
-    notes = defaultdict(set)
-    for r in store.rows.values():
-        if r['note'].strip():
-            notes[r['internal']].add(r['note'].strip())
-    conflicts = []
-    for internal, distinct in notes.items():
-        if len(distinct) > 1:
-            conflicts.append(internal)
-            continue
-        note = next(iter(distinct))
-        for r in store.rows.values():
-            if r['internal'] == internal and r['note'].strip() == '':
-                r['note'] = note
-                filled += 1
-    store.save()
-    return cleared, filled, conflicts
-
-
-def seed_notes(store, src, dst):
-    """Pre-seed `dst`'s notes from `src` (e.g. --seed-notes Bloom Tangle) so a
-    fresh run on `dst` already shows each enemy's note for inline editing during
-    collection. For every `src` row with a note, copy that note onto the matching
-    (internal, order) `dst` row — creating the row with BLANK atk/hp if it
-    doesn't exist, or filling an existing `dst` row's blank note. Never
-    overwrites an existing `dst` note or any `dst` atk/hp. The notes-only rows
-    don't count as recorded (see recorded()), so the walk still prompts for their
-    stats and they still show in 'remaining' counts. Returns (created, filled)."""
-    created = filled = 0
-    for (diff, internal, order), r in list(store.rows.items()):
-        if diff != src or not r['note'].strip():
-            continue
-        existing = store.get(dst, internal, order)
-        if existing is None:
-            store.upsert(dst, internal, r['display'], order, '', '', r['note'])
-            created += 1
-        elif not existing['note'].strip():
-            existing['note'] = r['note']
-            filled += 1
-    store.save()
-    return created, filled
-
-
 def seed_bosses_from_computed(store, variant_opts, wave_set_opts):
     """Bridge-seed Overgrowth boss rows from the computed BOSS_STATS block in
     gamedata.js (the soon-to-be-deprecated automated scaling path) as a
@@ -366,8 +311,8 @@ def seed_bosses_from_computed(store, variant_opts, wave_set_opts):
     existing display name for that internal where known (so Astrael's two keys
     'Mother's Flagellant'/'Mother's Hunter' collapse onto the single row
     'Astrael the First Reborn', and Swarmhost gets its CSV name). Notes are left
-    blank — run --tidy-notes afterward to propagate each boss's note from Bloom.
-    Existing Overgrowth boss rows are NOT clobbered. Returns (created, skipped)."""
+    blank (fill them per order in the walk). Existing Overgrowth boss rows are NOT
+    clobbered. Returns (created, skipped)."""
     js = open(GAMEDATA_JS).read()
     m = re.search(r'const BOSS_STATS = \{(.*?)\n\};', js, re.S)
     if not m:
@@ -500,7 +445,7 @@ def choose(title, options, allow_back=True):
 
 def recorded(rec):
     """True when a row carries both ATK and HP (verified or not). A notes-only
-    seed row (blank stats, left by --seed-notes) is NOT recorded."""
+    row (blank stats) is NOT recorded."""
     return bool(rec and (rec['atk'] or '').strip() and (rec['hp'] or '').strip())
 
 
@@ -855,29 +800,6 @@ def main():
         created, skipped = seed_bosses_from_computed(store, variant_opts, wave_set_opts)
         print(f'Seeded {created} Overgrowth boss rows from computed BOSS_STATS '
               f'(verified=No, notes blank); skipped {skipped} already present.')
-        print('Next: run --tidy-notes to propagate boss notes from Bloom.')
-        return
-
-    if '--seed-notes' in argv:
-        i = argv.index('--seed-notes')
-        if i + 2 >= len(argv):
-            sys.exit('ERROR: --seed-notes needs SRC and DST, e.g. --seed-notes Bloom Tangle')
-        src, dst = argv[i + 1], argv[i + 2]
-        for d in (src, dst):
-            if d not in DIFFICULTIES:
-                sys.exit(f'ERROR: difficulty must be one of {DIFFICULTIES}')
-        created, filled = seed_notes(store, src, dst)
-        print(f'Seeded {created} new {dst} note rows + filled {filled} blank {dst} notes '
-              f'from {src} (atk/hp left blank).')
-        return
-
-    if '--tidy-notes' in argv:
-        cleared, filled, conflicts = tidy_notes(store)
-        print(f'Filled {filled} blank notes by propagation.')
-        if conflicts:
-            print('Skipped these internals (conflicting notes — resolve by hand):')
-            for i in conflicts:
-                print('  ', i)
         return
 
     if reseed or not store.rows:
