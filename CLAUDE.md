@@ -125,16 +125,16 @@ Point scripts at the game's `Contents/Resources/Data` folder (contains `sharedas
 OUT=./out
 python3 extraction/mt2_extract_roster.py  "Contents/Resources/Data" --out $OUT
 python3 extraction/mt2_extract_scaling.py "Contents/Resources/Data" --out $OUT
-python3 extraction/mt2_build_outputs.py   --in $OUT --difficulty Overgrowth   # optional — see note
 ```
 
-> **`mt2_build_outputs.py` is now optional.** Its standalone outputs
-> (`scaled_<difficulty>.xlsx`, the boss sheet, `scaling_page.html`) are
-> **deprecated** — superseded by the app (`index.html` + `gamedata.js`); the
-> last copies are archived in `deprecated/`. The script is **kept** because its
-> scaling math (`build_model`/`compute_orders`) is imported by
-> `mt2_emit_boss_stats.py`. Run it only if you actually want to regenerate those
-> legacy spreadsheets/page.
+> **`mt2_build_outputs.py` is fully retired (2026-07-03).** It owned the old
+> boss/enemy scaling math (`build_model`/`compute_orders`) and emitted the now-
+> **deprecated** standalone outputs (`scaled_<difficulty>.xlsx`, the boss sheet,
+> `scaling_page.html`) — all superseded by the app (`index.html` + `gamedata.js`)
+> and observed stats. Its last consumer, the `--seed-bosses-from-computed` reseed,
+> was removed, so **nothing imports it anymore**; the script now lives in
+> `deprecated/` (git-ignored, local-only). If you ever need to revive the scaling
+> math, it's there.
 
 The wave/scenario extractor is a separate, self-contained pass (not part of the stat pipeline above):
 
@@ -149,7 +149,7 @@ python3 extraction/mt2_extract_waves.py "Contents/Resources/Data" --out $OUT
 
 Writes `out/waves.json` + `out/waves.md` — per-scenario wave composition (enemy lists per wave) broken out by tier T1–T4. Reads `RunDistance` pathIDs and CharacterData directly; does not depend on `roster.json`/`scaling.json`.
 
-`mt2_build_outputs.py` options:
+`mt2_build_outputs.py` (retired to `deprecated/`) options, for reference if revived:
 - `--difficulty Bloom|Tangle|Overgrowth` (default: Overgrowth)
 - `--prefix <internal-name-prefix>` for the boss sheet (default `Boss_SoulSavior`)
 - `--all` to include full 382-character roster (default: 59 Soul Savior enemies only)
@@ -161,14 +161,14 @@ Writes `out/waves.json` + `out/waves.md` — per-scenario wave composition (enem
 mt2_lib.py                 ← shared SerializedFile parser + helpers (only place with parsing logic)
 mt2_extract_roster.py      → out/roster.json (+ roster.xlsx)
 mt2_extract_scaling.py     → out/scaling.json
-mt2_build_outputs.py       ← owns the scaling math (build_model/compute_orders, imported by mt2_emit_boss_stats); its scaled_<difficulty>.xlsx + scaling_page.html outputs are DEPRECATED (archived in deprecated/)
+mt2_build_outputs.py       ← RETIRED to deprecated/ (2026-07-03) — owned the scaling math (build_model/compute_orders) + DEPRECATED scaled_<difficulty>.xlsx/scaling_page.html outputs; nothing imports it anymore (last consumer --seed-bosses-from-computed was removed)
 mt2_extract_waves.py       → out/waves.json + out/waves.md  (standalone, not wired to build_outputs)
 mt2_emit_wave_descriptions.py → rewrites the BOSS_WAVE_DESCRIPTIONS + WAVE_SET_DESCRIPTIONS blocks in gamedata.js from out/waves.json (first piece of the "pipeline emits gamedata.js" job)
-mt2_emit_boss_stats.py     → rewrites the BOSS_STATS block in gamedata.js from difficulty_observations.csv (OBSERVED Overgrowth boss rows; keyed by variant via the GROUPS table). The old computed path (roster.json + scaling.json + compute_orders) is DEPRECATED — compute_orders now only feeds the one-time --seed-bosses-from-computed reseed
+mt2_emit_boss_stats.py     → rewrites the BOSS_STATS block in gamedata.js from difficulty_observations.csv (OBSERVED Overgrowth boss rows; keyed by variant via the GROUPS table). The old computed path (roster.json + scaling.json + compute_orders) is fully retired — that math lived in mt2_build_outputs.py, now in deprecated/
 mt2_emit_enemy_stats.py    → rewrites the ENEMY_STATS block in gamedata.js from difficulty_observations.csv (Overgrowth, non-boss rows; OBSERVED — non-boss scaling is unsolved)
 mt2_emit_notes.py          → rewrites the ENEMY_NOTES block in gamedata.js from difficulty_observations.csv (note column; enemies AND bosses, keyed by display name; Overgrowth rows, **per-order**: a string when the note is the same at every order, else an [O1..O4] array with null per unrecorded order — resolved in app.js via pickByOrder/noteForOrder). Feeds the app's enemy/boss ability-note hover popover. Re-run after editing notes in the CSV.
 mt2_audit_coverage.py      → coverage check: non-boss internals that spawn in out/waves.json vs those with Overgrowth rows in difficulty_observations.csv. Reports MISSING (spawns but no row → not in ENEMY_STATS, shows as plain text; exit 1) and UNREFERENCED (has rows, never spawns). Run after mt2_extract_waves.py. (Resolved the base-vs-upgraded gap that hid Energizing Flautist.)
-mt2_collect_observations.py → guided TUI collector → difficulty_observations.csv (Bloom/Tangle/Overgrowth enemy AND boss ATK/HP + notes + verified). Entering a stat in the run-walk sets verified=Yes (the act of observing in-game); bulk/seed modes write verified=No. The walk keys its ✓/remaining on verified (not just on having stats), so the marks are: ✓ verified · ~ provisional (seeded ATK/HP, unconfirmed — shown "(unverified)") · blank unrecorded. Pressing Enter on a ~ row accepts its prefilled value and flips it to ✓. The interactive main menu offers **Walk a run** (collect in visit order) and **Manual collection** (jump straight to a chosen encounter: pick a region/Lifemother 1-5, then its battle/boss 1-2 or Lifemother variant 1-3, then an order — loops back to the region menu; Astrael isn't offered there, collect it via the walk). Numbered menus (`choose`) take a single keypress on a TTY (no Enter) for ≤9 options via cbreak mode (`read_key`); piped/non-interactive stdin and the ATK/HP/note line prompts still use typed input. Maintenance modes: --check (validator, incl. NOTE divergence), --prefill-base DIFF (seed a difficulty's non-boss cells from roster base, verified=No), --seed-bosses-from-computed (bridge-seed 84 Overgrowth boss rows from the computed BOSS_STATS in gamedata.js, verified=No, to be observed-and-overwritten). See its module docstring. (**Removed 2026-07-03:** `--tidy-notes`/`--seed-notes` — they propagated a note across an enemy's orders/difficulties on the now-obsolete invariance assumption; harmful since notes went per-order — see the note-column paragraph below.)
+mt2_collect_observations.py → guided TUI collector → difficulty_observations.csv (Bloom/Tangle/Overgrowth enemy AND boss ATK/HP + notes + verified). Entering a stat in the run-walk sets verified=Yes (the act of observing in-game); bulk/seed modes write verified=No. The walk keys its ✓/remaining on verified (not just on having stats), so the marks are: ✓ verified · ~ provisional (seeded ATK/HP, unconfirmed — shown "(unverified)") · blank unrecorded. Pressing Enter on a ~ row accepts its prefilled value and flips it to ✓. The interactive main menu offers **Walk a run** (collect in visit order) and **Manual collection** (jump straight to a chosen encounter: pick a region/Lifemother 1-5, then its battle/boss 1-2 or Lifemother variant 1-3, then an order — loops back to the region menu; Astrael isn't offered there, collect it via the walk). Numbered menus (`choose`) take a single keypress on a TTY (no Enter) for ≤9 options via cbreak mode (`read_key`); piped/non-interactive stdin and the ATK/HP/note line prompts still use typed input. Maintenance modes: --check (validator, incl. NOTE divergence), --prefill-base DIFF (seed a difficulty's non-boss cells from roster base, verified=No). See its module docstring. (**Removed 2026-07-03:** `--tidy-notes`/`--seed-notes` — they propagated a note across an enemy's orders/difficulties on the now-obsolete invariance assumption, harmful since notes went per-order (see the note-column paragraph below); and `--seed-bosses-from-computed` — a one-time bridge-seed of 84 Overgrowth boss rows from the then-computed BOSS_STATS, obsolete now that boss stats are observed.)
 mt2_extract_descriptions.py → out/enemy_descriptions.xlsx — PARTIAL per-enemy ability text from CharacterData descriptionKey (templates 100%; some amounts unresolved). See docs/enemy_descriptions.md
 difficulty_observations.csv ← hand-collected SS enemy+boss ATK/HP by difficulty×order (long format); columns: difficulty, internal, display, order, atk, hp, note, verified. Source of truth for ENEMY_STATS (and, in progress, BOSS_STATS — see the boss-migration note), plus the wiki-facing dataset. `verified` (Yes/No) = whether the row's ATK/HP was confirmed through the run-walk; bulk-seeded rows are No until observed.
 roster.json (out/)         ← authoritative BASE stats for every char (Bloom non-boss ≈ base, tentative)
@@ -180,13 +180,13 @@ roster.json (out/)         ← authoritative BASE stats for every char (Bloom no
 
 `mt2_lib.py` owns: `parse_assets()` (SerializedFile v22 reader), `Localizer` (resolves localization keys from `resources.assets`), `iter_characters()` (yields CharacterData dicts), `STAT_HP_INDEX`/`STAT_ATK_INDEX` constants.
 
-`mt2_build_outputs.py` owns all scaling math: `build_model()` reads formulas from `scaling.json` so percentages update automatically after a patch. Boss and non-boss scaling use separate code paths (see below).
+`mt2_build_outputs.py` (now in `deprecated/`, unused) owns all scaling math: `build_model()` reads formulas from `scaling.json` so percentages update automatically after a patch. Boss and non-boss scaling use separate code paths (see below). Relevant only if the computed path is ever revived — stats are observed now.
 
 ## Critical facts for any work on scaling math
 
 **No type trees anywhere** (`enableTypeTree = 0`). Fields read by byte position. HP = stat-block index 3, ATK = index 13 (0-based, after the prefab's 32-hex GUID). **Re-verify on a known unit (e.g. Flagellant, HP=90/ATK=3) after any patch.**
 
-**Set A / Set B labeling** in the scaling mutators is counterintuitive and was historically inverted. In `scaling.json`, for `DifficultyTier3`: `setA_health.Boss = 50%` is ATK and `setB_attack.Boss = 65%` is HP. For `RunDistance*` mutators the keys map more naturally. The code in `mt2_build_outputs.py:build_model()` handles this correctly — read the code, not the key names.
+**Set A / Set B labeling** in the scaling mutators is counterintuitive and was historically inverted. In `scaling.json`, for `DifficultyTier3`: `setA_health.Boss = 50%` is ATK and `setB_attack.Boss = 65%` is HP. For `RunDistance*` mutators the keys map more naturally. The code in `deprecated/mt2_build_outputs.py:build_model()` handles this correctly — read the code, not the key names.
 
 **Rounding rules** (verified across all 26 boss rows and non-boss observation set):
 - Boss O1–O4 formulas: `rnd(x) = math.floor(x + 0.5)` (round-half-up, not banker's, not ceil)

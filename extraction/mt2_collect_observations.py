@@ -34,7 +34,6 @@ that still need confirmation.
 Usage:  python3 extraction/mt2_collect_observations.py [--out FILE] [--reseed]
         python3 extraction/mt2_collect_observations.py --check [--out FILE]
         python3 extraction/mt2_collect_observations.py --prefill-base DIFFICULTY
-        python3 extraction/mt2_collect_observations.py --seed-bosses-from-computed
 """
 import sys, os, re, csv, ast, json
 try:
@@ -86,7 +85,6 @@ from mt2_emit_wave_descriptions import WAVESET_TO_SCENARIO, BOSSVARIANT_TO_SCENA
 WAVES_JSON   = os.path.join(REPO, 'out', 'waves.json')
 ROSTER_JSON  = os.path.join(REPO, 'out', 'roster.json')
 GAMEFACTS_JS = os.path.join(REPO, 'gamefacts.js')
-GAMEDATA_JS  = os.path.join(REPO, 'gamedata.js')
 # Legacy wide Overgrowth CSV — deprecated; kept only as the one-time bootstrap
 # seed for difficulty_observations.csv (now the master, so this rarely runs).
 SEED_CSV     = os.path.join(REPO, 'deprecated', 'enemy_observations.csv')
@@ -300,63 +298,6 @@ def prefill_base(store, scen, difficulty):
     if missing:
         print('  (no roster base for: ' + ', '.join(sorted(missing)) + ')')
     return added
-
-
-def seed_bosses_from_computed(store, variant_opts, wave_set_opts):
-    """Bridge-seed Overgrowth boss rows from the computed BOSS_STATS block in
-    gamedata.js (the soon-to-be-deprecated automated scaling path) as a
-    provisional baseline — written verified='No' so it reads as unconfirmed and
-    gets observed-and-overwritten in the walk. Uses the collector's own boss
-    model to map each BOSS_STATS variant key -> roster internal, and the CSV's
-    existing display name for that internal where known (so Astrael's two keys
-    'Mother's Flagellant'/'Mother's Hunter' collapse onto the single row
-    'Astrael the First Reborn', and Swarmhost gets its CSV name). Notes are left
-    blank (fill them per order in the walk). Existing Overgrowth boss rows are NOT
-    clobbered. Returns (created, skipped)."""
-    js = open(GAMEDATA_JS).read()
-    m = re.search(r'const BOSS_STATS = \{(.*?)\n\};', js, re.S)
-    if not m:
-        sys.exit('ERROR: could not find BOSS_STATS in gamedata.js')
-    body = m.group(1)
-
-    # variant key -> (internal, orders) via the run model
-    astrael, mids, lifemother = build_run_model(variant_opts, wave_set_opts)
-    vmap = {}
-    for region in [astrael, *mids, lifemother]:
-        for b in region['battles']:
-            if b['kind'] == 'boss':
-                for label, sk in b['options']:
-                    bb = BOSSES.get(sk)
-                    if bb:
-                        vmap[label] = (bb[0], sorted(bb[2]))
-            else:
-                for variant in b['boss_variants']:
-                    internal = MINORBOSS.get(variant)
-                    if internal:
-                        vmap[variant] = (internal, list(region['orders']))
-
-    created = skipped = 0
-    for key in re.findall(r'"([^"]+)":', body):
-        if key not in vmap:
-            continue
-        internal, orders = vmap[key]
-        display = store.display.get(internal) or key
-        raw = re.search(r'"%s":\s*(\[[^\]]*\]|"[^"]*")' % re.escape(key), body).group(1)
-        if raw.startswith('['):                       # region/minor boss: [O1..O4]
-            arr = ast.literal_eval(raw)
-            cells = {i + 1: v for i, v in enumerate(arr) if v}
-        else:                                          # Astrael (O1) / Lifemother (O4)
-            cells = {(orders[0] if orders else 1): ast.literal_eval(raw)}
-        for order, cell in cells.items():
-            if store.get('Overgrowth', internal, order):
-                skipped += 1
-                continue
-            nums = re.findall(r'\d+', cell)
-            if len(nums) < 2:
-                continue
-            store.upsert('Overgrowth', internal, display, order, nums[0], nums[1], '', verified='No')
-            created += 1
-    return created, skipped
 
 
 # ───────────────────────── TUI helpers ─────────────────────────
@@ -794,12 +735,6 @@ def main():
             sys.exit(f'ERROR: difficulty must be one of {DIFFICULTIES}')
         n = prefill_base(store, scen, difficulty)
         print(f'Prefilled {n} {difficulty} non-boss cells with roster base stats (verified=No).')
-        return
-
-    if '--seed-bosses-from-computed' in argv:
-        created, skipped = seed_bosses_from_computed(store, variant_opts, wave_set_opts)
-        print(f'Seeded {created} Overgrowth boss rows from computed BOSS_STATS '
-              f'(verified=No, notes blank); skipped {skipped} already present.')
         return
 
     if reseed or not store.rows:

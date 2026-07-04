@@ -2,11 +2,10 @@
 """
 mt2_emit_boss_stats.py — emit the BOSS_STATS block for gamedata.js from the
 OBSERVED boss rows of difficulty_observations.csv (now the authoritative stat
-source). This replaces the former computed path (roster.json + scaling.json +
-mt2_build_outputs.compute_orders), which is DEPRECATED — boss ATK/HP is now
-hand-observed exactly like enemy stats. compute_orders still lives in
-mt2_build_outputs only as a one-time reseed generator
-(`mt2_collect_observations.py --seed-bosses-from-computed`).
+source). This replaced the former computed path (roster.json + scaling.json +
+the old mt2_build_outputs.compute_orders) — boss ATK/HP is now hand-observed
+exactly like enemy stats. (mt2_build_outputs.py, which owned that scaling math,
+was retired to deprecated/ on 2026-07-03; nothing imports it anymore.)
 
 BOSS_STATS is keyed by the boss *variant* name shown in the app dropdowns:
   - Main-region + minor "battle" bosses → ['O1','O2','O3','O4'] of 'ATK⚔️ HP❤️'
