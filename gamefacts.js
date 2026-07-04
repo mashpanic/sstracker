@@ -94,8 +94,8 @@ const variantDescriptions = {
     'Prankster': 'Tivi adds a Tivi\'s Scourge to your hand on Siphon.',
 
     // Lylith Battle (wiki pages not yet written)
-    'Qel the Malaiser': '',
-    'Ajax the Deathbringer': '',
+    'Qel the Malaiser': 'Incant: Apply Witherbloom 2 and Malaise 3 to your units.',
+    'Ajax the Deathbringer': 'Action: Apply Malaise 8 to your front unit.',
 
     // Lylith Boss
     'Plaguebringer': 'Lylith gains Dualism at 50% health.',
