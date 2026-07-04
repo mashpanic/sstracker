@@ -96,6 +96,7 @@ Bloom,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,1,8,320,Titansk
 Bloom,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,3,30,2520,Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.,No
 Bloom,R3_AttackerT2_HunterSeeker,Sharp-Eye Sniper,1,5,2,Slay: Gain Rage 1.,No
 Bloom,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,3,37,3100,Shift: Apply Rage 3 to enemy units,No
+Bloom,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,4,,,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,No
 Bloom,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,4,82,14200,Trample<br>Resolve: Apply Witherbloom 15 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,No
 Bloom,R4_Support_RegenEnemies,Witchwarden,1,10,12,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
 Bloom,R4_Support_RegenEnemies,Witchwarden,2,10,12,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
@@ -200,6 +201,7 @@ Tangle,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,1,,,Titanskin 
 Tangle,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,3,,,Titanskin 10.<br>Revenge: Lose Titanskin 1 and Gain Rage 1.,No
 Tangle,R3_AttackerT2_HunterSeeker,Sharp-Eye Sniper,1,,,Slay: Gain Rage 1.,No
 Tangle,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,3,,,Shift: Apply Rage 3 to enemy units,No
+Tangle,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,4,,,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,No
 Tangle,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,4,,,Trample<br>Resolve: Apply Witherbloom 15 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,No
 Tangle,R4_Support_RegenEnemies,Witchwarden,1,,,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
 Tangle,R4_Support_RegenEnemies,Witchwarden,2,,,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
