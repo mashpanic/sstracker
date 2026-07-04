@@ -211,35 +211,55 @@ def build_run_model(variant_opts, wave_set_opts):
 # ───────────────────────── observation store ─────────────────────────
 
 class Store:
-    """Long-format observation table, keyed (difficulty, internal, order)."""
+    """Long-format observation table, keyed (difficulty, internal, order).
+
+    Reload-and-merge on save: the whole file is rewritten each save, but first
+    re-read from disk so edits made to the file *after* this session started
+    (by hand, another tool, or another collector run) are not clobbered — only
+    the cells this session actually touched (`dirty`) are overlaid on top. This
+    guards against the long-lived-session footgun where a stale in-memory
+    snapshot overwrites newer on-disk changes."""
 
     def __init__(self, path):
         self.path = path
-        self.rows = {}           # (difficulty, internal, order) -> dict
-        self.display = {}        # internal -> last-seen display name
-        if os.path.exists(path):
-            for r in csv.DictReader(open(path, newline='')):
-                key = (r['difficulty'], r['internal'], int(r['order']))
+        self.dirty = set()       # (difficulty, internal, order) touched this session
+        self.rows = self._read_disk()
+        self.display = {r['internal']: r['display'] for r in self.rows.values()}
+
+    def _read_disk(self):
+        """{(difficulty, internal, order) -> row dict} from the file (or {})."""
+        rows = {}
+        if os.path.exists(self.path):
+            for r in csv.DictReader(open(self.path, newline='')):
                 r.setdefault('verified', 'No')          # tolerate pre-migration files
                 if not (r.get('verified') or '').strip():
                     r['verified'] = 'No'
-                self.rows[key] = r
-                self.display[r['internal']] = r['display']
+                rows[(r['difficulty'], r['internal'], int(r['order']))] = r
+        return rows
 
     def get(self, difficulty, internal, order):
         return self.rows.get((difficulty, internal, order))
 
     def upsert(self, difficulty, internal, display, order, atk, hp, note, verified='No'):
-        self.rows[(difficulty, internal, order)] = {
+        key = (difficulty, internal, order)
+        self.rows[key] = {
             'difficulty': difficulty, 'internal': internal, 'display': display,
             'order': order, 'atk': atk, 'hp': hp, 'note': note, 'verified': verified,
         }
         self.display[internal] = display
+        self.dirty.add(key)
         self.save()
 
     def save(self):
+        # Re-read disk (picks up external edits), then overlay this session's
+        # own changes so we never clobber concurrent edits to untouched rows.
+        merged = self._read_disk()
+        for key in self.dirty:
+            merged[key] = self.rows[key]
+        self.rows = merged
+        self.display = {r['internal']: r['display'] for r in merged.values()}
         rank = {d: i for i, d in enumerate(DIFFICULTIES)}
-        ordered = sorted(self.rows.values(),
+        ordered = sorted(merged.values(),
                          key=lambda r: (rank.get(r['difficulty'], 99),
                                         r['display'], r['internal'], int(r['order'])))
         with open(self.path, 'w', newline='') as f:
