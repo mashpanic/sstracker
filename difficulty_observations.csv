@@ -231,6 +231,8 @@ Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,1,18,594
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,2,31,1854,Resolve: Gain Titanskin 5,No
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,3,46,4591,Resolve: Gain Titanskin 5,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,4,69,8528,Resolve: Gain Titanskin 5,No
+Overgrowth,EnchanterT1_Speed,Energizing Flautist,1,,,Haste<br>Enchant: Grant enemy units Haste.,No
+Overgrowth,EnchanterT1_Speed,Energizing Flautist,2,,,Haste<br>Enchant: Grant enemy units Haste.,No
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,1,21,1485,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,2,34,2799,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,3,49,5592,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No

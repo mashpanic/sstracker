@@ -62,6 +62,7 @@ const BOSS_STATS = {
 // extraction/mt2_emit_enemy_stats.py from difficulty_observations.csv
 // (Overgrowth rows) — edit that file, not this block.
 const ENEMY_STATS = {
+    "Energizing Flautist": [null, null, null, null],
     "Fleshfruit": ["0⚔️ 41❤️", "0⚔️ 44❤️", null, null],
     "Glutmass": ["12⚔️ 81❤️", "14⚔️ 86❤️", "15⚔️ 90❤️", "17⚔️ 94❤️"],
     "Jeermask": ["0⚔️ 2❤️", "0⚔️ 3❤️", "0⚔️ 5❤️", null],
@@ -109,6 +110,7 @@ const ENEMY_NOTES = {
     "Duplicitous": "Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",
     "Eldest Scion": "Resolve: Enemy units gain armor equal to their attack.",
     "Elebor the Unstoppable": "Resolve: Gain Titanskin 5",
+    "Energizing Flautist": "Haste<br>Enchant: Grant enemy units Haste.",
     "Energy Vampire": "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.",
     "Fleshfruit": ["Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", null, null],
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
