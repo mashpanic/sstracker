@@ -1,6 +1,6 @@
 difficulty,internal,display,order,atk,hp,note,verified
 Bloom,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,1,11,450,Action: Apply Malaise 5 to your front unit.,No
-Bloom,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,8,230,Sap 6. Infested 4.,No
+Bloom,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,8,230,Sap 6<br>Infested 4,No
 Bloom,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,22,1100,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Bloom,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,34,2600,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Bloom,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,92,13200,Trample<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
@@ -105,7 +105,7 @@ Bloom,R1_Attacker_AscendGainAtk,Zephyrite,1,8,6,Armor 6<br>Shift: Gain Burst 1.,
 Bloom,R1_Attacker_AscendGainAtk,Zephyrite,2,8,6,Armor 6<br>Shift: Gain Burst 1.,No
 Bloom,R1_Attacker_AscendGainAtk,Zephyrite,3,8,6,Armor 6<br>Shift: Gain Burst 1.,No
 Tangle,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,1,,,Action: Apply Malaise 5 to your front unit.,No
-Tangle,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,,,Sap 6. Infested 4.,No
+Tangle,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,,,Sap 6<br>Infested 4,No
 Tangle,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,,,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Tangle,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,,,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Tangle,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,,,Trample<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
@@ -213,7 +213,7 @@ Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,1,17,
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,2,30,2012,Action: Apply Malaise 5 to your front unit.,No
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,3,45,4757,Action: Apply Malaise 8 to your front unit.,Yes
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,4,68,8708,Action: Apply Malaise 5 to your front unit.,No
-Overgrowth,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,12,380,Sap 9. Infested 6.,Yes
+Overgrowth,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,12,380,Sap 9<br>Infested 6,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,1,18,660,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,31,1924,Incant: Apply Rage 2 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,46,4663,Incant: Apply Rage 2 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,Yes
