@@ -210,24 +210,34 @@ function encounterOrder(key) {
     return Number.isNaN(n) ? null : n;
 }
 
+// Resolve an ENEMY_NOTES value (string | [O1..O4]) to the note for a given order.
+// A string is order-invariant; an array indexes by order-1 (null when that order
+// has no recorded note). Returns null when there's no note to show.
+function noteForOrder(key, order) {
+    const e = (typeof ENEMY_NOTES !== 'undefined') ? ENEMY_NOTES[key] : undefined;
+    if (e == null) return null;
+    if (typeof e === 'string') return e;
+    return order ? (e[order - 1] || null) : null;
+}
+
 // Render one combatant as: abbreviated name + inline "(atk/hp)" (muted).
 // Missing/unparseable stat → "(?)" in the amber unrecorded style. Used for both
 // trash enemies and the boss (no special emphasis on the boss — it reads like
 // any other unit). `noteKey` (defaults to `name`) keys ENEMY_NOTES for the
 // ability-text popover; a boss passes its variant key since the wave-list name
 // (e.g. "Maera the Dutiful") differs from the note key (e.g. "Sibling Hierarchy").
-// When a note exists the span gets data-note-key/data-full-name (read by the
+// `order` resolves per-order notes (Athane Rage 1→2→3). When a note exists for
+// this order the span gets the resolved data-note/data-full-name (read by the
 // popover handlers) and drops the native title to avoid a double tooltip; with
 // no note, the full name stays on the native title as before.
-function enemySpan(name, statStr, noteKey) {
+function enemySpan(name, statStr, noteKey, order) {
     const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
     const num = m ? `(${m[1]}/${m[2]})` : '(?)';
     const cls = m ? 'enemy-stat' : 'enemy-stat unrecorded';
     const disp = name.replace("Mother's ", "M. ");
-    const key = noteKey || name;
-    const hasNote = typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[key];
-    const attrs = hasNote
-        ? ` data-note-key="${escapeAttr(key)}" data-full-name="${escapeAttr(name)}"`
+    const note = noteForOrder(noteKey || name, order);
+    const attrs = note
+        ? ` data-note="${escapeAttr(note)}" data-full-name="${escapeAttr(name)}"`
         : ` title="${escapeAttr(name)}"`;
     return `<span class="${cls}"${attrs}>${disp}<span class="es-num">&nbsp;${num}</span></span>`;
 }
@@ -245,12 +255,12 @@ function escapeAttr(s) {
 function wrapEnemyStats(html, order, bossName, bossStat, bossNoteKey) {
     let out = html.replace(ENEMY_NAME_RE, name => {
         const v = order && ENEMY_STATS[name] ? ENEMY_STATS[name][order - 1] : null;
-        return enemySpan(name, v);
+        return enemySpan(name, v, undefined, order);
     });
     if (bossName && out.includes(bossName)) {
         // The boss's note is keyed by its variant (bossNoteKey), not its
         // wave-list display name — pass it so the popover resolves.
-        out = out.split(bossName).join(enemySpan(bossName, bossStat, bossNoteKey));
+        out = out.split(bossName).join(enemySpan(bossName, bossStat, bossNoteKey, order));
     }
     return out;
 }
@@ -293,7 +303,7 @@ function getDisplayText(key) {
         // region/minor bosses and Lifemother; Astrael's variant is a wave-set/
         // featured-enemy label, so show (and key the note on) Astrael's own name.
         const leadName = key === 'astrael' ? 'Astrael the First Reborn' : variant;
-        const bossLabel = enemySpan(leadName, bossStat, leadName);
+        const bossLabel = enemySpan(leadName, bossStat, leadName, order);
         let text = variantDescriptions[variant]
             ? bossLabel + ': ' + variantDescriptions[variant]
             : bossLabel + ' information';
@@ -706,14 +716,13 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
     // Enemy/boss ability notes (green). Note text may contain <br> → innerHTML.
     if (infoBox) {
         infoBox.addEventListener('mouseover', e => {
-            const span = e.target.closest('.enemy-stat[data-note-key]');
+            const span = e.target.closest('.enemy-stat[data-note]');
             if (!span) return;
-            const key = span.dataset.noteKey;
-            const note = key && typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[key];
-            if (note) showAt(span, `<strong>${escapeAttr(span.dataset.fullName || key)}</strong><br>${note}`, false);
+            const note = span.dataset.note;
+            if (note) showAt(span, `<strong>${escapeAttr(span.dataset.fullName || '')}</strong><br>${note}`, false);
         });
         infoBox.addEventListener('mouseout', e => {
-            const span = e.target.closest('.enemy-stat[data-note-key]');
+            const span = e.target.closest('.enemy-stat[data-note]');
             if (span && !span.contains(e.relatedTarget)) hide();
         });
         new MutationObserver(hide).observe(infoBox, { childList: true });
@@ -731,7 +740,8 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
         const statStr = pickByOrder(BOSS_STATS[variant], region);
         const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
         const parens = m ? ` (${m[1]}/${m[2]})` : ' (?)';
-        const note = (typeof ENEMY_NOTES !== 'undefined' && ENEMY_NOTES[name]) || '';
+        const noteEntry = (typeof ENEMY_NOTES !== 'undefined') ? ENEMY_NOTES[name] : null;
+        const note = pickByOrder(noteEntry, region) || '';
         showAt(sel, `<strong>${escapeAttr(name)}</strong>${parens}${note ? '<br>' + note : ''}`, false);
     }
 
