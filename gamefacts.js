@@ -13,13 +13,13 @@
 const VARIANT_OPTIONS = {
     'astrael-variant':          ["Mother's Flagellant", "Mother's Hunter"],
     'maera-battle-variant':     ['Athane the Fallen', 'Korin the Judged'],
-    'maera-boss-variant':       ['Stern Sister', 'Sibling Hierarchy', 'Eldest Scion'],
+    'maera-boss-variant':       ['Eldest Scion', 'Sibling Hierarchy', 'Stern Sister'],
     'thaddeus-battle-variant':  ['Elebor the Unstoppable', 'Quoto the Destroyer'],
-    'thaddeus-boss-variant':    ['Train Chomper', 'Thick Skinned', 'Insatiable'],
+    'thaddeus-boss-variant':    ['Insatiable', 'Thick Skinned', 'Train Chomper'],
     'tivi-battle-variant':      ['Phalanx', 'The Undying Spirit'],
     'tivi-boss-variant':        ['Duplicitous', 'Mischevious Child', 'Prankster'],
-    'lylith-battle-variant':    ['Qel the Malaiser', 'Ajax the Deathbringer'],
-    'lylith-boss-variant':      ['Plaguebringer', 'Energy Vampire', 'Inoculation'],
+    'lylith-battle-variant':    ['Ajax the Deathbringer', 'Qel the Malaiser'],
+    'lylith-boss-variant':      ['Energy Vampire', 'Inoculation', 'Plaguebringer'],
     'lifemother-variant':       ['Corpseflower', 'Swarmhost', 'Undying Bloom']
 };
 
