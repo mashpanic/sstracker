@@ -473,8 +473,48 @@ function restoreState() {
     }
 }
 
-function resetGrid() {
-    if (!confirm('Reset the whole grid? This clears every selection for the current run.')) return;
+// Dark-themed replacement for window.confirm(): builds an overlay + modal and
+// resolves true/false when a button is clicked (or false on Escape/backdrop).
+function confirmModal(message, { confirmText = 'OK', cancelText = 'Cancel' } = {}) {
+    return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.innerHTML = `
+            <div class="modal" role="dialog" aria-modal="true">
+                <p class="modal-message"></p>
+                <div class="modal-buttons">
+                    <button type="button" class="modal-cancel"></button>
+                    <button type="button" class="modal-confirm"></button>
+                </div>
+            </div>`;
+        overlay.querySelector('.modal-message').textContent = message;
+        overlay.querySelector('.modal-cancel').textContent = cancelText;
+        overlay.querySelector('.modal-confirm').textContent = confirmText;
+
+        function close(result) {
+            document.removeEventListener('keydown', onKey);
+            overlay.remove();
+            resolve(result);
+        }
+        function onKey(e) {
+            if (e.key === 'Escape') close(false);
+            else if (e.key === 'Enter') close(true);
+        }
+        overlay.querySelector('.modal-cancel').addEventListener('click', () => close(false));
+        overlay.querySelector('.modal-confirm').addEventListener('click', () => close(true));
+        overlay.addEventListener('click', e => { if (e.target === overlay) close(false); });
+        document.addEventListener('keydown', onKey);
+
+        document.body.appendChild(overlay);
+        overlay.querySelector('.modal-confirm').focus();
+    });
+}
+
+async function resetGrid() {
+    if (!await confirmModal(
+        'Reset the whole grid? This clears every selection for the current run.',
+        { confirmText: 'Reset', cancelText: 'Cancel' }
+    )) return;
     document.querySelectorAll('#encounter-table select').forEach(sel => {
         sel.selectedIndex = 0; // first option is the "?" / "-- Select Variant --" placeholder
         updateNodeDisplay(sel);
