@@ -287,10 +287,39 @@ function swapBattleBoss(waves, region, selected) {
     return waves;
 }
 
-function getDisplayText(key) {
-    const info = encounterInfo[key];
+// The default info-box prompt for an encounter that is missing one or more of
+// its required selections. Astrael/Lifemother (standalone, no order dropdown)
+// need only a Variant; region battle rows need Order + Variant + Wave set;
+// region boss rows need Order + Variant. Rendered in the default white text so
+// it reads as a plain instruction (no amber order-hint styling).
+function requirementPrompt(key) {
+    if (key.endsWith('-battle')) return 'Select an Order, Variant and Wave set for information';
+    if (key.endsWith('-boss')) return 'Select an Order and Variant for information';
+    return 'Select a Variant for information';
+}
+
+// True once every selection required to render an encounter's full info is set.
+// If any required selection is later cleared this returns false, so the prompt
+// returns automatically.
+function hasRequiredSelections(key) {
     const variantEl = document.getElementById(`${key}-variant`);
-    if (variantEl && variantEl.value) {
+    if (!variantEl || !variantEl.value) return false;
+    if (!key.includes('-')) return true; // astrael/lifemother: variant only
+    const region = key.split('-')[0];
+    // Order dropdown's placeholder is "?" (truthy); encounterOrder returns null
+    // for it, so use that rather than a raw value check.
+    if (encounterOrder(key) === null) return false;
+    if (key.endsWith('-battle')) {
+        const waveEl = document.getElementById(`${region}-wave-set`);
+        if (!waveEl || !waveEl.value) return false;
+    }
+    return true;
+}
+
+function getDisplayText(key) {
+    if (!hasRequiredSelections(key)) return requirementPrompt(key);
+    const variantEl = document.getElementById(`${key}-variant`);
+    {
         const variant = variantEl.value;
         const region = key.includes('-') ? key.split('-')[0] : key;
         const order = encounterOrder(key);
@@ -307,14 +336,6 @@ function getDisplayText(key) {
         let text = variantDescriptions[variant]
             ? bossLabel + ': ' + variantDescriptions[variant]
             : bossLabel + ' information';
-
-        // Mid-run regions need an Order before wave/stat lines can resolve
-        // (encounterOrder is null until the dropdown is set; Astrael/Lifemother
-        // are fixed and never null). Lead with a prompt so the empty wave list
-        // is explained.
-        if (order === null) {
-            text = '<span class="order-hint">Select an Order for complete information</span><br>' + text;
-        }
 
         // Battle rows: the minor boss is the selected variant (swapBattleBoss
         // puts it in the wave string); it gets inline stats like any enemy.
@@ -345,7 +366,6 @@ function getDisplayText(key) {
 
         return text;
     }
-    return info.name + ' information';
 }
 
 function selectEncounter(row, key) {
