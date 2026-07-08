@@ -16,9 +16,9 @@ Bloom,R2_Heavy_HealGorge,Glutmass,4,8,60,Trample<br>Gorge: Gain Titanskin 3 and 
 Bloom,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Inoculation,1,14,1000,Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.,No
 Bloom,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,1,13,1100,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
 Bloom,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,3,35,3300,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
-Bloom,R3_Horde_T1_Decoy,Jeermask,1,0,1,Apply Dazed 2 to the attacker.,No
-Bloom,R3_Horde_T1_Decoy,Jeermask,2,0,1,Apply Dazed 2 to the attacker.,No
-Bloom,R3_Horde_T1_Decoy,Jeermask,3,0,1,Apply Dazed 2 to the attacker.,No
+Bloom,R3_Horde_T1_Decoy,Jeermask,1,0,1,Revenge: Apply Dazed 2 to the attacker.,No
+Bloom,R3_Horde_T1_Decoy,Jeermask,2,0,1,Revenge: Apply Dazed 2 to the attacker.,No
+Bloom,R3_Horde_T1_Decoy,Jeermask,3,0,1,Revenge: Apply Dazed 2 to the attacker.,No
 Bloom,R3_Attacker_T1_StealthSniper,Longlash,1,7,4,Sniper<br>Stealth 1,No
 Bloom,R3_Attacker_T1_StealthSniper,Longlash,2,7,4,Sniper<br>Stealth 1,No
 Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,1,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
@@ -121,9 +121,9 @@ Tangle,R2_Heavy_HealGorge,Glutmass,4,,,Trample<br>Gorge: Gain Titanskin 3 and re
 Tangle,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Inoculation,1,,,Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.,No
 Tangle,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,1,,,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
 Tangle,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,3,,,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
-Tangle,R3_Horde_T1_Decoy,Jeermask,1,,,Apply Dazed 2 to the attacker.,No
-Tangle,R3_Horde_T1_Decoy,Jeermask,2,,,Apply Dazed 2 to the attacker.,No
-Tangle,R3_Horde_T1_Decoy,Jeermask,3,,,Apply Dazed 2 to the attacker.,No
+Tangle,R3_Horde_T1_Decoy,Jeermask,1,,,Revenge: Apply Dazed 2 to the attacker.,No
+Tangle,R3_Horde_T1_Decoy,Jeermask,2,,,Revenge: Apply Dazed 2 to the attacker.,No
+Tangle,R3_Horde_T1_Decoy,Jeermask,3,,,Revenge: Apply Dazed 2 to the attacker.,No
 Tangle,R3_Attacker_T1_StealthSniper,Longlash,1,,,Sniper<br>Stealth 1,No
 Tangle,R3_Attacker_T1_StealthSniper,Longlash,2,,,Sniper<br>Stealth 1,No
 Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,1,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
@@ -251,9 +251,9 @@ Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,1,20,1815,Trample
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,2,33,3149,Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,3,48,5962,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,4,71,10005,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
-Overgrowth,R3_Horde_T1_Decoy,Jeermask,1,0,2,Apply Dazed 2 to the attacker.,Yes
+Overgrowth,R3_Horde_T1_Decoy,Jeermask,1,0,2,Revenge: Apply Dazed 2 to the attacker.,Yes
 Overgrowth,R3_Horde_T1_Decoy,Jeermask,2,0,3,Revenge: Apply Dazed 2 to the attacker.,Yes
-Overgrowth,R3_Horde_T1_Decoy,Jeermask,3,0,5,Apply Dazed 2 to the attacker.,Yes
+Overgrowth,R3_Horde_T1_Decoy,Jeermask,3,0,5,Revenge: Apply Dazed 2 to the attacker.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,1,18,660,Summon: Descend all friendly units to this floor and Retreat.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,2,31,1924,Summon: Descend all friendly units to this floor and Retreat.,No
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,3,46,4663,Summon: Descend all friendly units to this floor and Retreat.,Yes

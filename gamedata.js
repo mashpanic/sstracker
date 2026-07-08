@@ -116,7 +116,7 @@ const ENEMY_NOTES = {
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
     "Inoculation": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise."],
     "Insatiable": ["Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge."],
-    "Jeermask": ["Apply Dazed 2 to the attacker.", "Revenge: Apply Dazed 2 to the attacker.", "Apply Dazed 2 to the attacker.", null],
+    "Jeermask": "Revenge: Apply Dazed 2 to the attacker.",
     "Korin the Judged": "Summon: Descend all friendly units to this floor and Retreat.",
     "Longlash": "Sniper<br>Stealth 1",
     "Mischevious Child": "Sniper<br>Strike: Advance the attacked unit.",
