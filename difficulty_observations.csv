@@ -360,17 +360,17 @@ Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,3,52,5407,Resolve: Appl
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9404,Resolve: Apply Burst 1 to self and enemy units.,Yes
 Overgrowth,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,4,123,25821,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,1,11,413,Infested 6. Reanimate 6. Strike: Gain Infested 2.,Yes
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,24,1662,,No
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,3,39,4390,,No
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,24,1662,Infested 6. Reanimate 6. Strike: Gain Infested 2.,No
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,3,39,4390,Infested 6. Reanimate 6. Strike: Gain Infested 2.,No
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,4,57,8302,Infested 7. Reanimate 6. Strike: Gain Infested 3.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,1,18,1650,Trample<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,2,31,2974,Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,3,46,5777,Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,4,69,9805,Trample<br>Gorge: Gain Rage 6 and Titanskin 6.,Yes
-Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,1,18,1815,,No
-Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,2,31,3149,,No
-Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,3,46,5962,,No
-Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,4,69,10004,,Yes
+Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,1,18,1815,Resolve: Reduce Space by 1 and trigger Gorge.,No
+Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,2,31,3149,Resolve: Reduce Space by 1 and trigger Gorge.,No
+Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,3,46,5962,Resolve: Reduce Space by 1 and trigger Gorge.,No
+Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,4,69,10004,Resolve: Reduce Space by 1 and trigger Gorge.,Yes
 Overgrowth,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,4,123,27824,Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,R4_Support_RegenEnemies,Witchwarden,1,10,17,Witherbloom 2<br>Revenge: Enemy units gain Regen 3.,Yes
 Overgrowth,R4_Support_RegenEnemies,Witchwarden,2,10,18,Witherbloom 2<br>Revenge: Enemy units gain Regen 3.,Yes
