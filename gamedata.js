@@ -34,7 +34,7 @@ const BOSS_STATS = {
     "Eldest Scion": ["18⚔️ 1650❤️", "31⚔️ 2974❤️", "46⚔️ 5777❤️", "69⚔️ 9805❤️"],
     // Thaddeus Battle
     "Elebor the Unstoppable": ["18⚔️ 594❤️", "31⚔️ 1854❤️", "46⚔️ 4591❤️", "69⚔️ 8528❤️"],
-    "Quoto the Destroyer": ["12⚔️ 528❤️", "25⚔️ 1784❤️", "37⚔️ 4517❤️", "59⚔️ 8442❤️"],
+    "Quoto the Destroyer": ["12⚔️ 528❤️", "24⚔️ 1786❤️", "37⚔️ 4517❤️", "59⚔️ 8442❤️"],
     // Thaddeus Boss
     "Train Chomper": ["18⚔️ 1815❤️", "31⚔️ 3149❤️", "46⚔️ 5962❤️", "69⚔️ 10004❤️"],
     "Thick Skinned": ["18⚔️ 1650❤️", "31⚔️ 2974❤️", "46⚔️ 5777❤️", "69⚔️ 9805❤️"],
@@ -44,7 +44,7 @@ const BOSS_STATS = {
     "The Undying Spirit": ["11⚔️ 413❤️", "24⚔️ 1662❤️", "39⚔️ 4390❤️", "57⚔️ 8302❤️"],
     // Tivi Boss
     "Duplicitous": ["18⚔️ 1320❤️", "31⚔️ 2624❤️", "46⚔️ 5406❤️", "69⚔️ 9406❤️"],
-    "Mischevious Child": ["21⚔️ 1320❤️", "34⚔️ 2624❤️", "49⚔️ 5407❤️", "72⚔️ 9404❤️"],
+    "Mischevious Child": ["21⚔️ 1320❤️", "34⚔️ 2624❤️", "49⚔️ 5406❤️", "72⚔️ 9404❤️"],
     "Prankster": ["20⚔️ 1485❤️", "33⚔️ 2799❤️", "48⚔️ 5592❤️", "71⚔️ 9603❤️"],
     // Lylith Battle
     "Qel the Malaiser": ["18⚔️ 627❤️", "31⚔️ 1890❤️", "46⚔️ 4630❤️", "69⚔️ 8568❤️"],
@@ -146,7 +146,7 @@ const ENEMY_NOTES = {
     "Plaguehost": "Extinguish: Apply Witherbloom 5 to your front unit.",
     "Prankster": "Siphon: Add Tivi's Scourge to your hand.",
     "Qel the Malaiser": "Incant: Apply Witherbloom 2 and Malaise 3 to your units.",
-    "Quoto the Destroyer": ["Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 1.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 3."],
+    "Quoto the Destroyer": ["Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 3."],
     "Sharp-Eye Sniper": "Slay: Gain Rage 2.",
     "Sibling Hierarchy": ["Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 3 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 6 to enemy units."],
     "Stern Sister": "Resolve: Apply Burst 1 to self and enemy units.",
