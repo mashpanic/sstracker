@@ -236,7 +236,7 @@ Tangle,R1_Attacker_AscendGainAtk,Zephyrite,1,,,Armor 6<br>Shift: Gain Burst 1.,N
 Tangle,R1_Attacker_AscendGainAtk,Zephyrite,2,,,Armor 6<br>Shift: Gain Burst 1.,No
 Tangle,R1_Attacker_AscendGainAtk,Zephyrite,3,,,Armor 6<br>Shift: Gain Burst 1.,No
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,1,17,743,Action: Apply Malaise 8 to your front unit.,Yes
-Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,2,30,2012,Action: Apply Malaise 5 to your front unit.,No
+Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,2,30,2012,Action: Apply Malaise 8 to your front unit.,Yes
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,3,45,4757,Action: Apply Malaise 8 to your front unit.,Yes
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,4,68,8703,Action: Apply Malaise 9 to your front unit.,Yes
 Overgrowth,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,12,380,Sap 9<br>Infested 6,Yes
@@ -260,7 +260,7 @@ Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,4,69,852
 Overgrowth,EnchanterT1_Speed,Energizing Flautist,1,0,1,Haste<br>Enchant: Grant enemy units Haste.,Yes
 Overgrowth,EnchanterT1_Speed,Energizing Flautist,2,0,1,Haste<br>Enchant: Grant enemy units Haste.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,1,21,1485,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,2,34,2799,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
+Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,2,34,2799,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,3,49,5591,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,4,72,9606,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
 Overgrowth,R2_Support_FeedInfested,Fleshfruit,1,0,41,Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,Yes
@@ -376,7 +376,7 @@ Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,75,10204,Actio
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,1,8,95,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,2,9,99,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,3,11,103,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
-Overgrowth,Boss_SoulSavior_R3_Unruly_Scourge,Prankster,1,20,1485,Siphon: Add Tivi's Scourge to your hand.,No
+Overgrowth,Boss_SoulSavior_R3_Unruly_Scourge,Prankster,1,20,1485,Siphon: Add Tivi's Scourge to your hand.,Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_Scourge,Prankster,2,33,2799,Siphon: Add Tivi's Scourge to your hand.,No
 Overgrowth,Boss_SoulSavior_R3_Unruly_Scourge,Prankster,3,48,5592,Siphon: Add Tivi's Scourge to your hand.,No
 Overgrowth,Boss_SoulSavior_R3_Unruly_Scourge,Prankster,4,71,9603,Siphon: Add Tivi's Scourge to your hand.,Yes
