@@ -40,14 +40,14 @@ const BOSS_STATS = {
     "Thick Skinned": ["18⚔️ 1650❤️", "31⚔️ 2974❤️", "46⚔️ 5777❤️", "69⚔️ 9805❤️"],
     "Insatiable": ["20⚔️ 1815❤️", "33⚔️ 3149❤️", "48⚔️ 5962❤️", "71⚔️ 10005❤️"],
     // Tivi Battle
-    "Phalanx": ["18⚔️ 825❤️", "31⚔️ 2099❤️", "46⚔️ 4852❤️", "69⚔️ 8808❤️"],
+    "Phalanx": ["18⚔️ 825❤️", "31⚔️ 2099❤️", "46⚔️ 4852❤️", "69⚔️ 8803❤️"],
     "The Undying Spirit": ["11⚔️ 413❤️", "24⚔️ 1662❤️", "39⚔️ 4390❤️", "57⚔️ 8302❤️"],
     // Tivi Boss
-    "Duplicitous": ["18⚔️ 1320❤️", "31⚔️ 2624❤️", "46⚔️ 5406❤️", "69⚔️ 9406❤️"],
+    "Duplicitous": ["18⚔️ 1320❤️", "31⚔️ 2624❤️", "46⚔️ 5406❤️", "69⚔️ 9404❤️"],
     "Mischevious Child": ["21⚔️ 1320❤️", "34⚔️ 2624❤️", "49⚔️ 5406❤️", "72⚔️ 9404❤️"],
     "Prankster": ["20⚔️ 1485❤️", "33⚔️ 2799❤️", "48⚔️ 5592❤️", "71⚔️ 9603❤️"],
     // Lylith Battle
-    "Qel the Malaiser": ["18⚔️ 627❤️", "31⚔️ 1890❤️", "46⚔️ 4630❤️", "69⚔️ 8568❤️"],
+    "Qel the Malaiser": ["18⚔️ 627❤️", "31⚔️ 1890❤️", "46⚔️ 4627❤️", "69⚔️ 8568❤️"],
     "Ajax the Deathbringer": ["17⚔️ 743❤️", "30⚔️ 2012❤️", "45⚔️ 4757❤️", "68⚔️ 8708❤️"],
     // Lylith Boss
     "Plaguebringer": ["24⚔️ 1980❤️", "37⚔️ 3324❤️", "52⚔️ 6147❤️", "75⚔️ 10204❤️"],
@@ -148,12 +148,12 @@ const ENEMY_NOTES = {
     "Qel the Malaiser": "Incant: Apply Witherbloom 2 and Malaise 3 to your units.",
     "Quoto the Destroyer": ["Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 3."],
     "Sharp-Eye Sniper": "Slay: Gain Rage 2.",
-    "Sibling Hierarchy": ["Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 3 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 6 to enemy units."],
+    "Sibling Hierarchy": ["Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 6 to enemy units."],
     "Stern Sister": "Resolve: Apply Burst 1 to self and enemy units.",
     "Swarmhost": "Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.",
     "The Undying Spirit": ["Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 7. Reanimate 6. Strike: Gain Infested 3."],
     "Thick Skinned": ["Trample<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Gorge: Gain Rage 6 and Titanskin 6."],
-    "Train Chomper": "Resolve: Reduce Space by 1 and trigger Gorge.",
+    "Train Chomper": ["Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Resolve: Reduce Space by 1 and trigger Gorge.", "Resolve: Reduce Space by 1 and trigger Gorge.", "Resolve: Reduce Space by 1 and trigger Gorge."],
     "Undying Bloom": "Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.",
     "Witchwarden": "Witherbloom 2<br>Revenge: Enemy units gain Regen 3.",
     "Zephyrite": "Armor 9<br>Shift: Gain Burst 1.",

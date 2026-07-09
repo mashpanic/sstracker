@@ -222,7 +222,7 @@ Overgrowth,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,144,25821,Tr
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,1,18,1320,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,2,31,2624,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,3,46,5406,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
-Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,4,69,9406,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",No
+Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,4,69,9404,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,1,18,1650,Resolve: Enemy units gain armor equal to their attack.,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,31,2974,Resolve: Enemy units gain armor equal to their attack.,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,3,46,5777,Resolve: Enemy units gain armor equal to their attack.,No
@@ -329,10 +329,10 @@ Overgrowth,R1_Heavy_HealOnShift,Ossivane Sentinel,2,14,86,Shift: Gain Armor 23.,
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,1,18,825,Spikes 8<br>Strike: Lose Spikes 1.,No
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,31,2099,Spikes 8<br>Strike: Lose Spikes 1.,No
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,3,46,4852,Spikes 8<br>Strike: Lose Spikes 1.,No
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,4,69,8808,Spikes 8<br>Strike: Lose Spikes 1.,No
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,4,69,8803,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,1,24,1980,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,2,37,3324,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
-Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,3,52,6147,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
+Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,3,52,6147,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,75,10204,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,1,8,95,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,2,9,99,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
@@ -343,7 +343,7 @@ Overgrowth,Boss_SoulSavior_R3_Unruly_Scourge,Prankster,3,48,5592,Siphon: Add Tiv
 Overgrowth,Boss_SoulSavior_R3_Unruly_Scourge,Prankster,4,71,9603,Siphon: Add Tivi's Scourge to your hand.,Yes
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_Corruptor,Qel the Malaiser,1,18,627,Incant: Apply Witherbloom 2 and Malaise 3 to your units.,No
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_Corruptor,Qel the Malaiser,2,31,1890,Incant: Apply Witherbloom 2 and Malaise 3 to your units.,Yes
-Overgrowth,Boss_SoulSavior_R4_TrainBoss_Corruptor,Qel the Malaiser,3,46,4630,Incant: Apply Witherbloom 2 and Malaise 3 to your units.,No
+Overgrowth,Boss_SoulSavior_R4_TrainBoss_Corruptor,Qel the Malaiser,3,46,4627,Incant: Apply Witherbloom 2 and Malaise 3 to your units.,Yes
 Overgrowth,Boss_SoulSavior_R4_TrainBoss_Corruptor,Qel the Malaiser,4,69,8568,Incant: Apply Witherbloom 2 and Malaise 3 to your units.,No
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,1,12,528,Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,2,24,1786,Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.,Yes
@@ -351,7 +351,7 @@ Overgrowth,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,3,37,4517,
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,4,59,8442,Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 3.,Yes
 Overgrowth,R3_AttackerT2_HunterSeeker,Sharp-Eye Sniper,1,8,3,Slay: Gain Rage 2.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,1,23,1485,Shift: Apply Rage 5 to enemy units.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,2,36,2799,Shift: Apply Rage 3 to enemy units.,No
+Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,2,36,2799,Shift: Apply Rage 5 to enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,3,51,5591,Shift: Apply Rage 5 to enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,4,74,9603,Shift: Apply Rage 6 to enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,1,24,1320,Resolve: Apply Burst 1 to self and enemy units.,Yes
@@ -367,10 +367,10 @@ Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,1,18,1650,Trampl
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,2,31,2974,Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,3,46,5777,Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,4,69,9805,Trample<br>Gorge: Gain Rage 6 and Titanskin 6.,Yes
-Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,1,18,1815,Resolve: Reduce Space by 1 and trigger Gorge.,No
+Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,1,18,1815,Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,2,31,3149,Resolve: Reduce Space by 1 and trigger Gorge.,No
 Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,3,46,5962,Resolve: Reduce Space by 1 and trigger Gorge.,No
-Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,4,69,10004,Resolve: Reduce Space by 1 and trigger Gorge.,Yes
+Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,4,69,10004,Resolve: Reduce Space by 1 and trigger Gorge.,No
 Overgrowth,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,4,123,27824,Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,R4_Support_RegenEnemies,Witchwarden,1,10,17,Witherbloom 2<br>Revenge: Enemy units gain Regen 3.,Yes
 Overgrowth,R4_Support_RegenEnemies,Witchwarden,2,10,18,Witherbloom 2<br>Revenge: Enemy units gain Regen 3.,Yes
