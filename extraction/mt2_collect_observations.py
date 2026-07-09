@@ -461,6 +461,7 @@ def collect_battle(store, scen, difficulty, scenario_key, order, title, bosses=(
         print(f'  (no recorded combatants for {scenario_key})')
         return
     # here = (internal, display, is_boss) present at this order; bosses first.
+    here = [(i, d, True) for i, d, o in bosses if order in o]
     # Clamp the tier lookup to the deepest wave tier we have data for: waves.json
     # only encodes tiers 0-3 (T1-T4), but Lifemother is collected at O5, so its
     # trash lives at the top tier (3) — order-1 == 4 has no tier, fall back to it.
@@ -626,7 +627,11 @@ def resolve_bosses(battle, scenario_key, label, region_orders):
         if not b:
             return []
         display = b[1] if battle.get('astrael') else label
-        return [(b[0], display, set(b[2]))]
+        # The designated boss is always present when you fight its own boss
+        # battle, so offer it at the region's collectable orders — not the
+        # waves-derived tiers b[2], which peg Lifemother at O4 (tier 3) and would
+        # wrongly gate it out of its O5 collection.
+        return [(b[0], display, set(region_orders))]
     # minor battle — independent boss choice
     variant = choose('Which minor boss did you fight?',
                      [(v, v) for v in battle['boss_variants']])
@@ -717,7 +722,7 @@ def manual_collect(store, scen, mids, lifemother):
             return
         try:
             if region is lifemother:
-                # Lifemother: pick the variant (1-3); fixed order (O4).
+                # Lifemother: pick the variant (1-3); fixed order (O5).
                 battle = lifemother['battles'][0]
                 variant = choose('Lifemother — which variant?',
                                  [(lbl, lbl) for lbl, _ in battle['options']])
