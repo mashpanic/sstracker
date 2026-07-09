@@ -249,7 +249,7 @@ Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,1,18,1320,"Resol
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,2,31,2624,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,3,46,5406,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,4,69,9404,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,1,18,1650,Resolve: Enemy units gain armor equal to their attack.,No
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,1,18,1650,Resolve: Enemy units gain armor equal to their attack.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,31,2974,Resolve: Enemy units gain armor equal to their attack.,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,3,46,5777,Resolve: Enemy units gain armor equal to their attack.,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,4,69,9805,Resolve: Enemy units gain armor equal to their attack.,Yes
@@ -329,7 +329,7 @@ Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,1,5,5,Infested 2,Y
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,2,6,6,Infested 2,Yes
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,3,8,7,Infested 1,Yes
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,4,9,9,Infested 3,Yes
-Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,3,0,5,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
+Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,3,0,5,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,Yes
 Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,4,0,6,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,Yes
 Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,5,0,6,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,1,15,81,Vanguard: Gain Titanite.,Yes
@@ -346,9 +346,9 @@ Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,3,20,235,Extinguish: Ap
 Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,4,23,245,Extinguish: Apply Malaise 9 and Witherbloom 9 to your front unit.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,5,23,245,Extinguish: Apply Malaise 9 and Witherbloom 9 to your front unit.,No
 Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,2,11,6,Slay: Gain Rage 5.,Yes
-Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,3,14,9,Slay: Gain Rage 3.,No
+Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,3,12,7,Slay: Gain Rage 5.,Yes
 Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,4,14,9,Slay: Gain Rage 6.,Yes
-Overgrowth,R3_MageT3_Junker_Ver2,Mother's Supplicant,1,5,27,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,No
+Overgrowth,R3_MageT3_Junker_Ver2,Mother's Supplicant,1,5,27,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,Yes
 Overgrowth,R3_MageT3_Junker_Ver2,Mother's Supplicant,2,6,29,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,Yes
 Overgrowth,R3_MageT3_Junker_Ver2,Mother's Supplicant,3,8,30,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,Yes
 Overgrowth,R3_MageT3_Junker_Ver2,Mother's Supplicant,4,9,32,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,Yes
@@ -365,9 +365,9 @@ Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,4,50,32,Armor 34. S
 Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,5,50,32,Armor 34. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 18.,No
 Overgrowth,R1_Heavy_HealOnShift,Ossivane Sentinel,1,12,81,Shift: Gain Armor 23.,Yes
 Overgrowth,R1_Heavy_HealOnShift,Ossivane Sentinel,2,14,86,Shift: Gain Armor 23.,Yes
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,1,18,825,Spikes 8<br>Strike: Lose Spikes 1.,No
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,1,18,825,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,31,2099,Spikes 8<br>Strike: Lose Spikes 1.,No
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,3,46,4852,Spikes 8<br>Strike: Lose Spikes 1.,No
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,3,46,4850,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,4,69,8803,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,1,24,1980,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,2,37,3324,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No

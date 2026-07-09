@@ -40,7 +40,7 @@ const BOSS_STATS = {
     "Thick Skinned": ["18⚔️ 1650❤️", "31⚔️ 2974❤️", "46⚔️ 5777❤️", "69⚔️ 9805❤️"],
     "Insatiable": ["20⚔️ 1815❤️", "33⚔️ 3149❤️", "48⚔️ 5962❤️", "71⚔️ 10005❤️"],
     // Tivi Battle
-    "Phalanx": ["18⚔️ 825❤️", "31⚔️ 2099❤️", "46⚔️ 4852❤️", "69⚔️ 8803❤️"],
+    "Phalanx": ["18⚔️ 825❤️", "31⚔️ 2099❤️", "46⚔️ 4850❤️", "69⚔️ 8803❤️"],
     "The Undying Spirit": ["11⚔️ 413❤️", "22⚔️ 1662❤️", "39⚔️ 4390❤️", "57⚔️ 8302❤️"],
     // Tivi Boss
     "Duplicitous": ["18⚔️ 1320❤️", "31⚔️ 2624❤️", "46⚔️ 5406❤️", "69⚔️ 9404❤️"],
@@ -82,7 +82,7 @@ const ENEMY_STATS = {
     "Mother's Longlash": [null, null, "33⚔️ 19❤️", "38⚔️ 21❤️", "38⚔️ 21❤️"],
     "Mother's Ossivane Sentinel": [null, null, "33⚔️ 293❤️", "38⚔️ 306❤️", "38⚔️ 306❤️"],
     "Mother's Plaguehost": [null, null, "20⚔️ 235❤️", "23⚔️ 245❤️", "23⚔️ 245❤️"],
-    "Mother's Sharp-Eye Sniper": [null, "11⚔️ 6❤️", "14⚔️ 9❤️", "14⚔️ 9❤️", null],
+    "Mother's Sharp-Eye Sniper": [null, "11⚔️ 6❤️", "12⚔️ 7❤️", "14⚔️ 9❤️", null],
     "Mother's Supplicant": ["5⚔️ 27❤️", "6⚔️ 29❤️", "8⚔️ 30❤️", "9⚔️ 32❤️", null],
     "Mother's Witchwarden": [null, null, "22⚔️ 60❤️", "22⚔️ 63❤️", "22⚔️ 63❤️"],
     "Mother's Zealot": ["21⚔️ 61❤️", "24⚔️ 64❤️", "27⚔️ 67❤️", "30⚔️ 69❤️", "30⚔️ 69❤️"],
@@ -135,7 +135,7 @@ const ENEMY_NOTES = {
     "Mother's Longlash": "Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.",
     "Mother's Ossivane Sentinel": [null, null, "Shift: Gain Armor 30.", "Shift: Gain Armor 36.", "Shift: Gain Armor 36."],
     "Mother's Plaguehost": [null, null, "Extinguish: Apply Malaise 8 and Witherbloom 8 to your front unit.", "Extinguish: Apply Malaise 9 and Witherbloom 9 to your front unit.", "Extinguish: Apply Malaise 9 and Witherbloom 9 to your front unit."],
-    "Mother's Sharp-Eye Sniper": [null, "Slay: Gain Rage 5.", "Slay: Gain Rage 3.", "Slay: Gain Rage 6.", null],
+    "Mother's Sharp-Eye Sniper": [null, "Slay: Gain Rage 5.", "Slay: Gain Rage 5.", "Slay: Gain Rage 6.", null],
     "Mother's Supplicant": "Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.",
     "Mother's Witchwarden": [null, null, "Witherbloom 2<br>Revenge: Enemy units gain Armor 15 and Regen 3.", "Witherbloom 2<br>Revenge: Enemy units gain Armor 18 and Regen 3.", "Witherbloom 2<br>Revenge: Enemy units gain Armor 18 and Regen 3."],
     "Mother's Zealot": "Gorge: Gain Multistrike 1.",
