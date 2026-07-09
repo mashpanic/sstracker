@@ -429,35 +429,17 @@ def stat_label(rec):
     return f'{rec["atk"]}⚔️ {rec["hp"]}❤️{flag}{note}'
 
 
-def fmt_orders(orders):
-    """Compact order-range label: {1,2,3,4}→'O1-O4', {3,4}→'O3-O4', {1,3}→'O1,O3'."""
-    s = sorted(orders)
-    if len(s) > 1 and s == list(range(s[0], s[-1] + 1)):
-        return f'O{s[0]}-O{s[-1]}'
-    return ','.join(f'O{o}' for o in s)
-
-
 # ───────────────────────── collection ─────────────────────────
 
 def collect_battle(store, scen, difficulty, scenario_key, order, title, bosses=()):
     """Prompt for the combatants in `scenario_key` at this `order` — the boss(es)
     of the battle (`bosses` = [(internal, display, orders_set)]) plus the trash.
 
-    Lower orders spawn fewer enemies (tier gating from waves.json), so we show
-    BOTH what's present at this order (selectable) and what's gated out, each
-    tagged with its order-range — so an absent unit is never ambiguous between
-    'doesn't appear at this order' and 'missing from the data'. Bosses are
-    listed first, marked ★, and recorded into the same file as the trash."""
+    Lists the units present at this order (tier gating from waves.json — lower
+    orders spawn fewer enemies). Bosses are listed first, marked ★, and recorded
+    into the same file as the trash."""
     tiers = scen.get(scenario_key, {})
-    ranges, disp = {}, {}                       # internal -> set(orders) / display
-    for t, lst in tiers.items():
-        for internal, d in lst:
-            ranges.setdefault(internal, set()).add(t + 1)
-            disp[internal] = d
-    for internal, d, orders in bosses:
-        ranges.setdefault(internal, set()).update(orders)
-        disp[internal] = d
-    if not ranges:
+    if not tiers and not bosses:
         print(f'  (no recorded combatants for {scenario_key})')
         return
     # here = (internal, display, is_boss) present at this order; bosses first.
@@ -469,17 +451,13 @@ def collect_battle(store, scen, difficulty, scenario_key, order, title, bosses=(
     if tiers and trash_tier not in tiers:
         trash_tier = min(trash_tier, max(tiers))
     here += [(i, d, False) for i, d in tiers.get(trash_tier, [])]
-    here_set = {i for i, _, _ in here}
-    gated = sorted((disp[i], fmt_orders(ranges[i])) for i in ranges if i not in here_set)
     while True:
         print(f'\n── {title}  (O{order}) ──')
         for i, (internal, display, is_boss) in enumerate(here, 1):
             rec = store.get(difficulty, internal, order)
             mark = '✓' if is_verified(rec) else ('~' if recorded(rec) else ' ')
             tag = '★ ' if is_boss else '  '
-            print(f'  {mark}{i:2d}. {tag}{display:24s} [{fmt_orders(ranges[internal])}]  {stat_label(rec)}')
-        if gated:
-            print('      not at O%d: %s' % (order, ', '.join(f'{d} [{r}]' for d, r in gated)))
+            print(f'  {mark}{i:2d}. {tag}{display:24s}  {stat_label(rec)}')
         try:
             raw = prompt('Enter # to record (blank=done with battle)')
         except Back:
