@@ -313,7 +313,7 @@ Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,6,9,Extinguish:
 Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,5,6,9,Extinguish: Apply Infested 5 to enemy units.,No
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,5,108,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,6,114,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
-Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,8,119,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
+Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,8,119,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,4,9,125,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,1,2,7,Haste<br>Enchant: Grant enemy units Haste.,Yes
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,2,2,9,Haste<br>Enchant: Grant enemy units Haste.,Yes
