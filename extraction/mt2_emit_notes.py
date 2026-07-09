@@ -7,7 +7,7 @@ shown in the app's hover/click popover over a wave-list name.
 Notes are sourced from the *Overgrowth* rows only (the app targets Overgrowth),
 keyed by *display name*. A note can vary by order (e.g. Athane Rage 1→2→3), so
 the value mirrors ENEMY_STATS/BOSS_STATS: a single string when the note is the
-same at every recorded order, or an [O1,O2,O3,O4] array (null per order without a
+same at every recorded order, or an [O1,O2,O3,O4,O5] array (null per order without a
 note) when it differs — the app resolves both via pickByOrder. An Internal with
 no Overgrowth note at any order is omitted (fix it in the CSV; no cross-difficulty
 fallback). Covers BOTH non-boss enemies and bosses (a boss's note is keyed by its
@@ -33,7 +33,7 @@ def render_block(rows):
         '// ---- Per-enemy ability notes (hover/click popover text) ----',
         '// Keyed by display name → ability text (may contain <br> for multi-line).',
         '// Value is a single string when the note is the same at every order, or an',
-        '// [O1,O2,O3,O4] array (null per order without a note) when it varies by order',
+        '// [O1,O2,O3,O4,O5] array (null per order without a note) when it varies by order',
         '// — same string|array shape as ENEMY_STATS/BOSS_STATS (resolve via pickByOrder).',
         '// Covers enemies AND bosses (boss note keyed by variant/CSV display name).',
         '// OBSERVED, from the Overgrowth rows of difficulty_observations.csv (note',
@@ -68,7 +68,7 @@ def render_block(rows):
         if len(set(orders.values())) <= 1:
             entries[name] = next(iter(orders.values()))       # invariant → string
         else:
-            entries[name] = [orders.get(o) for o in (1, 2, 3, 4)]  # per-order array
+            entries[name] = [orders.get(o) for o in (1, 2, 3, 4, 5)]  # per-order array
     for name in sorted(entries):
         lines.append(f'    {json.dumps(name)}: {json.dumps(entries[name], ensure_ascii=False)},')
     lines.append('};')

@@ -13,7 +13,7 @@ It walks a run the way you actually play one:
     Astrael (O1, fixed first)
       → four mid regions in the visit sequence YOU choose (1st entered = O1 …
         4th = O4; earlier = weaker), the order being your routing decision
-      → Lifemother (O4, fixed last)
+      → Lifemother (O5, fixed last — its own scaling tier beyond the four rings)
 
 At each battle it lists the non-boss enemies present (from out/waves.json at the
 chosen ring) and prompts for any cell not yet recorded for the current
@@ -70,12 +70,13 @@ CAN_PREFILL = readline is not None and 'libedit' not in (getattr(readline, '__do
 #   from out/roster.json (so the collector never offers it). Check whether it's
 #   filtered out by is_soul_savior() in mt2_extract_roster.py and add it (e.g.
 #   via the SOUL_SAVIOR_EXTRA set) if so.
-# - Investigate O5 scaling (Lifemother). Some abilities (e.g. Apply Witherbloom)
-#   may scale up beyond O4 — and Lifemother may actually sit at O5, not O4 (the
-#   unresolved tier/ring reconciliation). The whole data model currently caps at
-#   O1–O4 (collector orders, difficulty_observations.csv, ENEMY_STATS/BOSS_STATS
-#   arrays). If O5 is real, add an O5 order across the collector and the emitters
-#   and collect O5 entries for each enemy that can appear there.
+# - O5 (Lifemother) is now its own scaling tier (added 2026-07-08). Lifemother is
+#   collected at order 5, and its wave enemies + bosses carry O5 rows in
+#   difficulty_observations.csv (seeded as copies of O4, verified=No). The emitters
+#   emit 5-element [O1..O5] arrays for ENEMY_STATS/ENEMY_NOTES (BOSS_STATS keeps
+#   Lifemother as a single order-invariant string). ATK/HP at O5 are believed
+#   equal to O4; the status-effect *amounts* in the notes scale beyond O4, so
+#   re-observe the O5 notes in-game (Apply Witherbloom, Malaise, etc.).
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -188,7 +189,7 @@ def build_run_model(variant_opts, wave_set_opts):
                      'options': boss_battle('astrael-variant')}],
     }
     lifemother = {
-        'key': 'lifemother', 'name': 'Lifemother', 'orders': [4], 'fixed_order': 4,
+        'key': 'lifemother', 'name': 'Lifemother', 'orders': [5], 'fixed_order': 5,
         'battles': [{'title': 'Final Battle', 'kind': 'boss',
                      'options': boss_battle('lifemother-variant')}],
     }
@@ -460,8 +461,13 @@ def collect_battle(store, scen, difficulty, scenario_key, order, title, bosses=(
         print(f'  (no recorded combatants for {scenario_key})')
         return
     # here = (internal, display, is_boss) present at this order; bosses first.
-    here = [(i, d, True) for i, d, o in bosses if order in o]
-    here += [(i, d, False) for i, d in tiers.get(order - 1, [])]
+    # Clamp the tier lookup to the deepest wave tier we have data for: waves.json
+    # only encodes tiers 0-3 (T1-T4), but Lifemother is collected at O5, so its
+    # trash lives at the top tier (3) — order-1 == 4 has no tier, fall back to it.
+    trash_tier = order - 1
+    if tiers and trash_tier not in tiers:
+        trash_tier = min(trash_tier, max(tiers))
+    here += [(i, d, False) for i, d in tiers.get(trash_tier, [])]
     here_set = {i for i, _, _ in here}
     gated = sorted((disp[i], fmt_orders(ranges[i])) for i in ranges if i not in here_set)
     while True:
@@ -791,12 +797,15 @@ def reachable_cells(scen):
     every scenario/tier, plus bosses (region/Astrael/Lifemother from waves.json,
     and the roster-only minor bosses Quoto/Ajax at any order)."""
     cells = set()
-    for tiers in scen.values():
+    for name, tiers in scen.items():
+        r5 = '_R5_' in name          # Lifemother scenarios are collected at O5
         for t, lst in tiers.items():
             for internal, _ in lst:
                 cells.add((internal, t + 1))
-    for internal, _, orders in BOSSES.values():
-        for o in orders:
+                if r5:
+                    cells.add((internal, 5))
+    for key, (internal, _, orders) in BOSSES.items():
+        for o in set(orders) | ({5} if '_R5_' in key else set()):
             cells.add((internal, o))
     for internal in MINORBOSS.values():
         for o in (1, 2, 3, 4):

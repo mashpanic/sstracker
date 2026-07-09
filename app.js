@@ -177,7 +177,7 @@ function updateNodeDisplay(selectEl) {
 // Returns the info-box HTML for an encounter. variantDescriptions entries
 // may contain HTML (e.g. <br>, <strong>) since the result is assigned via
 // innerHTML; the values are all author-controlled, so this is safe.
-// Resolve a string | [O1,O2,O3,O4] value to one string using the row's order
+// Resolve a string | [O1,O2,O3,O4,O5] value to one string using the row's order
 // selector. Fixed (string) values ignore order; arrays index by order-1.
 // Used for BOSS_STATS, WAVE_SET_DESCRIPTIONS and BOSS_WAVE_DESCRIPTIONS.
 function pickByOrder(entry, region) {
@@ -199,18 +199,19 @@ const ENEMY_NAME_RE = new RegExp(
     'g'
 );
 
-// The visit order (1-4) used to look up an enemy's observed stats for a row.
-// astrael is always first (O1); lifemother always last (O4). Mid-run regions
-// use their Order dropdown; null until one is picked.
+// The visit order (1-5) used to look up an enemy's observed stats for a row.
+// astrael is always first (O1); lifemother always last (O5 — its own scaling
+// tier beyond the four mid-run rings). Mid-run regions use their Order dropdown
+// (O1-O4); null until one is picked.
 function encounterOrder(key) {
     if (key === 'astrael') return 1;
-    if (key === 'lifemother') return 4;
+    if (key === 'lifemother') return 5;
     const el = document.getElementById(`${key.split('-')[0]}-order`);
     const n = el ? parseInt(el.value, 10) : NaN;
     return Number.isNaN(n) ? null : n;
 }
 
-// Resolve an ENEMY_NOTES value (string | [O1..O4]) to the note for a given order.
+// Resolve an ENEMY_NOTES value (string | [O1..O5]) to the note for a given order.
 // A string is order-invariant; an array indexes by order-1 (null when that order
 // has no recorded note). Returns null when there's no note to show.
 function noteForOrder(key, order) {

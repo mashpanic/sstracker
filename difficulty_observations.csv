@@ -3,7 +3,7 @@ Bloom,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,1,11,450,A
 Bloom,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,8,230,Sap 6<br>Infested 4,No
 Bloom,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,22,1100,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Bloom,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,34,2600,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
-Bloom,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,92,13200,Trample<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
+Bloom,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,5,92,13200,Trample<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
 Bloom,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,22,1700,Resolve: Enemy units gain armor equal to their attack.,No
 Bloom,EnchanterT1_Speed,Energizing Flautist,1,0,1,Haste<br>Enchant: Grant enemy units Haste.,No
 Bloom,EnchanterT1_Speed,Energizing Flautist,2,0,1,Haste<br>Enchant: Grant enemy units Haste.,No
@@ -25,9 +25,11 @@ Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,1,8,140,"Resolve: If you h
 Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,2,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,3,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,4,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
+Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,5,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,4,8,Strike: Apply Malaise 5.,No
 Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,4,8,Strike: Apply Malaise 5.,No
 Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,4,8,Strike: Apply Malaise 5.,No
+Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,4,8,Strike: Apply Malaise 5.,No
 Bloom,R3_HeavyT1_Basic_Ver2,Mother's Blade,1,5,80,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Bloom,R3_HeavyT1_Basic_Ver2,Mother's Blade,2,5,80,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Bloom,R3_HeavyT1_Basic_Ver2,Mother's Blade,3,5,80,Infested 2. Hellborne Harvest: Gain Infested 4.,No
@@ -36,8 +38,10 @@ Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,1,0,30,"Buffet 3<br>Eaten: Grant
 Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,2,0,30,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,3,0,30,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,4,0,30,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
+Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,5,0,30,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Bloom,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,2,3,Extinguish: Apply Infested 1 to enemy units.,No
 Bloom,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,2,3,Extinguish: Apply Infested 1 to enemy units.,No
+Bloom,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,5,2,3,Extinguish: Apply Infested 1 to enemy units.,No
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
@@ -48,24 +52,30 @@ Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,2,5,Haste<br>Enchant: Grant 
 Bloom,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,2,5,Haste<br>Enchant: Grant enemy units Haste.,No
 Bloom,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,0,60,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Bloom,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,0,60,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
+Bloom,R2_Support_FeedInfested_T2,Mother's Fleshfruit,5,0,60,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Bloom,R2_Heavy_HealGorge_T2,Mother's Glutmass,3,15,250,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
 Bloom,R2_Heavy_HealGorge_T2,Mother's Glutmass,4,15,250,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
+Bloom,R2_Heavy_HealGorge_T2,Mother's Glutmass,5,15,250,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
 Bloom,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,1,3,3,Infested 1,No
 Bloom,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,2,3,3,Infested 1,No
 Bloom,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,3,3,3,Infested 1,No
 Bloom,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,4,3,3,Infested 1,No
 Bloom,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,3,0,1,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Bloom,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,4,0,1,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
+Bloom,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,5,0,1,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Bloom,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,1,10,60,Vanguard: Gain Titanite.,No
 Bloom,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,2,10,60,Vanguard: Gain Titanite.,No
 Bloom,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,3,10,60,Vanguard: Gain Titanite.,No
 Bloom,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,4,10,60,Vanguard: Gain Titanite.,No
 Bloom,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,3,18,12,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
 Bloom,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,4,18,12,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
+Bloom,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,5,18,12,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
 Bloom,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,3,18,200,Shift: Gain Armor 24.,No
 Bloom,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,4,18,200,Shift: Gain Armor 24.,No
+Bloom,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,5,18,200,Shift: Gain Armor 24.,No
 Bloom,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,3,10,160,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
 Bloom,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,4,10,160,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
+Bloom,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,5,10,160,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
 Bloom,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,2,6,3,Slay: Gain Rage 3.,No
 Bloom,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,3,6,3,Slay: Gain Rage 3.,No
 Bloom,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,4,6,3,Slay: Gain Rage 3.,No
@@ -75,12 +85,15 @@ Bloom,R3_MageT3_Junker_Ver2,Mother's Supplicant,3,3,20,Resolve: Add a Tivi's Sco
 Bloom,R3_MageT3_Junker_Ver2,Mother's Supplicant,4,3,20,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,No
 Bloom,R4_Support_RegenEnemies_T2,Mother's Witchwarden,3,22,40,Witherbloom 2<br>Revenge: Enemy units gain Armor 12 and Regen 3.,No
 Bloom,R4_Support_RegenEnemies_T2,Mother's Witchwarden,4,22,40,Witherbloom 2<br>Revenge: Enemy units gain Armor 12 and Regen 3.,No
+Bloom,R4_Support_RegenEnemies_T2,Mother's Witchwarden,5,22,40,Witherbloom 2<br>Revenge: Enemy units gain Armor 12 and Regen 3.,No
 Bloom,R2_Attacker_Zealot_Ver2,Mother's Zealot,1,14,45,Gorge: Gain Multistrike 1.,No
 Bloom,R2_Attacker_Zealot_Ver2,Mother's Zealot,2,14,45,Gorge: Gain Multistrike 1.,No
 Bloom,R2_Attacker_Zealot_Ver2,Mother's Zealot,3,14,45,Gorge: Gain Multistrike 1.,No
 Bloom,R2_Attacker_Zealot_Ver2,Mother's Zealot,4,14,45,Gorge: Gain Multistrike 1.,No
+Bloom,R2_Attacker_Zealot_Ver2,Mother's Zealot,5,14,45,Gorge: Gain Multistrike 1.,No
 Bloom,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,3,24,20,Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 12.,No
 Bloom,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,4,24,20,Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 12.,No
+Bloom,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,5,24,20,Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 12.,No
 Bloom,R1_Heavy_HealOnShift,Ossivane Sentinel,1,8,60,Shift: Gain Armor 15.,No
 Bloom,R1_Heavy_HealOnShift,Ossivane Sentinel,2,8,60,Shift: Gain Armor 15.,No
 Bloom,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,22,1200,Spikes 8<br>Strike: Lose Spikes 1.,No
@@ -96,8 +109,8 @@ Bloom,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,1,8,320,Titansk
 Bloom,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,3,30,2520,Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 1.,No
 Bloom,R3_AttackerT2_HunterSeeker,Sharp-Eye Sniper,1,5,2,Slay: Gain Rage 1.,No
 Bloom,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,3,37,3100,Shift: Apply Rage 3 to enemy units.,No
-Bloom,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,4,,,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,No
-Bloom,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,4,82,14200,Trample<br>Resolve: Apply Witherbloom 15 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,No
+Bloom,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,5,,,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,No
+Bloom,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,5,82,14200,Trample<br>Resolve: Apply Witherbloom 15 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,No
 Bloom,R4_Support_RegenEnemies,Witchwarden,1,10,12,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
 Bloom,R4_Support_RegenEnemies,Witchwarden,2,10,12,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
 Bloom,R4_Support_RegenEnemies,Witchwarden,3,10,12,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
@@ -108,7 +121,7 @@ Tangle,Boss_SoulSavior_R4_TrainBoss_EmberGranter,Ajax the Deathbringer,1,,,Actio
 Tangle,Boss_SoulSavior_R0_TrainBoss_Defensive,Astrael the First Reborn,1,,,Sap 6<br>Infested 4,No
 Tangle,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,,,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
 Tangle,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,,,Incant: Apply Rage 1 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,No
-Tangle,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,,,Trample<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
+Tangle,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,5,,,Trample<br>Strike: Apply Malaise 18.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,No
 Tangle,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,,,Resolve: Enemy units gain armor equal to their attack.,No
 Tangle,EnchanterT1_Speed,Energizing Flautist,1,,,Haste<br>Enchant: Grant enemy units Haste.,No
 Tangle,EnchanterT1_Speed,Energizing Flautist,2,,,Haste<br>Enchant: Grant enemy units Haste.,No
@@ -130,9 +143,11 @@ Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,1,,,"Resolve: If you have
 Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,2,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,3,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,4,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
+Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,5,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,,,Strike: Apply Malaise 5.,No
 Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,,,Strike: Apply Malaise 5.,No
 Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,,,Strike: Apply Malaise 5.,No
+Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,,,Strike: Apply Malaise 5.,No
 Tangle,R3_HeavyT1_Basic_Ver2,Mother's Blade,1,,,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Tangle,R3_HeavyT1_Basic_Ver2,Mother's Blade,2,,,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Tangle,R3_HeavyT1_Basic_Ver2,Mother's Blade,3,,,Infested 2. Hellborne Harvest: Gain Infested 4.,No
@@ -141,8 +156,10 @@ Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,1,,,"Buffet 3<br>Eaten: Grant D
 Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,2,,,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,3,,,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,4,,,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
+Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,5,,,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Tangle,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,,,Extinguish: Apply Infested 1 to enemy units.,No
 Tangle,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,,,Extinguish: Apply Infested 1 to enemy units.,No
+Tangle,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,5,,,Extinguish: Apply Infested 1 to enemy units.,No
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
@@ -153,24 +170,30 @@ Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,,,Haste<br>Enchant: Grant e
 Tangle,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,,,Haste<br>Enchant: Grant enemy units Haste.,No
 Tangle,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,,,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Tangle,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,,,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
+Tangle,R2_Support_FeedInfested_T2,Mother's Fleshfruit,5,,,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Tangle,R2_Heavy_HealGorge_T2,Mother's Glutmass,3,,,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
 Tangle,R2_Heavy_HealGorge_T2,Mother's Glutmass,4,,,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
+Tangle,R2_Heavy_HealGorge_T2,Mother's Glutmass,5,,,"Gorge: Gain Rage 5, Titanskin 5 and restore 50 health.",No
 Tangle,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,1,,,Infested 1,No
 Tangle,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,2,,,Infested 1,No
 Tangle,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,3,,,Infested 1,No
 Tangle,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,4,,,Infested 1,No
 Tangle,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,3,,,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Tangle,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,4,,,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
+Tangle,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,5,,,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Tangle,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,1,,,Vanguard: Gain Titanite.,No
 Tangle,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,2,,,Vanguard: Gain Titanite.,No
 Tangle,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,3,,,Vanguard: Gain Titanite.,No
 Tangle,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,4,,,Vanguard: Gain Titanite.,No
 Tangle,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,3,,,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
 Tangle,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,4,,,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
+Tangle,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,5,,,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
 Tangle,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,3,,,Shift: Gain Armor 24.,No
 Tangle,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,4,,,Shift: Gain Armor 24.,No
+Tangle,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,5,,,Shift: Gain Armor 24.,No
 Tangle,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,3,,,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
 Tangle,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,4,,,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
+Tangle,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,5,,,Extinguish: Apply Malaise 6 and Witherbloom 6 to your front unit.,No
 Tangle,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,2,,,Slay: Gain Rage 3.,No
 Tangle,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,3,,,Slay: Gain Rage 3.,No
 Tangle,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,4,,,Slay: Gain Rage 3.,No
@@ -180,12 +203,15 @@ Tangle,R3_MageT3_Junker_Ver2,Mother's Supplicant,3,,,Resolve: Add a Tivi's Scour
 Tangle,R3_MageT3_Junker_Ver2,Mother's Supplicant,4,,,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,No
 Tangle,R4_Support_RegenEnemies_T2,Mother's Witchwarden,3,,,Witherbloom 2<br>Revenge: Enemy units gain Armor 12 and Regen 3.,No
 Tangle,R4_Support_RegenEnemies_T2,Mother's Witchwarden,4,,,Witherbloom 2<br>Revenge: Enemy units gain Armor 12 and Regen 3.,No
+Tangle,R4_Support_RegenEnemies_T2,Mother's Witchwarden,5,,,Witherbloom 2<br>Revenge: Enemy units gain Armor 12 and Regen 3.,No
 Tangle,R2_Attacker_Zealot_Ver2,Mother's Zealot,1,,,Gorge: Gain Multistrike 1.,No
 Tangle,R2_Attacker_Zealot_Ver2,Mother's Zealot,2,,,Gorge: Gain Multistrike 1.,No
 Tangle,R2_Attacker_Zealot_Ver2,Mother's Zealot,3,,,Gorge: Gain Multistrike 1.,No
 Tangle,R2_Attacker_Zealot_Ver2,Mother's Zealot,4,,,Gorge: Gain Multistrike 1.,No
+Tangle,R2_Attacker_Zealot_Ver2,Mother's Zealot,5,,,Gorge: Gain Multistrike 1.,No
 Tangle,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,3,,,Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 12.,No
 Tangle,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,4,,,Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 12.,No
+Tangle,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,5,,,Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 12.,No
 Tangle,R1_Heavy_HealOnShift,Ossivane Sentinel,1,,,Shift: Gain Armor 15.,No
 Tangle,R1_Heavy_HealOnShift,Ossivane Sentinel,2,,,Shift: Gain Armor 15.,No
 Tangle,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,,,Spikes 8<br>Strike: Lose Spikes 1.,No
@@ -201,8 +227,8 @@ Tangle,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,1,,,Titanskin 
 Tangle,Boss_SoulSavior_R2_TrainBoss_Titanskin,Quoto the Destroyer,3,,,Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 1.,No
 Tangle,R3_AttackerT2_HunterSeeker,Sharp-Eye Sniper,1,,,Slay: Gain Rage 1.,No
 Tangle,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,3,,,Shift: Apply Rage 3 to enemy units.,No
-Tangle,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,4,,,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,No
-Tangle,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,4,,,Trample<br>Resolve: Apply Witherbloom 15 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,No
+Tangle,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,5,,,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,No
+Tangle,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,5,,,Trample<br>Resolve: Apply Witherbloom 15 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,No
 Tangle,R4_Support_RegenEnemies,Witchwarden,1,,,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
 Tangle,R4_Support_RegenEnemies,Witchwarden,2,,,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
 Tangle,R4_Support_RegenEnemies,Witchwarden,3,,,Witherbloom 1<br>Revenge: Enemy units gain Regen 3.,No
@@ -218,7 +244,7 @@ Overgrowth,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,1,18,660,Incant
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,2,31,1924,Incant: Apply Rage 2 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,3,46,4663,Incant: Apply Rage 2 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Athane,Athane the Fallen,4,69,8602,Incant: Apply Rage 3 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.,Yes
-Overgrowth,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,4,144,25821,Trample<br>Strike: Apply Malaise 27.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,Yes
+Overgrowth,Boss_SoulSavior_Final_Lifemother_Debuffer,Corpseflower,5,144,25821,Trample<br>Strike: Apply Malaise 27.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,1,18,1320,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,2,31,2624,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,3,46,5406,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
@@ -268,9 +294,11 @@ Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,1,12,189,"Resolve: If
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,2,14,198,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",Yes
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,3,15,206,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",Yes
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,4,17,215,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",Yes
+Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,5,17,215,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,8,13,Strike: Apply Malaise 6.,Yes
 Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,9,14,Strike: Apply Malaise 6.,Yes
 Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,11,15,Strike: Apply Malaise 8.,Yes
+Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,11,15,Strike: Apply Malaise 8.,No
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,1,8,108,Infested 3<br>Hellborne Harvest: Gain Infested 6.,Yes
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,2,9,114,Infested 3. Hellborne Harvest: Gain Infested 6.,Yes
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,3,11,119,Infested 2. Hellborne Harvest: Gain Infested 6.,Yes
@@ -279,8 +307,10 @@ Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,1,0,41,"Buffet 3<br>Eaten: 
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,2,0,44,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,3,0,46,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,4,0,49,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
+Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,5,0,49,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,3,5,Extinguish: Apply Infested 2 to enemy units.,Yes
 Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,6,9,Extinguish: Apply Infested 5 to enemy units.,Yes
+Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,5,6,9,Extinguish: Apply Infested 5 to enemy units.,No
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,5,108,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,6,114,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,3,8,119,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
@@ -291,24 +321,30 @@ Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,3,2,10,Haste<br>Enchant: 
 Overgrowth,R1_EnchanterT1_Speed_Ver2,Mother's Flautist,4,2,11,Haste<br>Enchant: Grant enemy units Haste.,Yes
 Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,3,0,90,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,Yes
 Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,4,0,94,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,Yes
+Overgrowth,R2_Support_FeedInfested_T2,Mother's Fleshfruit,5,0,94,Buffet 3<br>Eaten: Grant Burst 1 and Infested 6.  Deal 20 damage to self.,No
 Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,3,29,366,"Gorge: Gain Rage 8, Titanskin 5 and restore 50 health.",Yes
 Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,4,32,381,"Infested 3. Gorge: Gain Rage 9, Titanskin 5 and restore 50 health.",Yes
+Overgrowth,R2_Heavy_HealGorge_T2,Mother's Glutmass,5,32,381,"Infested 3. Gorge: Gain Rage 9, Titanskin 5 and restore 50 health.",No
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,1,5,5,Infested 2,Yes
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,2,6,6,Infested 2,Yes
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,3,8,7,Infested 1,Yes
 Overgrowth,RAny_Attacker_Hunter_Hivemind_Ver2,Mother's Hunter,4,9,9,Infested 3,Yes
 Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,3,0,5,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,4,0,6,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,Yes
+Overgrowth,R3_Horde_T3_Decoy_Ver2,Mother's Jeermask,5,0,6,Spell Shield 1<br>Revenge: Apply Dazed 2 and Melee Weakness 1 to the attacker.,No
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,1,15,81,Vanguard: Gain Titanite.,Yes
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,2,17,86,Vanguard: Gain Titanite.,Yes
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,3,20,90,Vanguard: Gain Titanite.,Yes
 Overgrowth,RAny_Heavy_TitaniteUpFront_Ver2,Mother's Knight,4,23,94,Vanguard: Gain Titanite.,Yes
 Overgrowth,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,3,33,19,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,Yes
 Overgrowth,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,4,38,21,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,Yes
+Overgrowth,R3_Attacker_T3_StealthSniper_Ver2,Mother's Longlash,5,38,21,Sniper<br>Stealth 2<br>Strike: Apply Emberdrain 1.,No
 Overgrowth,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,3,33,293,Shift: Gain Armor 30.,Yes
 Overgrowth,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,4,38,306,Shift: Gain Armor 36.,Yes
+Overgrowth,R1_Heavy_HealOnShift_Ver2,Mother's Ossivane Sentinel,5,38,306,Shift: Gain Armor 36.,No
 Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,3,20,235,Extinguish: Apply Malaise 8 and Witherbloom 8 to your front unit.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,4,23,245,Extinguish: Apply Malaise 9 and Witherbloom 9 to your front unit.,Yes
+Overgrowth,R4_Heavy_SpreadDebuffs_T2,Mother's Plaguehost,5,23,245,Extinguish: Apply Malaise 9 and Witherbloom 9 to your front unit.,No
 Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,2,11,6,Slay: Gain Rage 5.,Yes
 Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,3,14,9,Slay: Gain Rage 3.,No
 Overgrowth,R3_AttackerT2_HunterSeeker_Ver2,Mother's Sharp-Eye Sniper,4,14,9,Slay: Gain Rage 6.,Yes
@@ -318,12 +354,15 @@ Overgrowth,R3_MageT3_Junker_Ver2,Mother's Supplicant,3,8,30,Resolve: Add a Tivi'
 Overgrowth,R3_MageT3_Junker_Ver2,Mother's Supplicant,4,9,32,Resolve: Add a Tivi's Scourge card to the top of your draw pile and to a random location in your draw pile.,Yes
 Overgrowth,R4_Support_RegenEnemies_T2,Mother's Witchwarden,3,22,60,Witherbloom 2<br>Revenge: Enemy units gain Armor 15 and Regen 3.,Yes
 Overgrowth,R4_Support_RegenEnemies_T2,Mother's Witchwarden,4,22,63,Witherbloom 2<br>Revenge: Enemy units gain Armor 18 and Regen 3.,Yes
+Overgrowth,R4_Support_RegenEnemies_T2,Mother's Witchwarden,5,22,63,Witherbloom 2<br>Revenge: Enemy units gain Armor 18 and Regen 3.,No
 Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,1,21,61,Gorge: Gain Multistrike 1.,Yes
 Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,2,24,64,Gorge: Gain Multistrike 1.,Yes
 Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,3,27,67,Gorge: Gain Multistrike 1.,Yes
 Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,4,30,69,Gorge: Gain Multistrike 1.,Yes
+Overgrowth,R2_Attacker_Zealot_Ver2,Mother's Zealot,5,30,69,Gorge: Gain Multistrike 1.,No
 Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,3,45,30,Armor 30. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 15.,Yes
 Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,4,50,32,Armor 34. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 18.,Yes
+Overgrowth,R1_Attacker_AscendGainAtk_Ver2,Mother's Zephyrite,5,50,32,Armor 34. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 18.,No
 Overgrowth,R1_Heavy_HealOnShift,Ossivane Sentinel,1,12,81,Shift: Gain Armor 23.,Yes
 Overgrowth,R1_Heavy_HealOnShift,Ossivane Sentinel,2,14,86,Shift: Gain Armor 23.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,1,18,825,Spikes 8<br>Strike: Lose Spikes 1.,No
@@ -358,7 +397,7 @@ Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,1,24,1320,Resolve: Appl
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,2,37,2624,Resolve: Apply Burst 1 to self and enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,3,52,5407,Resolve: Apply Burst 1 to self and enemy units.,No
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9404,Resolve: Apply Burst 1 to self and enemy units.,Yes
-Overgrowth,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,4,123,25821,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,Yes
+Overgrowth,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,5,123,25821,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,1,11,413,Infested 6. Reanimate 6. Strike: Gain Infested 2.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,22,1662,Infested 6. Reanimate 6. Strike: Gain Infested 2.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,3,39,4390,Infested 6. Reanimate 6. Strike: Gain Infested 2.,No
@@ -371,7 +410,7 @@ Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,1,18
 Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,2,31,3149,Resolve: Reduce Space by 1 and trigger Gorge.,No
 Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,3,46,5962,Resolve: Reduce Space by 1 and trigger Gorge.,No
 Overgrowth,Boss_SoulSavior_R2_Indulgent_ReduceCapacityResolve,Train Chomper,4,69,10004,Resolve: Reduce Space by 1 and trigger Gorge.,No
-Overgrowth,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,4,123,27824,Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,Yes
+Overgrowth,Boss_SoulSavior_Final_Lifemother_HealReanimate,Undying Bloom,5,123,27824,Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,R4_Support_RegenEnemies,Witchwarden,1,10,17,Witherbloom 2<br>Revenge: Enemy units gain Regen 3.,Yes
 Overgrowth,R4_Support_RegenEnemies,Witchwarden,2,10,18,Witherbloom 2<br>Revenge: Enemy units gain Regen 3.,Yes
 Overgrowth,R4_Support_RegenEnemies,Witchwarden,3,10,19,Witherbloom 2<br>Revenge: Enemy units gain Regen 3.,Yes
