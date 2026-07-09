@@ -174,9 +174,8 @@ function updateNodeDisplay(selectEl) {
     }
 }
 
-// Returns the info-box HTML for an encounter. variantDescriptions entries
-// may contain HTML (e.g. <br>, <strong>) since the result is assigned via
-// innerHTML; the values are all author-controlled, so this is safe.
+// Returns the info-box HTML for an encounter. The result is assigned via
+// innerHTML; every interpolated value is author-controlled data, so this is safe.
 // Resolve a string | [O1,O2,O3,O4,O5] value to one string using the row's order
 // selector. Fixed (string) values ignore order; arrays index by order-1.
 // Used for BOSS_STATS, WAVE_SET_DESCRIPTIONS and BOSS_WAVE_DESCRIPTIONS.
@@ -324,19 +323,14 @@ function getDisplayText(key) {
         const variant = variantEl.value;
         const region = key.includes('-') ? key.split('-')[0] : key;
         const order = encounterOrder(key);
-        // Boss ATK/HP no longer leads the box — it's shown inline in the wave,
-        // like every other unit. BOSS_STATS is a fixed string (Astrael/
-        // Lifemother) or an [O1..O4] array (the four regions).
+        // The info box shows only the wave list. The boss's name + ATK/HP and its
+        // hand-authored description used to lead the box, but that whole first
+        // line was dropped — the boss now reads inline in its own wave (hover for
+        // stats/notes) and via the grid hover. bossStat is still resolved here to
+        // give the in-wave boss its inline ATK/HP. BOSS_STATS is a fixed string
+        // (Astrael/Lifemother) or an [O1..O4] array (the four regions).
         const bossStat = pickByOrder(BOSS_STATS[variant], region);
-        // Lead with the boss name given the same inline-stat + note-popover
-        // treatment as the final-wave boss. The variant IS the boss name for
-        // region/minor bosses and Lifemother; Astrael's variant is a wave-set/
-        // featured-enemy label, so show (and key the note on) Astrael's own name.
-        const leadName = key === 'astrael' ? 'Astrael the First Reborn' : variant;
-        const bossLabel = enemySpan(leadName, bossStat, leadName, order);
-        let text = variantDescriptions[variant]
-            ? bossLabel + ': ' + variantDescriptions[variant]
-            : bossLabel + ' information';
+        let text = '';
 
         // Battle rows: the minor boss is the selected variant (swapBattleBoss
         // puts it in the wave string); it gets inline stats like any enemy.
@@ -344,7 +338,7 @@ function getDisplayText(key) {
             const waveEl = document.getElementById(`${region}-wave-set`);
             if (waveEl && waveEl.value) {
                 const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveEl.value], region);
-                if (waves) text += '<br>' + wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat, variant);
+                if (waves) text += (text ? '<br>' : '') + wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat, variant);
             }
         }
 
@@ -361,7 +355,7 @@ function getDisplayText(key) {
                 // but their note is keyed by variant (Sibling Hierarchy, …);
                 // Astrael/Lifemother fight under a name that IS the note key.
                 const bossNoteKey = key.endsWith('-boss') ? variant : bossName;
-                text += '<br>' + wrapEnemyStats(bossWaves, order, bossName, bossStat, bossNoteKey);
+                text += (text ? '<br>' : '') + wrapEnemyStats(bossWaves, order, bossName, bossStat, bossNoteKey);
             }
         }
 
