@@ -153,7 +153,7 @@ const ENEMY_NOTES = {
     "Swarmhost": "Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.",
     "The Undying Spirit": ["Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 7. Reanimate 6. Strike: Gain Infested 3.", null],
     "Thick Skinned": ["Trample<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Gorge: Gain Rage 6 and Titanskin 6.", null],
-    "Train Chomper": ["Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Resolve: Reduce Space by 1 and trigger Gorge.", null],
+    "Train Chomper": ["Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 6.<br>Resolve: Reduce Space by 1 and trigger Gorge.", null],
     "Undying Bloom": "Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.",
     "Witchwarden": "Witherbloom 2<br>Revenge: Enemy units gain Regen 3.",
     "Zephyrite": "Armor 9<br>Shift: Gain Burst 1.",
