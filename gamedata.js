@@ -151,7 +151,7 @@ const ENEMY_NOTES = {
     "Sibling Hierarchy": ["Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 6 to enemy units.", null],
     "Stern Sister": "Resolve: Apply Burst 1 to self and enemy units.",
     "Swarmhost": "Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.",
-    "The Undying Spirit": ["Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 6. Reanimate 6. Strike: Gain Infested 2.", "Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.", "Infested 7. Reanimate 6. Strike: Gain Infested 3.", null],
+    "The Undying Spirit": ["Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.", "Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.", "Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.", "Infested 7<br>Reanimate 6<br>Strike: Gain Infested 3.", null],
     "Thick Skinned": ["Trample<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Gorge: Gain Rage 6 and Titanskin 6.", null],
     "Train Chomper": ["Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 5.<br>Resolve: Reduce Space by 1 and trigger Gorge.", "Gorge: Gain Rage 6.<br>Resolve: Reduce Space by 1 and trigger Gorge.", null],
     "Undying Bloom": "Trample<br>Resolve: Apply Witherbloom 23 to your front unit and Reanimate 2 to the front enemy unit.<br>On Team Turn: Lose Dazed 5.",

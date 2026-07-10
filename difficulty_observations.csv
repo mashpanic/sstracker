@@ -398,10 +398,10 @@ Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,2,37,2624,Resolve: Appl
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,3,52,5406,Resolve: Apply Burst 1 to self and enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9404,Resolve: Apply Burst 1 to self and enemy units.,Yes
 Overgrowth,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,5,123,25821,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,Yes
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,1,11,413,Infested 6. Reanimate 6. Strike: Gain Infested 2.,Yes
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,22,1662,Infested 6. Reanimate 6. Strike: Gain Infested 2.,Yes
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,1,11,413,Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.,Yes
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,22,1662,Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,3,36,4386,Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.,Yes
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,4,57,8302,Infested 7. Reanimate 6. Strike: Gain Infested 3.,Yes
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,4,57,8302,Infested 7<br>Reanimate 6<br>Strike: Gain Infested 3.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,1,18,1650,Trample<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,2,31,2974,Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,3,46,5777,Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
