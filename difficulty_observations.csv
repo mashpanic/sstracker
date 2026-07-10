@@ -370,7 +370,7 @@ Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,31,2099,Spikes 8<br>Str
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,3,46,4850,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,4,69,8803,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,1,24,1980,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,2,37,3324,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
+Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,2,37,3324,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,3,52,6147,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,75,10204,Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,1,8,95,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
@@ -400,7 +400,7 @@ Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9404,Resolve: Appl
 Overgrowth,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,5,123,25821,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,1,11,413,Infested 6. Reanimate 6. Strike: Gain Infested 2.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,22,1662,Infested 6. Reanimate 6. Strike: Gain Infested 2.,Yes
-Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,3,39,4390,Infested 6. Reanimate 6. Strike: Gain Infested 2.,No
+Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,3,36,4386,Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,4,57,8302,Infested 7. Reanimate 6. Strike: Gain Infested 3.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,1,18,1650,Trample<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_Titanskin,Thick Skinned,2,31,2974,Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.,Yes
