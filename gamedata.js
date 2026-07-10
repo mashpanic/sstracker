@@ -27,7 +27,7 @@ const BOSS_STATS = {
     "Undying Bloom": "123⚔️ 27824❤️",
     // Maera Battle
     "Athane the Fallen": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8602❤️"],
-    "Korin the Judged": ["18⚔️ 660❤️", "31⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8602❤️"],
+    "Korin the Judged": ["18⚔️ 660❤️", "1⚔️ 1924❤️", "46⚔️ 4663❤️", "69⚔️ 8602❤️"],
     // Maera Boss
     "Stern Sister": ["24⚔️ 1320❤️", "37⚔️ 2624❤️", "52⚔️ 5406❤️", "75⚔️ 9404❤️"],
     "Sibling Hierarchy": ["23⚔️ 1485❤️", "36⚔️ 2799❤️", "51⚔️ 5591❤️", "74⚔️ 9603❤️"],
@@ -115,7 +115,7 @@ const ENEMY_NOTES = {
     "Fleshfruit": ["Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", null, null, null],
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
     "Inoculation": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", null],
-    "Insatiable": ["Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 6.<br>Slay: Trigger Gorge.", null],
+    "Insatiable": ["Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 6.<br>Slay: Trigger Gorge.", null],
     "Jeermask": "Revenge: Apply Dazed 2 to the attacker.",
     "Korin the Judged": "Summon: Descend all friendly units to this floor and Retreat.",
     "Longlash": "Sniper<br>Stealth 1",

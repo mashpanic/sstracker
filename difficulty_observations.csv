@@ -250,7 +250,7 @@ Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,2,31,2624,"Resol
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,3,46,5406,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,4,69,9404,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,1,18,1650,Resolve: Enemy units gain armor equal to their attack.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,31,2974,Resolve: Enemy units gain armor equal to their attack.,No
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,31,2974,Resolve: Enemy units gain armor equal to their attack.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,3,46,5777,Resolve: Enemy units gain armor equal to their attack.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,4,69,9805,Resolve: Enemy units gain armor equal to their attack.,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,1,18,594,Resolve: Gain Titanskin 5.,Yes
@@ -275,13 +275,13 @@ Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Inoculation,3,49,5777,Actio
 Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Inoculation,4,72,9805,Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,1,20,1815,Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,2,33,3149,Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.,Yes
-Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,3,48,5962,Trample<br>Gorge: Gain Rage 3.<br>Slay: Trigger Gorge.,No
+Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,3,48,5962,Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,4,71,10004,Trample<br>Gorge: Gain Rage 6.<br>Slay: Trigger Gorge.,Yes
 Overgrowth,R3_Horde_T1_Decoy,Jeermask,1,0,2,Revenge: Apply Dazed 2 to the attacker.,Yes
 Overgrowth,R3_Horde_T1_Decoy,Jeermask,2,0,3,Revenge: Apply Dazed 2 to the attacker.,Yes
 Overgrowth,R3_Horde_T1_Decoy,Jeermask,3,0,5,Revenge: Apply Dazed 2 to the attacker.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,1,18,660,Summon: Descend all friendly units to this floor and Retreat.,Yes
-Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,2,31,1924,Summon: Descend all friendly units to this floor and Retreat.,No
+Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,2,1,1924,Summon: Descend all friendly units to this floor and Retreat.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,3,46,4663,Summon: Descend all friendly units to this floor and Retreat.,Yes
 Overgrowth,Boss_SoulSavior_R1_TrainBoss_Harvester,Korin the Judged,4,69,8602,Summon: Descend all friendly units to this floor and Retreat.,Yes
 Overgrowth,R3_Attacker_T1_StealthSniper,Longlash,1,11,6,Sniper<br>Stealth 1,Yes
