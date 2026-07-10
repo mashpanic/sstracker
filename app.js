@@ -792,6 +792,12 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
         const key = sel.id.replace(/-variant$/, '');
         const region = key.includes('-') ? key.split('-')[0] : key;
         const name = key === 'astrael' ? 'Astrael the First Reborn' : variant;
+        // Order-dependent boss (an [O1..O4] array) with no Order picked yet: the
+        // stats/note can't resolve, so prompt for an Order rather than show "(?)".
+        if (Array.isArray(BOSS_STATS[variant]) && encounterOrder(key) === null) {
+            showAt(sel, `<strong>${escapeAttr(name)}</strong><br>Select an Order to see stats`, false);
+            return;
+        }
         const statStr = pickByOrder(BOSS_STATS[variant], region);
         const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
         const parens = m ? ` (${m[1]}/${m[2]})` : ' (?)';
