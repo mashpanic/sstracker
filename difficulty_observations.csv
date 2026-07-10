@@ -262,7 +262,7 @@ Overgrowth,EnchanterT1_Speed,Energizing Flautist,2,0,1,Haste<br>Enchant: Grant e
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,1,21,1485,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,2,34,2799,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,3,49,5591,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,4,72,9606,Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
+Overgrowth,Boss_SoulSavior_R4_Spurned_WitherbloomOnAction,Energy Vampire,4,72,9603,Action: Apply Malaise 5 and Witherbloom 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,R2_Support_FeedInfested,Fleshfruit,1,0,41,Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,Yes
 Overgrowth,R2_Support_FeedInfested,Fleshfruit,2,0,44,Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.,Yes
 Overgrowth,R2_Heavy_HealGorge,Glutmass,1,12,81,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,Yes

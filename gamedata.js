@@ -51,7 +51,7 @@ const BOSS_STATS = {
     "Ajax the Deathbringer": ["17⚔️ 743❤️", "30⚔️ 2012❤️", "45⚔️ 4757❤️", "68⚔️ 8703❤️"],
     // Lylith Boss
     "Plaguebringer": ["24⚔️ 1980❤️", "37⚔️ 3324❤️", "52⚔️ 6147❤️", "75⚔️ 10204❤️"],
-    "Energy Vampire": ["21⚔️ 1485❤️", "34⚔️ 2799❤️", "49⚔️ 5591❤️", "72⚔️ 9606❤️"],
+    "Energy Vampire": ["21⚔️ 1485❤️", "34⚔️ 2799❤️", "49⚔️ 5591❤️", "72⚔️ 9603❤️"],
     "Inoculation": ["21⚔️ 1650❤️", "34⚔️ 2974❤️", "49⚔️ 5777❤️", "72⚔️ 9805❤️"],
 };
 
@@ -111,7 +111,7 @@ const ENEMY_NOTES = {
     "Eldest Scion": "Resolve: Enemy units gain armor equal to their attack.",
     "Elebor the Unstoppable": "Resolve: Gain Titanskin 5.",
     "Energizing Flautist": "Haste<br>Enchant: Grant enemy units Haste.",
-    "Energy Vampire": "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.",
+    "Energy Vampire": ["Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 5 and Witherbloom 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", null],
     "Fleshfruit": ["Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", null, null, null],
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
     "Inoculation": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", null],
