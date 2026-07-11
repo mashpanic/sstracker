@@ -716,7 +716,12 @@ populateOrderSelects();
 document.getElementById('encounter-table').addEventListener('change', (e) => {
     if (e.target && e.target.classList.contains('order-select')) {
         refreshOrderOptions();
+        // reorderGroups() moves the row's DOM node, which blurs whatever was
+        // focused; the node itself survives the move, so re-focus the changed
+        // Order select afterward to keep focus on the control the user just set.
+        const changed = e.target;
         reorderGroups();
+        changed.focus();
         // Refresh info box so order-scaled stats update immediately.
         const selectedRow = document.querySelector('.selected-row');
         if (selectedRow && selectedRow.dataset.encounterKey) {
@@ -732,6 +737,155 @@ document.getElementById('encounter-table').addEventListener('change', (e) => {
     }
     saveState();
 });
+
+// ---- Central-node keyboard entry ----
+// Fast keyboard entry for the 12 central-node dropdowns. Click a box to focus
+// it (the native popup is suppressed — on macOS an open popup swallows keys),
+// then press a base's first letter to set it (all 8 base first letters are
+// unique); press the same letter again to toggle base <-> the "+" upgrade.
+// Backspace/Delete (or "/"/"?") clears back to "?". Tab/Shift+Tab are owned by
+// the global tab ring below (central nodes are its final segment).
+// The full option list stays reachable via Enter / Space / ArrowDown.
+const CENTRAL_LETTER_MAP = (() => {
+    const map = {};
+    CENTRAL_NODE_OPTIONS.forEach(name => {
+        if (name.endsWith('+')) return;            // map base names only
+        const letter = name[0].toLowerCase();
+        if (!(letter in map)) map[letter] = name;  // first base wins on collision
+    });
+    return map;
+})();
+
+function setCentralNode(sel, value) {
+    sel.value = value;
+    updateNodeDisplay(sel);   // programmatic value change doesn't fire 'change'
+    saveState();
+}
+
+function handleCentralNodeKeydown(e) {
+    const sel = e.target;
+    if (!sel.classList || !sel.classList.contains('central-node-select')) return;
+
+    // Backspace / Delete / "/" / "?": clear back to unset ("/" is the easy
+    // one-key alternative to the shifted "?" the box shows when unset).
+    if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '/' || e.key === '?') {
+        e.preventDefault();
+        setCentralNode(sel, '?');
+        return;
+    }
+
+    // Single letter (no modifiers, so Cmd+R etc. still work): set the matching
+    // base, or toggle base <-> "+". Space/Enter/Arrows fall through to native.
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const base = CENTRAL_LETTER_MAP[e.key.toLowerCase()];
+        if (!base) return;
+        e.preventDefault();
+        setCentralNode(sel, sel.value === base ? base + '+' : base);
+    }
+}
+
+// First click on a box focuses it without opening the native popup, so the
+// letter/Tab flow can take over (preventing mousedown default also suppresses
+// focus, so focus explicitly). A second click on the already-focused node
+// falls through to the native default, opening the menu (like pressing Enter).
+// The row's click still fires either way, keeping encounter selection.
+function handleCentralNodeMousedown(e) {
+    const sel = e.target;
+    if (!sel.classList || !sel.classList.contains('central-node-select')) return;
+    if (document.activeElement === sel) return;  // already focused → let it open
+    e.preventDefault();
+    sel.focus();
+}
+
+// ---- Global keyboard tab ring ----
+// A curated, closed Tab order over the form's primary inputs, following the
+// visual top-to-bottom layout (which tracks turn-order sorting). Order:
+//   Astrael variant
+//   → per region (visual order): Order, Battle variant, Battle wave set,
+//     Boss variant, Boss curse (mutator box)
+//   → Lifemother variant
+//   → every central node, top-to-bottom
+//   → wrap back to Astrael variant.
+// Left/right track and path selects are deliberately excluded (mouse-only,
+// tabindex -1); the mutator "curse" boxes are made focusable so Tab can land
+// on them (they show the curse popover on focus — see setupPopovers).
+
+// Region keys in current visual (top-to-bottom) order: the Order selects live
+// in the battle rows, which reorderGroups() physically reorders, so their DOM
+// order is the visual order.
+const visualRegionOrder = () =>
+    Array.from(document.querySelectorAll('.order-select')).map(s => s.id.replace(/-order$/, ''));
+
+function buildTabRing() {
+    const byId = id => document.getElementById(id);
+    const ring = [];
+    const push = el => { if (el) ring.push(el); };
+    const regions = visualRegionOrder();
+    push(byId('astrael-variant'));
+    regions.forEach(r => {
+        push(byId(`${r}-order`));
+        push(byId(`${r}-battle-variant`));
+        push(byId(`${r}-wave-set`));
+        push(byId(`${r}-boss-variant`));
+        push(byId(`${r}-boss-mutator-box`));
+    });
+    push(byId('lifemother-variant'));
+    regions.forEach(r => { push(byId(`${r}-n1`)); push(byId(`${r}-n2`)); push(byId(`${r}-n3`)); });
+    return ring;
+}
+
+function handleTabRing(e) {
+    if (e.key !== 'Tab') return;
+    const ring = buildTabRing();
+    const i = ring.indexOf(document.activeElement);
+    if (i === -1) return;   // focus off the ring (e.g. a mouse-focused track) → native
+    e.preventDefault();
+    const n = ring.length;
+    const next = e.shiftKey ? (i - 1 + n) % n : (i + 1) % n;
+    ring[next].focus();
+}
+
+// Highlight a region's Battle + Boss rows (both share the rowspan'd Order
+// cell). Rows are found by data-key, so it survives reorderGroups() moves.
+function highlightRegionRows(region, on) {
+    ['battle', 'boss'].forEach(part => {
+        const lbl = document.querySelector(`.encounter-label[data-key="${region}-${part}"]`);
+        const tr = lbl && lbl.closest('tr');
+        if (tr) tr.classList.toggle('order-focus-row', on);
+    });
+}
+
+(() => {
+    const encTable = document.getElementById('encounter-table');
+    encTable.addEventListener('keydown', handleCentralNodeKeydown);
+    encTable.addEventListener('keydown', handleTabRing);
+    encTable.addEventListener('mousedown', handleCentralNodeMousedown);
+    // While an Order box is focused, highlight both of its region's rows;
+    // and make the row selection (green highlight + info box) follow keyboard
+    // focus into a row, so tabbing into a row selects it like a click would.
+    encTable.addEventListener('focusin', e => {
+        const t = e.target;
+        if (t.classList && t.classList.contains('order-select')) {
+            highlightRegionRows(t.id.replace(/-order$/, ''), true);
+        }
+        const row = t.closest && t.closest('tr.selectable-row');
+        if (row && !row.classList.contains('selected-row')) {
+            const key = row.querySelector('.encounter-label')?.dataset.key;
+            if (key) selectEncounter(row, key);
+        }
+    });
+    encTable.addEventListener('focusout', e => {
+        if (e.target.classList && e.target.classList.contains('order-select')) {
+            highlightRegionRows(e.target.id.replace(/-order$/, ''), false);
+        }
+    });
+    // Take track/path selects out of the Tab flow (ring is the keyboard path);
+    // make the curse boxes focusable so the ring can include them.
+    encTable.querySelectorAll('.track-node-select, .path-track-select')
+        .forEach(el => { el.tabIndex = -1; });
+    encTable.querySelectorAll('.mutator-box')
+        .forEach(el => { el.tabIndex = -1; });
+})();
 
 // Restore the saved run last, after every select has its options, then
 // apply the saved turn order (disabled numbers + group sort).
@@ -755,7 +909,13 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
     pop.style.display = 'none';
     document.body.appendChild(pop);
 
-    function showAt(el, html, curse) {
+    // Track where the current popover came from: 'info' (an info-box wave-list
+    // note) vs 'table' (a row's boss-select / curse box). The info-box rebuild
+    // observer below hides only 'info' popovers, so a boss-select popover shown
+    // on focus survives the selection rebuild that a forward Tab triggers.
+    let popSource = null;
+    function showAt(el, html, curse, source) {
+        popSource = source || 'table';
         pop.className = 'note-popover' + (curse ? ' note-popover--curse' : '');
         pop.innerHTML = html;
         pop.style.display = 'block';
@@ -766,7 +926,7 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
         pop.style.top = (window.scrollY + r.bottom + 6) + 'px';
         pop.style.left = left + 'px';
     }
-    function hide() { pop.style.display = 'none'; }
+    function hide() { popSource = null; pop.style.display = 'none'; }
 
     // Enemy/boss ability notes (green). Note text may contain <br> → innerHTML.
     if (infoBox) {
@@ -774,13 +934,15 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
             const span = e.target.closest('.enemy-stat[data-note]');
             if (!span) return;
             const note = span.dataset.note;
-            if (note) showAt(span, `<strong>${escapeAttr(span.dataset.fullName || '')}</strong><br>${note}`, false);
+            if (note) showAt(span, `<strong>${escapeAttr(span.dataset.fullName || '')}</strong><br>${note}`, false, 'info');
         });
         infoBox.addEventListener('mouseout', e => {
             const span = e.target.closest('.enemy-stat[data-note]');
             if (span && !span.contains(e.relatedTarget)) hide();
         });
-        new MutationObserver(hide).observe(infoBox, { childList: true });
+        // Rebuild of the info box stales an info-box hover popover → hide it, but
+        // leave a 'table' popover (e.g. a boss-select shown on focus) alone.
+        new MutationObserver(() => { if (popSource === 'info') hide(); }).observe(infoBox, { childList: true });
     }
 
     // Boss-selection dropdown (green note popover, with ATK/HP appended in
@@ -806,22 +968,26 @@ document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(se
         showAt(sel, `<strong>${escapeAttr(name)}</strong>${parens}${note ? '<br>' + note : ''}`, false);
     }
 
-    // Encounter-table hovers: boss defeat-mutator "curse" boxes (red) and the
-    // boss-variant selects (green note + appended ATK/HP).
+    // Encounter-table: boss defeat-mutator "curse" boxes (red) and boss-variant
+    // selects (green note + appended ATK/HP). Shown on hover AND on focus, so
+    // the same info surfaces when Tab-ringing through with the keyboard.
+    function showForTarget(target) {
+        const box = target.closest('.mutator-box[data-curse-key]');
+        if (box) {
+            const m = typeof MUTATORS !== 'undefined' && MUTATORS[box.dataset.curseKey];
+            if (m) showAt(box, `<strong>${escapeAttr(m.name)}</strong><br>${escapeAttr(m.effect)}`, true);
+            return;
+        }
+        const sel = target.closest('.variant-select');
+        if (sel) showBossSelect(sel);
+    }
     if (table) {
-        table.addEventListener('mouseover', e => {
-            const box = e.target.closest('.mutator-box[data-curse-key]');
-            if (box) {
-                const m = typeof MUTATORS !== 'undefined' && MUTATORS[box.dataset.curseKey];
-                if (m) showAt(box, `<strong>${escapeAttr(m.name)}</strong><br>${escapeAttr(m.effect)}`, true);
-                return;
-            }
-            const sel = e.target.closest('.variant-select');
-            if (sel) showBossSelect(sel);
-        });
+        table.addEventListener('mouseover', e => showForTarget(e.target));
         table.addEventListener('mouseout', e => {
             const t = e.target.closest('.mutator-box[data-curse-key], .variant-select');
             if (t && !t.contains(e.relatedTarget)) hide();
         });
+        table.addEventListener('focusin', e => showForTarget(e.target));
+        table.addEventListener('focusout', hide);
     }
 })();

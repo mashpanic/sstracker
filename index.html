@@ -56,6 +56,9 @@
         .node-slot option { background: #202024; color: #fff; font-size: 14px; }
         .node-slot:hover { border-color: #04d361; }
         .node-slot.selected { color: #04d361; border-color: #04d361; background: #19191c; }
+        /* Visible focus for keyboard central-node entry (the select itself is
+           opacity:0, so its native ring never shows). */
+        .node-slot:focus-within { outline: 2px solid #04d361; outline-offset: 1px; border-color: #04d361; }
 
         /* Fixed-width slots for selectors that display full names (Central Nodes, Path, Left/Right Track)
            so longer labels stay aligned, consistent, and readable */
@@ -101,6 +104,9 @@
             font-weight: bold;
             cursor: help;
         }
+        /* Focus ring for keyboard tab-ring landing on the curse box (red to
+           match the curse popover). */
+        .mutator-box:focus { outline: 2px solid #ef4444; outline-offset: 1px; }
 
         .selectable-row { cursor: pointer; }
         .selected-row { background: #1f3a2d !important; }
@@ -113,6 +119,12 @@
            so its position in the boss row's child list isn't first. */
         .selected-row td.order-cell { background: #121214 !important; }
         .selected-row td.order-cell.disabled-cell { background: #161619 !important; }
+
+        /* While a region's Order box is focused, highlight BOTH of its rows
+           (Battle + Boss) in blue so it's clear which region you're editing.
+           Placed after the selection rules so it wins when a row is both. */
+        .order-focus-row td { background: #1f2d3a !important; }
+        .order-focus-row td.order-cell { background: #182231 !important; }
 
         #encounter-info {
             margin-bottom: 20px;
