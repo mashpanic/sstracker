@@ -142,7 +142,7 @@ const ENEMY_NOTES = {
     "Mother's Zephyrite": [null, null, "Armor 30. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 15.", "Armor 34. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 18.", "Armor 34. Shift: Gain Burst 1.<br>Slay: Descend and gain Armor 18."],
     "Ossivane Sentinel": "Shift: Gain Armor 23.",
     "Phalanx": "Spikes 8<br>Strike: Lose Spikes 1.",
-    "Plaguebringer": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", null],
+    "Plaguebringer": ["Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Gain Dualism at 50% Health<br>Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", null],
     "Plaguehost": "Extinguish: Apply Witherbloom 5 to your front unit.",
     "Prankster": "Siphon: Add Tivi's Scourge to your hand.",
     "Qel the Malaiser": ["Incant: Apply Witherbloom 2 and Malaise 3 to your units.", "Incant: Apply Witherbloom 2 and Malaise 3 to your units.", "Incant: Apply Witherbloom 2 and Malaise 3 to your units.", "Incant: Apply Witherbloom 3 and Malaise 5 to your units.", null],

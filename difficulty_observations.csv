@@ -98,7 +98,7 @@ Bloom,R1_Heavy_HealOnShift,Ossivane Sentinel,1,8,60,Shift: Gain Armor 15.,No
 Bloom,R1_Heavy_HealOnShift,Ossivane Sentinel,2,8,60,Shift: Gain Armor 15.,No
 Bloom,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,22,1200,Spikes 8<br>Strike: Lose Spikes 1.,No
 Bloom,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,4,54,4700,Spikes 8<br>Strike: Lose Spikes 1.,No
-Bloom,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,58,5400,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
+Bloom,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,58,5400,Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
 Bloom,R4_Heavy_SpreadDebuffs,Plaguehost,1,5,70,Extinguish: Apply Witherbloom 3 to your front unit.,No
 Bloom,R4_Heavy_SpreadDebuffs,Plaguehost,2,5,70,Extinguish: Apply Witherbloom 3 to your front unit.,No
 Bloom,R4_Heavy_SpreadDebuffs,Plaguehost,3,5,70,Extinguish: Apply Witherbloom 3 to your front unit.,No
@@ -216,7 +216,7 @@ Tangle,R1_Heavy_HealOnShift,Ossivane Sentinel,1,,,Shift: Gain Armor 15.,No
 Tangle,R1_Heavy_HealOnShift,Ossivane Sentinel,2,,,Shift: Gain Armor 15.,No
 Tangle,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,,,Spikes 8<br>Strike: Lose Spikes 1.,No
 Tangle,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,4,,,Spikes 8<br>Strike: Lose Spikes 1.,No
-Tangle,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,,,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
+Tangle,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,,,Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,No
 Tangle,R4_Heavy_SpreadDebuffs,Plaguehost,1,,,Extinguish: Apply Witherbloom 3 to your front unit.,No
 Tangle,R4_Heavy_SpreadDebuffs,Plaguehost,2,,,Extinguish: Apply Witherbloom 3 to your front unit.,No
 Tangle,R4_Heavy_SpreadDebuffs,Plaguehost,3,,,Extinguish: Apply Witherbloom 3 to your front unit.,No
@@ -369,10 +369,10 @@ Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,1,18,825,Spikes 8<br>Stri
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,2,31,2099,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,3,46,4850,Spikes 8<br>Strike: Lose Spikes 1.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Spikes,Phalanx,4,69,8803,Spikes 8<br>Strike: Lose Spikes 1.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,1,24,1980,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,2,37,3324,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,3,52,6147,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,75,10204,Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,1,24,1980,Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,2,37,3324,Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,3,52,6147,Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_DualismAt50,Plaguebringer,4,75,10204,Gain Dualism at 50% Health<br>Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,1,8,95,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,2,9,99,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
 Overgrowth,R4_Heavy_SpreadDebuffs,Plaguehost,3,11,103,Extinguish: Apply Witherbloom 5 to your front unit.,Yes
