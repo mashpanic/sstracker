@@ -44,6 +44,10 @@ The boss epithet is encoded in its `BossBattle` variant *family* name: Maera **D
 
 **Central-node upgrade mechanic** (wiki, tracker-relevant): defeating any region's boss permanently upgrades one central node in *every other* region to a more powerful "+" version — so the 4th region visited has all 3 of its central nodes upgraded. (Detailed node lists live in `app.js`/`gamefacts.js`.)
 
+**Minor nodes.** A run's non-central map nodes ("minor nodes") are drawn from this set of 9 (sourced from the track-node dropdown that used to live in the tracker grid): **Armory, Boons, Celestial, Hoard, Remains, UnitAllied, UnitPrimary, Vortex, Well**.
+
+**Minor-node left/right choice.** Before each central-region encounter (the region's minor-boss battle *and* its named boss), **four random minor nodes spawn**, arranged as a left pair and a right pair. The player chooses to go **left or right**, which selects **which two of the four** minor nodes are actually accessed (the other two are skipped). (This is the mechanic the removed Left Track / Right Track / Path grid columns tracked.)
+
 ## Web resources
 
 Base page for the soul savior mode of monster train 2

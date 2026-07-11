@@ -60,8 +60,8 @@
            opacity:0, so its native ring never shows). */
         .node-slot:focus-within { outline: 2px solid #04d361; outline-offset: 1px; border-color: #04d361; }
 
-        /* Fixed-width slots for selectors that display full names (Central Nodes, Path, Left/Right Track)
-           so longer labels stay aligned, consistent, and readable */
+        /* Fixed-width slots for selectors that display full names (Central Nodes,
+           Variant, Wave Set) so longer labels stay aligned, consistent, and readable */
         .full-name-slot {
             width: 110px;
             font-size: 0.8em;
@@ -197,23 +197,6 @@
         #attribution a { color: #9d9da3; }
         #attribution a:hover { color: #04d361; }
 
-        /* Simple mode hides the last 3 columns (Left Track, Right Track, Path).
-           Counting from the end (rather than nth-child(5/6/7)) keeps this correct
-           for boss rows, whose Order cell is covered by a rowspan from the row
-           above -- those rows have one fewer cell, which would otherwise shift
-           nth-child positions and leave a stray column visible. */
-        #simple-mode-toggle {
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9em;
-            color: #e1e1e6;
-            cursor: pointer;
-            user-select: none;
-        }
-        #simple-mode-toggle input { cursor: pointer; }
-
         /* Subtle, low-emphasis reset control (distinct from the bold green
            primary button) that clears all selections for the current run. */
         #reset-grid {
@@ -228,11 +211,6 @@
             cursor: pointer;
         }
         #reset-grid:hover { color: #ef4444; border-color: #ef4444; }
-
-        table.simple-mode th:nth-last-child(-n+3),
-        table.simple-mode td:nth-last-child(-n+3) {
-            display: none;
-        }
 
         /* Dark-themed replacement for the native confirm() dialog. */
         .modal-overlay {
@@ -282,16 +260,13 @@
 
 
 
-    <table id="encounter-table" class="simple-mode">
+    <table id="encounter-table">
         <thead>
             <tr>
                 <th>Order</th>
                 <th>Region</th>
                 <th>Variant</th>
                 <th>Central Nodes</th>
-                <th>Left Track</th>
-                <th>Right Track</th>
-                <th>Path</th>
             </tr>
         </thead>
         <tbody id="encounter-tbody"></tbody>
@@ -300,11 +275,6 @@
     <div id="encounter-info">
         Select a battle or boss to see information.
     </div>
-
-    <label id="simple-mode-toggle">
-        <input type="checkbox" checked onchange="toggleSimpleMode(this)">
-        Simple mode
-    </label>
 
     <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
 

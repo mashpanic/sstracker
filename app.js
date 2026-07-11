@@ -34,30 +34,6 @@ function populateCentralNodeSelects() {
     });
 }
 
-// ---- Left/Right Track selector options (edit here) ----
-// The 9 possible track node picks, shared by every left/right track dropdown.
-// Each select also gets a "?" option for "not yet chosen", added automatically.
-const TRACK_NODE_OPTIONS = [
-    'Armory',
-    'Boons',
-    'Celestial',
-    'Hoard',
-    'Remains',
-    'UnitAllied',
-    'UnitPrimary',
-    'Vortex',
-    'Well'
-];
-
-function populateTrackNodeSelects() {
-    const optionsHtml = '<option value="?">?</option>' +
-        TRACK_NODE_OPTIONS.map(name => `<option value="${name}">${name}</option>`).join('');
-
-    document.querySelectorAll('.track-node-select').forEach(sel => {
-        sel.innerHTML = optionsHtml;
-    });
-}
-
 // Variant options live in gamefacts.js (VARIANT_OPTIONS).
 function populateVariantSelects() {
     document.querySelectorAll('.variant-select').forEach(sel => {
@@ -74,23 +50,6 @@ function populateWaveSetSelects() {
         const names = WAVE_SET_OPTIONS[region] || [];
         sel.innerHTML = '<option value="">-- Select Wave Set --</option>' +
             names.map(name => `<option value="${name}">${name}</option>`).join('');
-    });
-}
-
-// ---- Path/Track selector options (edit here) ----
-// The two choices for which side of the train track was taken.
-// Each select also gets a "?" option for "not yet chosen", added automatically.
-const PATH_TRACK_OPTIONS = [
-    ['L', 'Left'],
-    ['R', 'Right']
-];
-
-function populatePathTrackSelects() {
-    const optionsHtml = '<option value="?">?</option>' +
-        PATH_TRACK_OPTIONS.map(([value, label]) => `<option value="${value}">${label}</option>`).join('');
-
-    document.querySelectorAll('.path-track-select').forEach(sel => {
-        sel.innerHTML = optionsHtml;
     });
 }
 
@@ -144,15 +103,13 @@ function updateNodeDisplay(selectEl) {
     const slotEl = selectEl.parentElement;
     const labelEl = slotEl.querySelector('.label');
 
-    // Central Node, Path, Left/Right Track, and Variant selectors all display
-    // their full option name (e.g. "Trinkets+", "Left Track", "Armory",
-    // "Sibling Hierarchy") rather than a short code, truncated with an
-    // ellipsis by the .full-name-slot styling if it's too long to fit.
+    // Central Node, Variant, and Wave Set selectors all display their full
+    // option name (e.g. "Trinkets+", "Sibling Hierarchy") rather than a short
+    // code, truncated with an ellipsis by the .full-name-slot styling if it's
+    // too long to fit.
     const showsFullName = selectEl.classList.contains('central-node-select')
-        || selectEl.classList.contains('track-node-select')
         || selectEl.classList.contains('variant-select')
-        || selectEl.classList.contains('wave-set-select')
-        || selectEl.id.endsWith('-path-track');
+        || selectEl.classList.contains('wave-set-select');
 
     const isUnselected = selectEl.value === '?' || selectEl.value === '';
 
@@ -432,17 +389,10 @@ function handleVariantChange(selectEl) {
     }
 }
 
-// Simple mode hides the last 3 columns (Left Track, Right Track, Path)
-// by toggling a class on the table.
-function toggleSimpleMode(checkbox) {
-    document.getElementById('encounter-table').classList.toggle('simple-mode', checkbox.checked);
-    saveState();
-}
-
 // ---- Persistence (localStorage) ----
-// The whole grid state — every dropdown value, the simple-mode toggle,
-// and the currently selected row — is saved on every change and restored
-// on load, so a run survives refreshes and reopening the page.
+// The whole grid state — every dropdown value and the currently selected
+// row — is saved on every change and restored on load, so a run survives
+// refreshes and reopening the page.
 const STORAGE_KEY = 'mt2-soul-savior-state-v1';
 const DEFAULT_INFO = 'Select a battle or boss to see information.';
 
@@ -454,7 +404,6 @@ function saveState() {
     const selectedRow = document.querySelector('.selected-row');
     const state = {
         selects,
-        simpleMode: document.querySelector('#simple-mode-toggle input').checked,
         selectedKey: selectedRow ? (selectedRow.dataset.encounterKey || null) : null
     };
     try {
@@ -476,11 +425,6 @@ function restoreState() {
             sel.value = value;
             updateNodeDisplay(sel); // refresh the slot label / selected styling
         });
-    }
-    if (typeof state.simpleMode === 'boolean') {
-        const cb = document.querySelector('#simple-mode-toggle input');
-        cb.checked = state.simpleMode;
-        toggleSimpleMode(cb);
     }
     if (state.selectedKey) {
         const label = document.querySelector(`.encounter-label[data-key="${state.selectedKey}"]`);
@@ -642,12 +586,6 @@ const battleVariantCell = (region, battleKey) => {
         slot(`${region}-wave-set`, 'wave-set-select', { variant: true, aria: `${labelFor(region)} wave set` })
     ));
 };
-const trackCell = (prefix, side) => cell(container(
-    slot(`${prefix}-${side}-1`, 'track-node-select', { aria: `${labelFor(prefix)} ${side} track 1` }),
-    slot(`${prefix}-${side}-2`, 'track-node-select', { aria: `${labelFor(prefix)} ${side} track 2` })
-));
-const pathCell = prefix => cell(container(slot(`${prefix}-path-track`, 'path-track-select', { aria: `${labelFor(prefix)} path` })));
-
 // Standalone row (astrael / lifemother): no Order cell, variant only,
 // remaining columns disabled.
 function singleRowHtml(key) {
@@ -655,7 +593,7 @@ function singleRowHtml(key) {
          + `<td class="disabled-cell order-cell">—</td>`
          + `<td class="encounter-label" data-key="${key}"></td>`
          + variantCell(`${key}-variant`)
-         + `<td class="disabled-cell">—</td>`.repeat(4)
+         + `<td class="disabled-cell">—</td>`
          + `</tr>`;
 }
 
@@ -672,9 +610,6 @@ function regionRowsHtml(region) {
         + `<td class="encounter-label" data-key="${battleKey}"></td>`
         + battleVariantCell(region, battleKey)
         + cell(container(slot(`${region}-n1`, 'central-node-select', { aria: `${labelFor(battleKey)} central node` })))
-        + trackCell(battleKey, 'left')
-        + trackCell(battleKey, 'right')
-        + pathCell(battleKey)
         + `</tr>`;
 
     const boss = `<tr class="selectable-row" onclick="selectEncounter(this, '${bossKey}')">`
@@ -684,9 +619,6 @@ function regionRowsHtml(region) {
             slot(`${region}-n2`, 'central-node-select', { aria: `${labelFor(bossKey)} central node 1` }),
             slot(`${region}-n3`, 'central-node-select', { aria: `${labelFor(bossKey)} central node 2` })
           ))
-        + trackCell(bossKey, 'left')
-        + trackCell(bossKey, 'right')
-        + pathCell(bossKey)
         + `</tr>`;
 
     return battle + boss;
@@ -704,14 +636,12 @@ function renderEncounterTable() {
 renderEncounterTable();
 populateEncounterLabels();
 populateCentralNodeSelects();
-populateTrackNodeSelects();
 populateVariantSelects();
 populateWaveSetSelects();
-populatePathTrackSelects();
 populateOrderSelects();
 
 // Persist any dropdown change (selects fire 'change' which bubbles to the
-// table); row clicks and the simple-mode toggle call saveState directly.
+// table); row clicks call saveState directly.
 // An Order pick additionally re-syncs disabled numbers and re-sorts groups.
 document.getElementById('encounter-table').addEventListener('change', (e) => {
     if (e.target && e.target.classList.contains('order-select')) {
@@ -806,9 +736,8 @@ function handleCentralNodeMousedown(e) {
 //   → Lifemother variant
 //   → every central node, top-to-bottom
 //   → wrap back to Astrael variant.
-// Left/right track and path selects are deliberately excluded (mouse-only,
-// tabindex -1); the mutator "curse" boxes are made focusable so Tab can land
-// on them (they show the curse popover on focus — see setupPopovers).
+// The mutator "curse" boxes are made focusable so Tab can land on them (they
+// show the curse popover on focus — see setupPopovers).
 
 // Region keys in current visual (top-to-bottom) order: the Order selects live
 // in the battle rows, which reorderGroups() physically reorders, so their DOM
@@ -879,10 +808,8 @@ function highlightRegionRows(region, on) {
             highlightRegionRows(e.target.id.replace(/-order$/, ''), false);
         }
     });
-    // Take track/path selects out of the Tab flow (ring is the keyboard path);
-    // make the curse boxes focusable so the ring can include them.
-    encTable.querySelectorAll('.track-node-select, .path-track-select')
-        .forEach(el => { el.tabIndex = -1; });
+    // Take the mutator "curse" boxes out of the Tab flow (the ring is the
+    // keyboard path); the ring itself makes them focusable when needed.
     encTable.querySelectorAll('.mutator-box')
         .forEach(el => { el.tabIndex = -1; });
 })();
