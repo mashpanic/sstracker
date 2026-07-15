@@ -133,15 +133,38 @@ function updateNodeDisplay(selectEl) {
 
 // Returns the info-box HTML for an encounter. The result is assigned via
 // innerHTML; every interpolated value is author-controlled data, so this is safe.
+// ---- Temporary ("provisional") order ----
+// While contemplating which region to enter next, selecting a mid-region row
+// whose turn isn't assigned yet auto-previews it at the next unused order (the
+// old "set the Order to the next number, look, set it back to ?" dance). It's a
+// VIRTUAL overlay: the underlying `${region}-order` select value stays "?", so
+// it's never persisted (saveState), never reserves the number away from other
+// regions (refreshOrderOptions), and never re-sorts rows (reorderGroups). Only
+// effectiveOrder() below and the Order box's own display reflect it. At most one
+// region is provisional at a time (only one row-pair is ever active).
+let tempOrder = null; // { region, value } | null
+
+// The order (1-4) in effect for a mid-region: its real pick if assigned, else
+// the provisional value if this region is the one being contemplated, else null.
+function effectiveOrder(region) {
+    const el = document.getElementById(`${region}-order`);
+    const raw = el ? el.value : '?';
+    if (raw && raw !== '?') {
+        const n = parseInt(raw, 10);
+        if (!Number.isNaN(n)) return n;
+    }
+    if (tempOrder && tempOrder.region === region) return tempOrder.value;
+    return null;
+}
+
 // Resolve a string | [O1,O2,O3,O4,O5] value to one string using the row's order
 // selector. Fixed (string) values ignore order; arrays index by order-1.
 // Used for BOSS_STATS, WAVE_SET_DESCRIPTIONS and BOSS_WAVE_DESCRIPTIONS.
 function pickByOrder(entry, region) {
     if (entry == null) return null;
     if (typeof entry === 'string') return entry;
-    const orderEl = document.getElementById(`${region}-order`);
-    const order = orderEl ? parseInt(orderEl.value, 10) : NaN;
-    return !Number.isNaN(order) ? entry[order - 1] : null;
+    const order = effectiveOrder(region);
+    return order != null ? entry[order - 1] : null;
 }
 
 // Regex matching any known enemy display name, longest-first so multi-word
@@ -162,9 +185,7 @@ const ENEMY_NAME_RE = new RegExp(
 function encounterOrder(key) {
     if (key === 'astrael') return 1;
     if (key === 'lifemother') return 5;
-    const el = document.getElementById(`${key.split('-')[0]}-order`);
-    const n = el ? parseInt(el.value, 10) : NaN;
-    return Number.isNaN(n) ? null : n;
+    return effectiveOrder(key.split('-')[0]);
 }
 
 // Resolve an ENEMY_NOTES value (string | [O1..O5]) to the note for a given order.
@@ -327,6 +348,7 @@ function selectEncounter(row, key) {
 
     row.classList.add('selected-row');
     row.dataset.encounterKey = key;
+    updateTempOrderForSelection(key);
     document.getElementById('encounter-info').innerHTML = getDisplayText(key);
     saveState();
 }
@@ -535,6 +557,63 @@ function reorderGroups() {
     });
 }
 
+// ---- Temporary-order apply/clear (see the tempOrder block near the top) ----
+// Smallest turn number (1-4) not assigned to any region. Gap-aware, so with
+// O3 already picked and O1/O2 open it returns 1 (not max+1). null if all taken.
+function nextUnusedOrder() {
+    const taken = new Set();
+    REGION_KEYS.forEach(region => {
+        const v = document.getElementById(`${region}-order`).value;
+        if (v !== '?') taken.add(parseInt(v, 10));
+    });
+    for (let n = 1; n <= 4; n++) if (!taken.has(n)) return n;
+    return null; // all four assigned (can't happen for an unset region)
+}
+
+// Preview `region` at the next unused order: set tempOrder and paint the Order
+// box amber with an entry flash. Leaves the select value at "?" (see tempOrder).
+function applyTempOrder(region) {
+    const value = nextUnusedOrder();
+    if (value == null) return;
+    tempOrder = { region, value };
+    const sel = document.getElementById(`${region}-order`);
+    if (!sel) return;
+    const slot = sel.parentElement;
+    const label = slot.querySelector('.label');
+    if (label) label.textContent = String(value);
+    slot.classList.add('order-temp'); // pulses (CSS) until cleared
+    slot.title = 'Provisional order — pick a number to keep it';
+}
+
+// Drop the current provisional order and restore the Order box to its real
+// (still "?") display.
+function clearTempOrder() {
+    if (!tempOrder) return;
+    const { region } = tempOrder;
+    tempOrder = null;
+    const sel = document.getElementById(`${region}-order`);
+    if (!sel) return;
+    const slot = sel.parentElement;
+    slot.classList.remove('order-temp');
+    slot.title = '';
+    updateNodeDisplay(sel); // repaint label from the real value ("?")
+}
+
+// Called whenever a row becomes selected: contemplate the newly selected
+// mid-region (if its turn is unset) and drop any provisional order left on a
+// different region / Astrael / Lifemother.
+function updateTempOrderForSelection(key) {
+    const region = key.includes('-') ? key.split('-')[0] : null;
+    const isMid = region && REGION_KEYS.includes(region);
+    if (tempOrder && (!isMid || tempOrder.region !== region)) clearTempOrder();
+    if (isMid) {
+        const sel = document.getElementById(`${region}-order`);
+        if (sel && sel.value === '?' && (!tempOrder || tempOrder.region !== region)) {
+            applyTempOrder(region);
+        }
+    }
+}
+
 // ---- Table row generation (edit layout here) ----
 // The encounter table body is generated from this layout rather than
 // hand-written, so each row type is defined once. 'astrael' and
@@ -645,6 +724,7 @@ populateOrderSelects();
 // An Order pick additionally re-syncs disabled numbers and re-sorts groups.
 document.getElementById('encounter-table').addEventListener('change', (e) => {
     if (e.target && e.target.classList.contains('order-select')) {
+        clearTempOrder(); // a real pick supersedes any provisional order
         refreshOrderOptions();
         // reorderGroups() moves the row's DOM node, which blurs whatever was
         // focused; the node itself survives the move, so re-focus the changed
@@ -822,6 +902,23 @@ reorderGroups();
 
 // Refresh mutator boxes after state is restored.
 document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(sel));
+
+// Clicking outside the contemplated region's two rows drops its provisional
+// order (the info box, blank space, reset button, etc.). Clicks inside the pair
+// — including its central-node slots — keep it; selecting another region's row
+// is handled by updateTempOrderForSelection, which runs first (the row's
+// onclick fires before this bubbles to document), so by here tempOrder already
+// points at whichever region was just clicked.
+document.addEventListener('click', (e) => {
+    if (!tempOrder) return;
+    const region = tempOrder.region;
+    const inPair = ['battle', 'boss'].some(part => {
+        const lbl = document.querySelector(`.encounter-label[data-key="${region}-${part}"]`);
+        const tr = lbl && lbl.closest('tr');
+        return tr && tr.contains(e.target);
+    });
+    if (!inPair) clearTempOrder();
+});
 
 // ----- Floating popover (hover) -----
 // One shared element serves two uses: enemy/boss ability notes in the info-box
