@@ -22,3 +22,6 @@ venv/
 
 # macOS
 .DS_Store
+
+# Throwaway headless-test harness copies of index.html (temp files)
+_t*.html
