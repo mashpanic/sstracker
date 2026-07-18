@@ -1074,23 +1074,34 @@ const CHAMPION_DEFAULTS = CHAMPION_CLANS
     .sort((a, b) => a.clan.localeCompare(b.clan) || a.name.localeCompare(b.name));
 const CHAMPION_BY_NAME = Object.fromEntries(CHAMPION_DEFAULTS.map(c => [c.name, c]));
 
-// In-memory records: { name: {win, loss} }. Row order lives in the DOM and is
-// serialized alongside the counts on save. selectedChamp is the currently
+// In-memory records: { name: {win, loss, lap} }. Row order lives in the DOM and
+// is serialized alongside the counts on save. `lap` is a short-term per-lap
+// indicator ('up' | 'down' | null), independent of the win/loss tally: it's set
+// by the editor's ▲/▼ buttons, shown as a green/red arrow before the score, and
+// cleared by Reset Lap (not Reset record). selectedChamp is the currently
 // highlighted row (name), or null.
 let championRecords = {};
 let selectedChamp = null;
+
+// Render a champion's lap state as an arrow (empty string when no lap set).
+function lapArrow(lap) {
+    if (lap === 'up') return '<span class="lap-up">▲</span>';
+    if (lap === 'down') return '<span class="lap-down">▼</span>';
+    return '';
+}
 
 function loadChampionOrder() {
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(CHAMPION_STORAGE_KEY)); } catch (e) { /* ignore */ }
     // Seed every champion at 0/0, then overlay any saved counts.
     championRecords = {};
-    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name] = { win: 0, loss: 0 }; });
+    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name] = { win: 0, loss: 0, lap: null }; });
     if (saved && saved.records) {
         Object.entries(saved.records).forEach(([name, rec]) => {
             if (!championRecords[name]) return; // dropped from the game since saved
             championRecords[name].win = Math.max(0, parseInt(rec.win, 10) || 0);
             championRecords[name].loss = Math.max(0, parseInt(rec.loss, 10) || 0);
+            championRecords[name].lap = (rec.lap === 'up' || rec.lap === 'down') ? rec.lap : null;
         });
     }
     selectedChamp = (saved && CHAMPION_BY_NAME[saved.selected]) ? saved.selected : null;
@@ -1131,9 +1142,13 @@ function updateChampEditor() {
     if (selectedChamp) {
         const r = championRecords[selectedChamp];
         if (nameEl) nameEl.textContent = CHAMPION_BY_NAME[selectedChamp].alias;
-        if (scoreEl) scoreEl.innerHTML = `<span class="rec-w">${r.win}</span>-<span class="rec-l">${r.loss}</span>`;
+        if (scoreEl) {
+            const lap = lapArrow(r.lap);
+            scoreEl.innerHTML = `<span class="rec-w">${r.win}</span>-<span class="rec-l">${r.loss}</span>` +
+                (lap ? ` ${lap}` : '');
+        }
     } else {
-        if (nameEl) nameEl.textContent = 'none';
+        if (nameEl) nameEl.textContent = '';
         if (scoreEl) scoreEl.textContent = '';
     }
     editor.querySelectorAll('.btn-group button').forEach(b => { b.disabled = !selectedChamp; });
@@ -1154,6 +1169,7 @@ function championRow(name) {
     row.innerHTML =
         `<span class="champ-grip" title="Drag to reorder">⠿</span>` +
         `<span class="champ-alias">${c.alias}</span>` +
+        `<span class="champ-lap">${lapArrow(rec.lap)}</span>` +
         `<span class="champ-record"><span class="rec-w">${rec.win}</span>-<span class="rec-l">${rec.loss}</span></span>`;
     return row;
 }
@@ -1173,10 +1189,27 @@ async function resetChampions() {
         'Reset the champion record? This clears every win/loss count. The current order is kept.',
         { confirmText: 'Reset', cancelText: 'Cancel' }
     )) return;
-    // Zero the counts but keep the current row order (and selection).
+    // Zero the counts but keep the current row order, selection, and lap state
+    // (laps are cleared separately by Reset Lap).
     const order = Array.from(document.querySelectorAll('#champion-grid .champion-row'))
         .map(r => r.dataset.champ);
-    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name] = { win: 0, loss: 0 }; });
+    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name].win = 0; championRecords[c.name].loss = 0; });
+    renderChampions(order);
+    updateChampEditor();
+    saveChampionState();
+}
+
+// Clear every champion's lap indicator without touching win/loss counts, the
+// order, or the selection. Its own reset (Reset Lap), independent of Reset
+// record and the Run Tracker.
+async function resetLap() {
+    if (!await confirmModal(
+        'Reset the lap? This clears every champion’s up/down arrow. Win/loss counts are kept.',
+        { confirmText: 'Reset Lap', cancelText: 'Cancel' }
+    )) return;
+    const order = Array.from(document.querySelectorAll('#champion-grid .champion-row'))
+        .map(r => r.dataset.champ);
+    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name].lap = null; });
     renderChampions(order);
     updateChampEditor();
     saveChampionState();
@@ -1208,15 +1241,38 @@ async function resetChampionOrder() {
         editor.addEventListener('click', e => {
             const btn = e.target.closest('button');
             if (!btn || !selectedChamp) return;
-            const stat = btn.dataset.stat;
-            const next = Math.max(0, championRecords[selectedChamp][stat] + parseInt(btn.dataset.delta, 10));
-            championRecords[selectedChamp][stat] = next;
+            const rec = championRecords[selectedChamp];
             const row = [...grid.querySelectorAll('.champion-row')].find(r => r.dataset.champ === selectedChamp);
-            if (row) {
-                row.querySelector('.rec-w').textContent = championRecords[selectedChamp].win;
-                row.querySelector('.rec-l').textContent = championRecords[selectedChamp].loss;
+            if (btn.dataset.lap) {
+                // Lap arrow ▲/▼ doubles as a quick win/loss entry: ▲ records a
+                // win (win+1, green up), ▼ records a loss (loss+1, red down).
+                // The lap holds one result, so the counts stay in sync with the
+                // arrow: re-clicking the current direction undoes it (and clears
+                // the arrow); clicking the opposite direction undoes the old
+                // result before applying the new one.
+                const dir = btn.dataset.lap;      // 'up' | 'down'
+                const undo = { up: 'win', down: 'loss' };
+                if (rec.lap) rec[undo[rec.lap]] = Math.max(0, rec[undo[rec.lap]] - 1);
+                if (rec.lap === dir) {
+                    rec.lap = null;               // re-click: undo only, no re-apply
+                } else {
+                    rec[undo[dir]] += 1;
+                    rec.lap = dir;
+                }
+                if (row) {
+                    row.querySelector('.champ-lap').innerHTML = lapArrow(rec.lap);
+                    row.querySelector('.rec-w').textContent = rec.win;
+                    row.querySelector('.rec-l').textContent = rec.loss;
+                }
+            } else {
+                const stat = btn.dataset.stat;
+                rec[stat] = Math.max(0, rec[stat] + parseInt(btn.dataset.delta, 10));
+                if (row) {
+                    row.querySelector('.rec-w').textContent = rec.win;
+                    row.querySelector('.rec-l').textContent = rec.loss;
+                }
             }
-            updateChampEditor(); // refresh the editor's W-L score
+            updateChampEditor(); // refresh the editor's W-L score / lap
             saveChampionState();
         });
     }
