@@ -44,12 +44,19 @@ function populateVariantSelects() {
 }
 
 // Wave set options live in gamefacts.js (WAVE_SET_OPTIONS).
+// Regions with a single wave set (Thaddeus, Lylith) get a locked, non-
+// interactive dropdown: the value is filled automatically when the battle
+// variant is chosen (see handleVariantChange) and the user can't change or
+// clear it by hand.
 function populateWaveSetSelects() {
     document.querySelectorAll('.wave-set-select').forEach(sel => {
         const region = sel.id.replace(/-wave-set$/, '');
         const names = WAVE_SET_OPTIONS[region] || [];
         sel.innerHTML = '<option value="">-- Select Wave Set --</option>' +
             names.map(name => `<option value="${name}">${name}</option>`).join('');
+        const locked = names.length === 1;
+        sel.disabled = locked;
+        sel.parentElement.classList.toggle('locked', locked);
     });
 }
 
@@ -126,6 +133,7 @@ function updateNodeDisplay(selectEl) {
 
     if (!isUnselected) {
         slotEl.classList.add('selected');
+        slotEl.classList.remove('needs-flash'); // set → stop the "needed" pulse
     } else {
         slotEl.classList.remove('selected');
     }
@@ -379,19 +387,23 @@ function handleVariantChange(selectEl) {
 
     refreshMutatorBox(selectEl);
 
-    // Auto-select the wave set when the region offers only one (battle rows
-    // only — e.g. Thaddeus/Lylith each have a single wave set shared by both
-    // their minor bosses). Saves the redundant second pick. Done before the
+    // Keep the battle row's wave set in step with its variant. A wave set
+    // without a chosen minor boss is meaningless, so clearing the variant back
+    // to "?" clears the wave set too — but switching between two real variants
+    // leaves it alone (the player's wave-set pick stands). Single-wave-set
+    // regions (Thaddeus/Lylith) additionally auto-fill their one, locked wave
+    // set when a variant is chosen (see populateWaveSetSelects). Done before the
     // info-box refresh below so it reflects the wave set immediately.
-    if (selectEl.value && selectEl.id.endsWith('-battle-variant')) {
+    if (selectEl.id.endsWith('-battle-variant')) {
         const region = selectEl.id.split('-')[0];
         const opts = WAVE_SET_OPTIONS[region] || [];
-        if (opts.length === 1) {
-            const waveSel = document.getElementById(`${region}-wave-set`);
-            if (waveSel && waveSel.value !== opts[0]) {
-                waveSel.value = opts[0];
-                updateNodeDisplay(waveSel);
-            }
+        const waveSel = document.getElementById(`${region}-wave-set`);
+        let want = null; // null = leave the wave set as-is
+        if (!selectEl.value) want = '';             // variant cleared → clear wave set
+        else if (opts.length === 1) want = opts[0]; // locked region → auto-fill its one set
+        if (waveSel && want !== null && waveSel.value !== want) {
+            waveSel.value = want;
+            updateNodeDisplay(waveSel);
         }
     }
 
@@ -599,18 +611,49 @@ function clearTempOrder() {
     updateNodeDisplay(sel); // repaint label from the real value ("?")
 }
 
+// Amber-pulse the selected row's still-empty boxes that are needed to reveal
+// its waves: its Variant always, plus its Wave Set for battle rows whose region
+// offers a manual choice (Maera/Tivi — Thaddeus/Lylith auto-fill, so their
+// locked wave-set box is skipped). Called on temp-mode entry alongside the Order
+// pulse, but unlike the order it is NOT dropped when temp mode is exited — the
+// pulse persists until each box is actually set (updateNodeDisplay clears it).
+function flagNeededBoxes(key) {
+    const ids = [`${key}-variant`];
+    if (key.endsWith('-battle')) {
+        const ws = document.getElementById(`${key.split('-')[0]}-wave-set`);
+        if (ws && !ws.disabled) ids.push(ws.id);
+    }
+    ids.forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel && !sel.value) sel.parentElement.classList.add('needs-flash');
+    });
+}
+
 // Called whenever a row becomes selected: contemplate the newly selected
 // mid-region (if its turn is unset) and drop any provisional order left on a
 // different region / Astrael / Lifemother.
 function updateTempOrderForSelection(key) {
     const region = key.includes('-') ? key.split('-')[0] : null;
     const isMid = region && REGION_KEYS.includes(region);
+
+    // The "needed" pulse follows the selected row: clear it from every OTHER
+    // row so switching encounters back and forth doesn't accumulate stuck
+    // pulses. Only a real re-selection runs this — neutral outside-clicks (info
+    // box, blank space) don't re-select, so they leave the current row's pulses
+    // alone (that's the "don't clear on temp-mode exit" behavior).
+    const selRow = document.querySelector('.selected-row');
+    document.querySelectorAll('.node-slot.needs-flash').forEach(slot => {
+        if (!selRow || !selRow.contains(slot)) slot.classList.remove('needs-flash');
+    });
+
     if (tempOrder && (!isMid || tempOrder.region !== region)) clearTempOrder();
     if (isMid) {
         const sel = document.getElementById(`${region}-order`);
-        if (sel && sel.value === '?' && (!tempOrder || tempOrder.region !== region)) {
+        const orderUnset = sel && sel.value === '?';
+        if (orderUnset && (!tempOrder || tempOrder.region !== region)) {
             applyTempOrder(region);
         }
+        if (orderUnset) flagNeededBoxes(key); // temp mode → flag its needed boxes
     }
 }
 
@@ -828,7 +871,7 @@ const visualRegionOrder = () =>
 function buildTabRing() {
     const byId = id => document.getElementById(id);
     const ring = [];
-    const push = el => { if (el) ring.push(el); };
+    const push = el => { if (el && !el.disabled) ring.push(el); };  // skip locked wave-set selects
     const regions = visualRegionOrder();
     push(byId('astrael-variant'));
     regions.forEach(r => {
