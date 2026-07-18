@@ -1016,11 +1016,13 @@ document.addEventListener('click', (e) => {
     }
 })();
 
-// ---- Champion win/loss record (right-side panel) ----
+// ---- Champion win/loss record (Champion Record screen) ----
 // A per-champion Win/Loss tally, fully independent of the run grid: its own
 // localStorage key and Reset button (resetGrid never touches it, and vice
-// versa), with drag-reorderable rows. Built from CHAMPION_CLANS (gamefacts.js);
-// default order is alphabetical by clan then champion, but the clan isn't shown.
+// versa), drag-reorderable rows, and a click-to-highlight selection. Rendered
+// into the two-column grid (#champion-grid) on the Champion Record screen.
+// Built from CHAMPION_CLANS (gamefacts.js); default order is alphabetical by
+// clan then champion, but the clan isn't shown.
 const CHAMPION_STORAGE_KEY = 'mt2-champion-records-v1';
 
 // Flattened default order: sort by clan name, then champion name.
@@ -1057,7 +1059,7 @@ function loadChampionOrder() {
 }
 
 function saveChampionState() {
-    const order = Array.from(document.querySelectorAll('#champion-tbody .champion-row'))
+    const order = Array.from(document.querySelectorAll('#champion-grid .champion-row'))
         .map(r => r.dataset.champ);
     try {
         localStorage.setItem(CHAMPION_STORAGE_KEY,
@@ -1069,41 +1071,44 @@ function saveChampionState() {
 // stores the choice, and persists.
 function setSelectedChamp(name) {
     selectedChamp = name;
-    document.querySelectorAll('#champion-tbody .champion-row').forEach(r => {
+    document.querySelectorAll('#champion-grid .champion-row').forEach(r => {
         r.classList.toggle('champ-selected', r.dataset.champ === name);
     });
     saveChampionState();
 }
 
+// One champion's row: a drag grip, the alias, and independent Win/Loss
+// counters. A <div> row (not a table row) so the 24 rows can flow into the
+// two-column grid (#champion-grid).
 function championRow(name) {
     const c = CHAMPION_BY_NAME[name];
     const rec = championRecords[name];
-    const tr = document.createElement('tr');
-    tr.className = 'champion-row';
-    tr.draggable = true;
-    tr.dataset.champ = name;
-    const counter = (stat, label, cls, val) => `
-        <td class="champ-counter">
-            <span class="counter-label ${cls}">${label}</span>
-            <button type="button" class="counter-btn" data-stat="${stat}" data-delta="-1" aria-label="Decrease ${c.alias} ${stat}">−</button>
-            <span class="counter-val" data-stat="${stat}">${val}</span>
-            <button type="button" class="counter-btn" data-stat="${stat}" data-delta="1" aria-label="Increase ${c.alias} ${stat}">+</button>
-        </td>`;
-    tr.innerHTML =
-        `<td class="champ-grip" title="Drag to reorder">⠿</td>` +
-        `<td class="champ-alias">${c.alias}</td>` +
+    const row = document.createElement('div');
+    row.className = 'champion-row';
+    row.draggable = true;
+    row.dataset.champ = name;
+    const counter = (stat, label, cls, val) =>
+        `<span class="champ-counter">` +
+        `<span class="counter-label ${cls}">${label}</span>` +
+        `<button type="button" class="counter-btn" data-stat="${stat}" data-delta="-1" aria-label="Decrease ${c.alias} ${stat}">−</button>` +
+        `<span class="counter-val" data-stat="${stat}">${val}</span>` +
+        `<button type="button" class="counter-btn" data-stat="${stat}" data-delta="1" aria-label="Increase ${c.alias} ${stat}">+</button>` +
+        `</span>`;
+    row.innerHTML =
+        `<span class="champ-grip" title="Drag to reorder">⠿</span>` +
+        `<span class="champ-alias">${c.alias}</span>` +
         counter('win', 'W', 'win', rec.win) +
         counter('loss', 'L', 'loss', rec.loss);
-    return tr;
+    return row;
 }
 
 function renderChampions(order) {
-    const tbody = document.getElementById('champion-tbody');
-    tbody.innerHTML = '';
+    const grid = document.getElementById('champion-grid');
+    grid.innerHTML = '';
     order.forEach(name => {
         const row = championRow(name);
         if (name === selectedChamp) row.classList.add('champ-selected');
-        tbody.appendChild(row);
+        grid.appendChild(row);
     });
 }
 
@@ -1119,13 +1124,13 @@ async function resetChampions() {
 }
 
 (function initChampions() {
-    const tbody = document.getElementById('champion-tbody');
-    if (!tbody || typeof CHAMPION_CLANS === 'undefined') return;
+    const grid = document.getElementById('champion-grid');
+    if (!grid || typeof CHAMPION_CLANS === 'undefined') return;
     renderChampions(loadChampionOrder());
 
     // Clicks in a row: a +/- button adjusts the count (and highlights the row);
-    // clicking anywhere else on the row (the name, the cell) toggles highlight.
-    tbody.addEventListener('click', e => {
+    // clicking anywhere else on the row toggles the highlight.
+    grid.addEventListener('click', e => {
         const row = e.target.closest('.champion-row');
         if (!row) return;
         const name = row.dataset.champ;
@@ -1142,20 +1147,23 @@ async function resetChampions() {
         setSelectedChamp(selectedChamp === name ? null : name);
     });
 
-    // Drag-to-reorder: the dragged row moves live as it passes the others,
-    // and the new order is persisted on drop.
+    // Drag-to-reorder across the two columns: pick the insertion point by 2-D
+    // proximity (nearest row center) so moving between columns works. The
+    // dragged row moves live, and the new order is persisted on drop.
     let dragRow = null;
-    function champDragAfter(y) {
-        const rows = [...tbody.querySelectorAll('.champion-row:not(.dragging)')];
-        let closest = null, closestOffset = -Infinity;
+    function champDragAfter(x, y) {
+        const rows = [...grid.querySelectorAll('.champion-row:not(.dragging)')];
+        let best = null, bestDist = Infinity, before = true;
         rows.forEach(row => {
-            const box = row.getBoundingClientRect();
-            const offset = y - box.top - box.height / 2;
-            if (offset < 0 && offset > closestOffset) { closestOffset = offset; closest = row; }
+            const b = row.getBoundingClientRect();
+            const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+            const d = Math.hypot(x - cx, y - cy);
+            if (d < bestDist) { bestDist = d; best = row; before = y < cy; }
         });
-        return closest;
+        if (!best) return null;
+        return before ? best : best.nextElementSibling; // insertBefore ref; null -> append
     }
-    tbody.addEventListener('dragstart', e => {
+    grid.addEventListener('dragstart', e => {
         dragRow = e.target.closest('.champion-row');
         if (!dragRow) return;
         dragRow.classList.add('dragging');
@@ -1163,19 +1171,42 @@ async function resetChampions() {
         e.dataTransfer.effectAllowed = 'move';
         try { e.dataTransfer.setData('text/plain', dragRow.dataset.champ); } catch (_) { /* Firefox needs data set */ }
     });
-    tbody.addEventListener('dragover', e => {
+    grid.addEventListener('dragover', e => {
         if (!dragRow) return;
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
-        const after = champDragAfter(e.clientY);
-        if (after == null) tbody.appendChild(dragRow);
-        else if (after !== dragRow) tbody.insertBefore(dragRow, after);
+        const ref = champDragAfter(e.clientX, e.clientY);
+        if (ref == null) grid.appendChild(dragRow);
+        else if (ref !== dragRow) grid.insertBefore(dragRow, ref);
     });
-    tbody.addEventListener('drop', e => e.preventDefault());
-    tbody.addEventListener('dragend', () => {
+    grid.addEventListener('drop', e => e.preventDefault());
+    grid.addEventListener('dragend', () => {
         if (!dragRow) return;
         dragRow.classList.remove('dragging');
         dragRow = null;
         saveChampionState();
     });
+})();
+
+// ---- Screens ----
+// Three screens, one visible at a time: 'tracker' (Run Tracker), 'champions'
+// (Champion Record), 'help' (Help). The buttons at the bottom of each screen
+// switch between them.
+function showScreen(name) {
+    ['tracker', 'champions', 'help'].forEach(n => {
+        document.getElementById('screen-' + n).classList.toggle('active', n === name);
+    });
+}
+
+// First-time visitors (nothing saved in localStorage) land on Help; returning
+// visitors keep the default Run Tracker. State is only written once the user
+// interacts, so Help shows exactly once — before any interaction.
+(function pickInitialScreen() {
+    if (!document.getElementById('screen-help')) return;
+    let hasSaved = false;
+    try {
+        hasSaved = localStorage.getItem(STORAGE_KEY) !== null
+                || localStorage.getItem(CHAMPION_STORAGE_KEY) !== null;
+    } catch (e) { /* storage unavailable — treat as first visit */ }
+    if (!hasSaved) showScreen('help');
 })();

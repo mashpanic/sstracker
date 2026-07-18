@@ -23,7 +23,7 @@
         th { background: #19191c; }
 
         select { background: #202024; color: #fff; border: 1px solid #323238; padding: 6px; border-radius: 4px; width: 95%; }
-        button { background: #04d361; color: #000; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        button { background: #04d361; color: #000; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: capitalize; }
         pre { background: #19191c; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #29292e; }
 
         /* Subtle grouping colors to keep paired rows visually connected */
@@ -75,6 +75,19 @@
            variant names tend to run longer (e.g. "Mother's Flagellant") */
         .variant-slot {
             width: 165px;
+        }
+
+        /* Battle/Boss region labels match the variant button's (normal) font
+           weight — the name is wrapped in <strong> by app.js, so override it. */
+        .encounter-label strong {
+            font-weight: normal;
+        }
+
+        /* Match the gap above the info box to the gap below it (10px): the base
+           table margin-bottom (20px) set the top gap, the info box's own
+           margin-bottom (10px) the bottom gap. */
+        #encounter-table {
+            margin-bottom: 10px;
         }
 
         /* Mutator indicator shown in boss row variant cells. Red outline/text when active. */
@@ -144,7 +157,7 @@
         .order-focus-row td.order-cell { background: #182231 !important; }
 
         #encounter-info {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             padding: 15px;
             background: #19191c;
             border: 1px solid #29292e;
@@ -216,18 +229,9 @@
 
         /* Subtle, low-emphasis reset control (distinct from the bold green
            primary button) that clears all selections for the current run. */
-        #reset-grid, #reset-champions {
-            margin-top: 12px;
-            background: none;
-            color: #9d9da3;
-            border: 1px solid #323238;
-            padding: 6px 12px;
-            font-weight: normal;
-            font-size: 0.85em;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        #reset-grid:hover, #reset-champions:hover { color: #ef4444; border-color: #ef4444; }
+        /* (ALT: reset buttons are normalized to .screen-toggle's design above,
+           so the low-emphasis styling from the base file is intentionally
+           dropped here.) */
 
         /* Dark-themed replacement for the native confirm() dialog. */
         .modal-overlay {
@@ -271,23 +275,58 @@
         }
         .modal-confirm:hover { background: #dc2626; }
 
-        /* ---- Two-column layout: run tracker on the left, champion record on
-           the right. Wraps to stacked on narrow screens. ---- */
-        #app-layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
-        #main-column { flex: 1 1 520px; min-width: 0; }
-        #champion-panel { flex: 0 0 auto; }
+        /* ---- Two-screen layout (ALT): one screen visible at a time, toggled
+           by the left button in each screen's button row. Both screens are
+           left-aligned. The toggle + reset buttons share one normalized style
+           and sit side by side (toggle left, reset right). ---- */
+        .screen { display: none; }
+        .screen.active { display: block; }
+        .button-row { display: flex; gap: 10px; margin-top: 10px; }
+        .screen-toggle, #reset-grid, #reset-champions {
+            background: #202024;
+            color: #e1e1e6;
+            border: 1px solid #323238;
+            padding: 9px 16px;
+            font-weight: bold;
+            font-size: 0.9em;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .screen-toggle:hover, #reset-grid:hover, #reset-champions:hover {
+            border-color: #04d361; color: #04d361;
+        }
 
-        /* ---- Champion win/loss record grid ---- */
-        #champion-table { margin-bottom: 0; }
-        #champion-table td { padding: 3px 8px; border-color: #212126; }
-        .champion-row { cursor: grab; }
+        /* ---- Champion win/loss record, two-column grid (ALT) ----
+           24 rows split in half: rows 1-12 fill the left column top-to-bottom,
+           13-24 the right, sized to roughly span the run-tracker table's width.
+           Rows are flex (not table cells) so they can flow inside the grid. */
+        #champion-grid {
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-rows: repeat(12, auto);
+            grid-template-columns: 1fr 1fr;
+            column-gap: 28px;
+            max-width: 900px;
+        }
+        .champion-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: grab;
+            border-bottom: 1px solid #212126;
+            /* ~50% taller rows (text size unchanged) via extra vertical padding. */
+            padding: 10px 4px;
+        }
         .champion-row.dragging { opacity: 0.4; }
         /* Highlighted (clicked / worked-with) row. */
-        .champion-row.champ-selected td { background: #1f3a2d; }
+        .champion-row.champ-selected { background: #1f3a2d; border-radius: 4px; }
         .champion-row.champ-selected .champ-alias { color: #04d361; }
-        .champ-grip { color: #52525b; text-align: center; user-select: none; padding: 3px 2px 3px 6px; }
-        .champ-alias { font-weight: bold; white-space: nowrap; cursor: pointer; }
-        .champ-counter { white-space: nowrap; }
+        .champ-grip { color: #52525b; user-select: none; padding: 0 4px 0 2px; }
+        .champ-alias {
+            font-weight: bold; white-space: nowrap; cursor: pointer;
+            flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis;
+        }
+        .champ-counter { white-space: nowrap; flex: 0 0 auto; }
         .counter-label {
             display: inline-block; width: 1.1em; text-align: center;
             font-size: 0.72em; font-weight: bold; vertical-align: middle;
@@ -307,55 +346,120 @@
         .counter-btn:hover { color: #04d361; border-color: #04d361; }
         .counter-btn:active { background: #19191c; }
 
+        /* ---- Help screen (screen 3): read-only how-to text ---- */
+        #help-content {
+            max-width: 900px;
+            padding: 16px 20px;
+            background: #19191c;
+            border: 1px solid #29292e;
+            border-radius: 4px;
+            line-height: 1.55;
+        }
+        #help-content h2 { margin: 0 0 10px; font-size: 1.1em; }
+        #help-content h3 { margin: 18px 0 6px; font-size: 1em; color: #04d361; }
+        #help-content ul { margin: 6px 0; padding-left: 20px; }
+        #help-content li { margin: 5px 0; }
+        #help-content p { margin: 8px 0; }
+        #help-content a { color: #9d9da3; }
+
+        /* Two-line attribution on the Run Tracker screen. */
+        #attribution div + div { margin-top: 2px; }
+
     </style>
 </head>
 <body>
 
 
 
-    <div id="app-layout">
-        <div id="main-column">
-            <table id="encounter-table">
-                <thead>
-                    <tr>
-                        <th>Order</th>
-                        <th>Region</th>
-                        <th>Variant</th>
-                        <th>Central Nodes</th>
-                    </tr>
-                </thead>
-                <tbody id="encounter-tbody"></tbody>
-            </table>
+    <!-- ALT layout: two screens, one visible at a time, toggled by the button
+         below. Screen 1 = run tracker; Screen 2 = champion record. -->
 
-            <div id="encounter-info">
-                Select a battle or boss to see information.
-            </div>
+    <!-- Screen 1: run tracker -->
+    <div id="screen-tracker" class="screen active">
+        <table id="encounter-table">
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Region</th>
+                    <th>Variant</th>
+                    <th>Central Nodes</th>
+                </tr>
+            </thead>
+            <tbody id="encounter-tbody"></tbody>
+        </table>
 
-            <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
+        <div id="encounter-info">
+            Select a battle or boss to see information.
         </div>
 
-        <!-- Per-champion win/loss tally. Rows are hand-orderable (drag) and
-             persist independently of the run grid (separate localStorage key +
-             its own reset button). Populated from CHAMPION_CLANS in app.js. -->
-        <aside id="champion-panel">
-            <table id="champion-table">
-                <tbody id="champion-tbody"></tbody>
-            </table>
-            <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
-        </aside>
+        <div class="button-row">
+            <button type="button" class="screen-toggle" onclick="showScreen('champions')">Show Champion Record</button>
+            <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
+            <button type="button" class="screen-toggle" onclick="showScreen('help')">Help</button>
+        </div>
+
+        <!-- Attribution lives only on the Run Tracker screen (screen 1), split
+             onto two lines. -->
+        <footer id="attribution">
+            <div>Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.</div>
+            <div>Content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a> unless otherwise noted.</div>
+        </footer>
     </div>
 
-    <footer id="attribution">
-        Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.
-        Content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a> unless otherwise noted.
-    </footer>
+    <!-- Screen 2: Champion Record — per-champion win/loss tally, laid out in
+         two columns (rows 1-12 left, 13-24 right). Populated by the inline
+         script below from CHAMPION_CLANS; shares the run grid's independence
+         (own storage key + reset). -->
+    <div id="screen-champions" class="screen">
+        <div id="champion-grid"></div>
+        <div class="button-row">
+            <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Show Run Tracker</button>
+            <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
+        </div>
+    </div>
+
+    <!-- Screen 3: Help — read-only how-to text for the app. -->
+    <div id="screen-help" class="screen">
+        <div id="help-content">
+            <h2>How to use this app</h2>
+            <p>This tracker has three screens, switched with the buttons at the
+               bottom of each screen:</p>
+            <ul>
+                <li><strong>Run Tracker</strong> (screen 1) — plan and follow a Soul Savior run.</li>
+                <li><strong>Champion Record</strong> (screen 2) — keep a win/loss tally per starting champion.</li>
+                <li><strong>Help</strong> (screen 3) — this page.</li>
+            </ul>
+
+            <h3>Run Tracker</h3>
+            <ul>
+                <li><strong>Order</strong> — set each mid-run region's combat order (1–4) in its Order box. A number you pick is greyed out for the other regions, and the rows re-sort into that order. Astrael is always first, the Lifemother always last.</li>
+                <li><strong>Variant &amp; Central Nodes</strong> — for each encounter, pick its boss / wave-set Variant and its Central Nodes from the dropdowns.</li>
+                <li><strong>Info box</strong> — click a Battle or Boss row to see its waves and enemy stats below. Hover an enemy name for its ability note; a boss's curse box shows its mutator on hover.</li>
+                <li><strong>Reset grid</strong> — clears every selection for the current run (it asks first). It does not affect your Champion Record.</li>
+            </ul>
+
+            <h3>Champion Record</h3>
+            <ul>
+                <li><strong>Win / Loss</strong> — use the −/+ buttons on each row to adjust a champion's counts (they never go below 0).</li>
+                <li><strong>Reorder</strong> — drag a row by its grip (⠿) to move it; the new order is saved. The 24 champions fill the left column first, then the right.</li>
+                <li><strong>Highlight</strong> — click a champion's name (or work with its row) to highlight it; click the name again to clear it.</li>
+                <li><strong>Reset record</strong> — clears all counts and restores the default order (it asks first). It does not affect the Run Tracker.</li>
+            </ul>
+
+            <p>Everything you enter is saved in your browser and restored when you come back.</p>
+        </div>
+        <div class="button-row">
+            <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Show Run Tracker</button>
+        </div>
+    </div>
 
     <!-- Data + logic, split into separate files. Load order matters and these
          MUST stay classic <script> (not type="module") so the top-level consts
          remain visible across files and the page still works opened via file://.
            gamedata.js  — pipeline-generated stats + wave compositions
            gamefacts.js — hand-authored wiki facts (mutators, descriptions)
-           app.js       — tracker logic + UI config (depends on both above) -->
+           app.js       — tracker logic, champion record, screen switching + UI
+                          config (depends on both above) -->
     <script src="gamedata.js"></script>
     <script src="gamefacts.js"></script>
     <script src="app.js"></script>
