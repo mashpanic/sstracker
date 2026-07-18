@@ -1327,6 +1327,144 @@ async function resetChampionOrder() {
     });
 })();
 
+// ---- Export / Import app state ----
+// A plain-text (JSON) backup covering every screen's saved data. Rather than
+// listing individual fields, it snapshots every localStorage entry under the
+// app's `mt2-` prefix, so any future feature that persists under a new `mt2-…`
+// key is carried by export/import automatically, with no change here. Each
+// store already versions its own schema inside its key name (…-state-v1,
+// …-records-v1); the envelope adds a separate `formatVersion` for the wrapper.
+const APP_STATE_PREFIX = 'mt2-';
+const EXPORT_APP_ID = 'mt2-soul-savior-tracker';
+const EXPORT_FORMAT_VERSION = 1;
+
+// Gather { key: parsedValue } for every mt2- localStorage entry. Values are
+// stored parsed (not as escaped strings) so the export stays human-readable.
+function collectAppState() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith(APP_STATE_PREFIX)) continue;
+        const raw = localStorage.getItem(key);
+        try { data[key] = JSON.parse(raw); } catch (e) { data[key] = raw; }
+    }
+    return data;
+}
+
+function buildExportEnvelope() {
+    return {
+        app: EXPORT_APP_ID,
+        type: 'app-state-export',
+        formatVersion: EXPORT_FORMAT_VERSION,
+        exportedAt: new Date().toISOString(),
+        data: collectAppState()
+    };
+}
+
+// Validate an export envelope and write its stores to localStorage. Per-key
+// REPLACE: only keys present in the file are overwritten; every other store the
+// browser holds is left untouched (so importing an old export that predates a
+// screen won't wipe that screen). Foreign (non-mt2-) keys are ignored. Returns
+// the written keys, or throws with a user-facing message. Does not reload.
+function applyImport(text) {
+    let env;
+    try { env = JSON.parse(text); } catch (e) { throw new Error('That isn’t valid JSON.'); }
+    if (!env || env.app !== EXPORT_APP_ID || typeof env.data !== 'object' || env.data === null) {
+        throw new Error('This doesn’t look like a Soul Savior Tracker export.');
+    }
+    const written = [];
+    Object.entries(env.data).forEach(([key, value]) => {
+        if (!key.startsWith(APP_STATE_PREFIX)) return; // ignore foreign keys
+        try { localStorage.setItem(key, JSON.stringify(value)); written.push(key); }
+        catch (e) { /* storage unavailable/full — skip this key */ }
+    });
+    if (!written.length) throw new Error('The file contained no tracker data to import.');
+    return written;
+}
+
+// Bare-bones modal builder shared by the export/import dialogs: wraps the given
+// inner HTML in the standard overlay, wires Escape + backdrop to close, and
+// hands back the elements. Buttons are wired by the caller.
+function dataModal(innerHTML) {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `<div class="modal modal-data" role="dialog" aria-modal="true">${innerHTML}</div>`;
+    function close() { document.removeEventListener('keydown', onKey); overlay.remove(); }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(overlay);
+    return { overlay, close };
+}
+
+function exportState() {
+    const json = JSON.stringify(buildExportEnvelope(), null, 2);
+    const { overlay, close } = dataModal(`
+        <p class="modal-message">Your saved data as JSON — copy it or download it as a file, then Import it in another browser.</p>
+        <textarea readonly spellcheck="false"></textarea>
+        <div class="modal-buttons">
+            <span class="modal-error"></span>
+            <button type="button" class="modal-cancel">Close</button>
+            <button type="button" class="modal-neutral modal-copy">Copy</button>
+            <button type="button" class="modal-neutral modal-download">Download .json</button>
+        </div>`);
+    const ta = overlay.querySelector('textarea');
+    const err = overlay.querySelector('.modal-error');
+    ta.value = json;
+    overlay.querySelector('.modal-cancel').addEventListener('click', close);
+    overlay.querySelector('.modal-copy').addEventListener('click', async () => {
+        try {
+            ta.focus(); ta.select();
+            if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(json);
+            else document.execCommand('copy');
+            err.style.color = '#04d361'; err.textContent = 'Copied.';
+        } catch (e) { err.style.color = '#ef4444'; err.textContent = 'Copy failed — select the text and copy it manually.'; }
+    });
+    overlay.querySelector('.modal-download').addEventListener('click', () => {
+        try {
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `soul-savior-tracker-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } catch (e) { err.style.color = '#ef4444'; err.textContent = 'Download failed — use Copy instead.'; }
+    });
+    ta.focus(); ta.select();
+}
+
+function importState() {
+    const { overlay, close } = dataModal(`
+        <p class="modal-message">Paste exported JSON below, or choose a file. Importing replaces the screens the file contains, then reloads the page.</p>
+        <textarea spellcheck="false" placeholder="Paste exported JSON here…"></textarea>
+        <label class="modal-file">Or load a file:
+            <input type="file" accept="application/json,.json,text/plain">
+        </label>
+        <div class="modal-buttons">
+            <span class="modal-error"></span>
+            <button type="button" class="modal-cancel">Cancel</button>
+            <button type="button" class="modal-confirm">Import</button>
+        </div>`);
+    const ta = overlay.querySelector('textarea');
+    const err = overlay.querySelector('.modal-error');
+    overlay.querySelector('.modal-cancel').addEventListener('click', close);
+    overlay.querySelector('input[type=file]').addEventListener('change', function () {
+        const f = this.files && this.files[0];
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = () => { ta.value = reader.result; err.textContent = ''; };
+        reader.onerror = () => { err.style.color = '#ef4444'; err.textContent = 'Could not read that file.'; };
+        reader.readAsText(f);
+    });
+    overlay.querySelector('.modal-confirm').addEventListener('click', () => {
+        try { applyImport(ta.value.trim()); }
+        catch (e) { err.style.color = '#ef4444'; err.textContent = e.message; return; }
+        location.reload(); // re-read every store (incl. any not known to this build)
+    });
+    ta.focus();
+}
+
 // ---- Screens ----
 // Three screens, one visible at a time: 'tracker' (Run Tracker), 'champions'
 // (Win-Loss), 'help' (Help). The buttons at the bottom of each screen switch

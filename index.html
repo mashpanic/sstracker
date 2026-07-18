@@ -289,6 +289,26 @@
         }
         .modal-confirm:hover { background: #dc2626; }
 
+        /* Data export/import dialog: a wider modal holding a monospace textarea
+           of JSON, an optional file picker, and an inline error line. */
+        .modal.modal-data { max-width: 620px; width: 90vw; }
+        .modal-data textarea {
+            width: 100%; box-sizing: border-box; min-height: 220px;
+            margin: 0 0 12px; padding: 10px; resize: vertical;
+            background: #101013; color: #d4d4d8; border: 1px solid #323238;
+            border-radius: 4px; font-family: ui-monospace, Menlo, Consolas, monospace;
+            font-size: 0.8em; line-height: 1.4; white-space: pre;
+        }
+        .modal-file { margin: 0 0 12px; font-size: 0.85em; color: #9d9da3; }
+        .modal-file input { display: block; margin-top: 6px; color: #c8c8ce; }
+        .modal-error { color: #ef4444; font-size: 0.85em; margin: 0 auto 0 0; align-self: center; min-height: 1em; }
+        /* A neutral (non-destructive) primary action for the export dialog's
+           Copy/Download buttons — the red .modal-confirm reads as dangerous. */
+        .modal-buttons button.modal-neutral {
+            background: #202024; color: #e1e1e6; border: 1px solid #323238; font-weight: bold;
+        }
+        .modal-buttons button.modal-neutral:hover { border-color: #04d361; color: #04d361; }
+
         /* ---- Two-screen layout (ALT): one screen visible at a time, toggled
            by the left button in each screen's button row. Both screens are
            left-aligned. The toggle + reset buttons share one normalized style
@@ -296,7 +316,7 @@
         .screen { display: none; }
         .screen.active { display: block; }
         .button-row { display: flex; gap: 10px; margin-top: 10px; }
-        .screen-toggle, #reset-grid, #reset-champions, #reset-order, #reset-lap {
+        .screen-toggle, #reset-grid, #reset-champions, #reset-order, #reset-lap, #export-state, #import-state {
             background: #202024;
             color: #e1e1e6;
             border: 1px solid #323238;
@@ -309,7 +329,7 @@
             min-width: 130px;
             text-align: center;
         }
-        .screen-toggle:hover, #reset-grid:hover, #reset-champions:hover, #reset-order:hover, #reset-lap:hover {
+        .screen-toggle:hover, #reset-grid:hover, #reset-champions:hover, #reset-order:hover, #reset-lap:hover, #export-state:hover, #import-state:hover {
             border-color: #04d361; color: #04d361;
         }
 
@@ -548,6 +568,20 @@
             </ul>
 
             <p>Everything you enter is saved in your browser and restored when you come back.</p>
+
+            <h3>Backup &amp; transfer</h3>
+            <p>Your data lives only in this browser. Use these to move it to
+               another browser or device, or to keep a backup. The export is a
+               plain-text JSON file covering every screen (Run Tracker and
+               Win-Loss).</p>
+            <div class="button-row">
+                <button type="button" id="export-state" onclick="exportState()">Export data</button>
+                <button type="button" id="import-state" onclick="importState()">Import data</button>
+            </div>
+            <ul>
+                <li><strong>Export data</strong> — shows your data as JSON text you can copy or download as a file.</li>
+                <li><strong>Import data</strong> — paste that text (or pick a downloaded file) to load it. Import only replaces the screens the file contains, then reloads the page (it asks first).</li>
+            </ul>
 
             <h3>Attributions</h3>
             <div id="attribution">
