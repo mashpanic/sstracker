@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-mt2_emit_notes.py — emit the ENEMY_NOTES block for gamedata.js from the `note`
+mt2_emit_notes.py — emit the ENEMY_NOTES block for gamefacts.js (the
+observed-stats section; moved there from gamedata.js 2026-07-18) from the `note`
 column of difficulty_observations.csv. The note is the enemy/boss ability text
 shown in the app's hover/click popover over a wave-list name.
 
@@ -18,7 +19,7 @@ and the app renders it as innerHTML.
 Duplicate display names are collapsed like ENEMY_STATS: the non-spawning Internal
 is dropped via EXCLUDE_INTERNALS so the surviving note is the enemy you fight.
 
-Usage:  python3 mt2_emit_notes.py [--csv difficulty_observations.csv] [--write gamedata.js]
+Usage:  python3 mt2_emit_notes.py [--csv difficulty_observations.csv] [--write gamefacts.js]
 """
 import sys, os, re, csv, json
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-mt2_emit_boss_stats.py — emit the BOSS_STATS block for gamedata.js from the
+mt2_emit_boss_stats.py — emit the BOSS_STATS block for gamefacts.js (the
+observed-stats section; moved there from gamedata.js 2026-07-18) from the
 OBSERVED boss rows of difficulty_observations.csv (now the authoritative stat
 source). This replaced the former computed path (roster.json + scaling.json +
 the old mt2_build_outputs.compute_orders) — boss ATK/HP is now hand-observed
@@ -10,7 +11,7 @@ was retired to deprecated/ on 2026-07-03; nothing imports it anymore.)
 BOSS_STATS is keyed by the boss *variant* name shown in the app dropdowns:
   - Main-region + minor "battle" bosses → ['O1','O2','O3','O4'] of 'ATK⚔️ HP❤️'
     (null for an order not yet observed).
-  - Astrael (O1 only) and Lifemother (O4 only) → a single 'ATK⚔️ HP❤️' string.
+  - Astrael (O1 only) and Lifemother (O5) → a single 'ATK⚔️ HP❤️' string.
 
 CSV display names are authoritative, so Astrael's row is 'Astrael the First
 Reborn' (remapped onto BOTH dropdown keys "Mother's Flagellant"/"Mother's
@@ -19,7 +20,7 @@ TODO: rename the BOSS_STATS keys + app dropdowns to the CSV names and drop the
 Astrael remap (then this file keys straight off the CSV display name).
 
 Usage:  python3 mt2_emit_boss_stats.py [--csv difficulty_observations.csv]
-                                       [--difficulty Overgrowth] [--write gamedata.js]
+                                       [--difficulty Overgrowth] [--write gamefacts.js]
 """
 import sys, os, re, csv, json
 

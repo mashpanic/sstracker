@@ -10,7 +10,7 @@ them up:
   - WAVE_SET_DESCRIPTIONS — keyed by wave-set name (battle rows), [O1..O4].
   - BOSS_WAVE_DESCRIPTIONS — keyed by boss *variant* name (boss/standalone
     rows). Main-region bosses → [O1..O4]; Astrael (O1 only) and Lifemother
-    (O4 only) → a single string.
+    (O5, one fixed set) → a single string.
 
 The variant↔scenario pairings below are the ones resolved in CLAUDE.md
 (R1 confirmed in-game, R3/R5 by mechanic suffix, R2/R4 by boss internal name).
@@ -57,7 +57,7 @@ BOSSVARIANT_TO_SCENARIO = {
     'Plaguebringer':       'SoulSavior_R4_BossBattle_EstrangedChild_1',  # DualismAt50
     'Inoculation':         'SoulSavior_R4_BossBattle_EstrangedChild_2',  # ArmorPerDebuff
     'Energy Vampire':      'SoulSavior_R4_BossBattle_EstrangedChild_3',  # WitherbloomOnAction
-    # Lifemother (R5, O4 only) — by mechanic suffix
+    # Lifemother (R5, O5 — one fixed set) — by mechanic suffix
     'Corpseflower':        'SoulSavior_R5_BossBattle_Lifemother_Debuffs',
     'Swarmhost':           'SoulSavior_R5_BossBattle_Lifemother_Infested',
     'Undying Bloom':       'SoulSavior_R5_BossBattle_Lifemother_Reanimate',
@@ -122,7 +122,7 @@ def main():
         'BOSS_WAVE_DESCRIPTIONS', BOSSVARIANT_TO_SCENARIO, data,
         '// ---- Boss wave descriptions ----\n'
         '// Keyed by boss VARIANT name. Main-region bosses are order-scaled\n'
-        '// ([O1..O4]); Astrael (O1 only) and Lifemother (O4 only) are single\n'
+        '// ([O1..O4]); Astrael (O1 only) and Lifemother (O5, one fixed set) are single\n'
         '// strings. Appended to the info box for boss / standalone rows.')
     waveset = render_block(
         'WAVE_SET_DESCRIPTIONS', WAVESET_TO_SCENARIO, data,

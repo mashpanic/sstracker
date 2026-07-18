@@ -139,8 +139,6 @@ function updateNodeDisplay(selectEl) {
     }
 }
 
-// Returns the info-box HTML for an encounter. The result is assigned via
-// innerHTML; every interpolated value is author-controlled data, so this is safe.
 // ---- Temporary ("provisional") order ----
 // While contemplating which region to enter next, selecting a mid-region row
 // whose turn isn't assigned yet auto-previews it at the next unused order (the
@@ -277,7 +275,7 @@ function swapBattleBoss(waves, region, selected) {
 // its required selections. Astrael/Lifemother (standalone, no order dropdown)
 // need only a Variant; region battle rows need Order + Variant + Wave set;
 // region boss rows need Order + Variant. Rendered in the default white text so
-// it reads as a plain instruction (no amber order-hint styling).
+// it reads as a plain instruction (no amber warning styling).
 function requirementPrompt(key) {
     if (key.endsWith('-battle')) return 'Select an Order, Variant and Wave set for information';
     if (key.endsWith('-boss')) return 'Select an Order and Variant for information';
@@ -291,62 +289,51 @@ function hasRequiredSelections(key) {
     const variantEl = document.getElementById(`${key}-variant`);
     if (!variantEl || !variantEl.value) return false;
     if (!key.includes('-')) return true; // astrael/lifemother: variant only
-    const region = key.split('-')[0];
     // Order dropdown's placeholder is "?" (truthy); encounterOrder returns null
     // for it, so use that rather than a raw value check.
     if (encounterOrder(key) === null) return false;
     if (key.endsWith('-battle')) {
-        const waveEl = document.getElementById(`${region}-wave-set`);
+        const waveEl = document.getElementById(`${key.split('-')[0]}-wave-set`);
         if (!waveEl || !waveEl.value) return false;
     }
     return true;
 }
 
+// Returns the info-box HTML for an encounter (assigned via innerHTML — safe:
+// every interpolated value is author-controlled data). The box shows only the
+// wave list; the boss's name + ATK/HP and its hand-authored description used
+// to lead it, but that first line was dropped — the boss now reads inline in
+// its own wave (hover for stats/notes) and via the grid hover. bossStat gives
+// the in-wave boss its inline ATK/HP; BOSS_STATS is a fixed string
+// (Astrael/Lifemother) or an [O1..O4] array (the four regions). The defeat
+// mutator is shown via the mutator box hover on each row, not here.
 function getDisplayText(key) {
     if (!hasRequiredSelections(key)) return requirementPrompt(key);
-    const variantEl = document.getElementById(`${key}-variant`);
-    {
-        const variant = variantEl.value;
-        const region = key.includes('-') ? key.split('-')[0] : key;
-        const order = encounterOrder(key);
-        // The info box shows only the wave list. The boss's name + ATK/HP and its
-        // hand-authored description used to lead the box, but that whole first
-        // line was dropped — the boss now reads inline in its own wave (hover for
-        // stats/notes) and via the grid hover. bossStat is still resolved here to
-        // give the in-wave boss its inline ATK/HP. BOSS_STATS is a fixed string
-        // (Astrael/Lifemother) or an [O1..O4] array (the four regions).
-        const bossStat = pickByOrder(BOSS_STATS[variant], region);
-        let text = '';
+    const variant = document.getElementById(`${key}-variant`).value;
+    const region = key.includes('-') ? key.split('-')[0] : key;
+    const order = encounterOrder(key);
+    const bossStat = pickByOrder(BOSS_STATS[variant], region);
 
-        // Battle rows: the minor boss is the selected variant (swapBattleBoss
-        // puts it in the wave string); it gets inline stats like any enemy.
-        if (key.endsWith('-battle')) {
-            const waveEl = document.getElementById(`${region}-wave-set`);
-            if (waveEl && waveEl.value) {
-                const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveEl.value], region);
-                if (waves) text += (text ? '<br>' : '') + wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat, variant);
-            }
-        }
-
-        // (Defeat mutator is shown via the mutator box hover on each row, not here.)
-
-        // Boss/standalone rows: the boss appears under its in-game name —
-        // region boss (REGION_BOSS_DISPLAY), Astrael, or the Lifemother variant.
-        if (key.endsWith('-boss') || !key.includes('-')) {
-            const bossWaves = pickByOrder(BOSS_WAVE_DESCRIPTIONS[variant], region);
-            if (bossWaves) {
-                const bossName = key.endsWith('-boss') ? REGION_BOSS_DISPLAY[region]
-                    : (key === 'astrael' ? 'Astrael the First Reborn' : variant);
-                // Note key: region bosses fight under their region display name
-                // but their note is keyed by variant (Sibling Hierarchy, …);
-                // Astrael/Lifemother fight under a name that IS the note key.
-                const bossNoteKey = key.endsWith('-boss') ? variant : bossName;
-                text += (text ? '<br>' : '') + wrapEnemyStats(bossWaves, order, bossName, bossStat, bossNoteKey);
-            }
-        }
-
-        return text;
+    // Battle row: the minor boss is the selected variant (swapBattleBoss puts
+    // it in the wave string); it gets inline stats like any enemy. The wave-set
+    // select is guaranteed filled by hasRequiredSelections above.
+    if (key.endsWith('-battle')) {
+        const waveSet = document.getElementById(`${region}-wave-set`).value;
+        const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveSet], region);
+        return waves ? wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat, variant) : '';
     }
+
+    // Boss/standalone row: the boss appears under its in-game name — region
+    // boss (REGION_BOSS_DISPLAY), Astrael, or the Lifemother variant.
+    const bossWaves = pickByOrder(BOSS_WAVE_DESCRIPTIONS[variant], region);
+    if (!bossWaves) return '';
+    const bossName = key.endsWith('-boss') ? REGION_BOSS_DISPLAY[region]
+        : (key === 'astrael' ? 'Astrael the First Reborn' : variant);
+    // Note key: region bosses fight under their region display name but their
+    // note is keyed by variant (Sibling Hierarchy, …); Astrael/Lifemother
+    // fight under a name that IS the note key.
+    const bossNoteKey = key.endsWith('-boss') ? variant : bossName;
+    return wrapEnemyStats(bossWaves, order, bossName, bossStat, bossNoteKey);
 }
 
 function selectEncounter(row, key) {
@@ -359,6 +346,15 @@ function selectEncounter(row, key) {
     updateTempOrderForSelection(key);
     document.getElementById('encounter-info').innerHTML = getDisplayText(key);
     saveState();
+}
+
+// Re-render the info box for the currently selected row (no-op when none) —
+// called after a change that affects what the box shows (order, wave set, …).
+function refreshSelectedInfo() {
+    const row = document.querySelector('.selected-row');
+    if (row && row.dataset.encounterKey) {
+        document.getElementById('encounter-info').innerHTML = getDisplayText(row.dataset.encounterKey);
+    }
 }
 
 function refreshMutatorBox(variantSelectEl) {
@@ -418,9 +414,7 @@ function handleVariantChange(selectEl) {
         return;
     }
 
-    if (row.dataset.encounterKey) {
-        document.getElementById('encounter-info').innerHTML = getDisplayText(row.dataset.encounterKey);
-    }
+    refreshSelectedInfo();
 }
 
 // ---- Persistence (localStorage) ----
@@ -766,27 +760,20 @@ populateOrderSelects();
 // table); row clicks call saveState directly.
 // An Order pick additionally re-syncs disabled numbers and re-sorts groups.
 document.getElementById('encounter-table').addEventListener('change', (e) => {
-    if (e.target && e.target.classList.contains('order-select')) {
+    const t = e.target;
+    if (t.classList.contains('order-select')) {
         clearTempOrder(); // a real pick supersedes any provisional order
         refreshOrderOptions();
         // reorderGroups() moves the row's DOM node, which blurs whatever was
         // focused; the node itself survives the move, so re-focus the changed
         // Order select afterward to keep focus on the control the user just set.
-        const changed = e.target;
         reorderGroups();
-        changed.focus();
-        // Refresh info box so order-scaled stats update immediately.
-        const selectedRow = document.querySelector('.selected-row');
-        if (selectedRow && selectedRow.dataset.encounterKey) {
-            document.getElementById('encounter-info').innerHTML = getDisplayText(selectedRow.dataset.encounterKey);
-        }
+        t.focus();
     }
-    // Refresh info box when wave set changes so description appends immediately.
-    if (e.target && e.target.classList.contains('wave-set-select')) {
-        const selectedRow = document.querySelector('.selected-row');
-        if (selectedRow && selectedRow.dataset.encounterKey) {
-            document.getElementById('encounter-info').innerHTML = getDisplayText(selectedRow.dataset.encounterKey);
-        }
+    // An Order pick changes the order-scaled stats; a wave-set pick changes the
+    // wave list — both need the info box re-rendered immediately.
+    if (t.classList.contains('order-select') || t.classList.contains('wave-set-select')) {
+        refreshSelectedInfo();
     }
     saveState();
 });
@@ -1021,17 +1008,17 @@ document.addEventListener('click', (e) => {
         const key = sel.id.replace(/-variant$/, '');
         const region = key.includes('-') ? key.split('-')[0] : key;
         const name = key === 'astrael' ? 'Astrael the First Reborn' : variant;
+        const order = encounterOrder(key);
         // Order-dependent boss (an [O1..O4] array) with no Order picked yet: the
         // stats/note can't resolve, so prompt for an Order rather than show "(?)".
-        if (Array.isArray(BOSS_STATS[variant]) && encounterOrder(key) === null) {
+        if (Array.isArray(BOSS_STATS[variant]) && order === null) {
             showAt(sel, `<strong>${escapeAttr(name)}</strong><br>Select an Order to see stats`, false);
             return;
         }
         const statStr = pickByOrder(BOSS_STATS[variant], region);
         const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
         const parens = m ? ` (${m[1]}/${m[2]})` : ' (?)';
-        const noteEntry = (typeof ENEMY_NOTES !== 'undefined') ? ENEMY_NOTES[name] : null;
-        const note = pickByOrder(noteEntry, region) || '';
+        const note = noteForOrder(name, order) || '';
         showAt(sel, `<strong>${escapeAttr(name)}</strong>${parens}${note ? '<br>' + note : ''}`, false);
     }
 
@@ -1112,9 +1099,15 @@ function loadChampionOrder() {
     return order;
 }
 
-function saveChampionState() {
-    const order = Array.from(document.querySelectorAll('#champion-grid .champion-row'))
+// Current champion row order as rendered in the grid (the DOM is the source
+// of truth for order — drag-reorder moves nodes directly).
+function championGridOrder() {
+    return Array.from(document.querySelectorAll('#champion-grid .champion-row'))
         .map(r => r.dataset.champ);
+}
+
+function saveChampionState() {
+    const order = championGridOrder();
     try {
         localStorage.setItem(CHAMPION_STORAGE_KEY,
             JSON.stringify({ order, records: championRecords, selected: selectedChamp }));
@@ -1191,8 +1184,7 @@ async function resetChampions() {
     )) return;
     // Zero the counts but keep the current row order, selection, and lap state
     // (laps are cleared separately by Reset Lap).
-    const order = Array.from(document.querySelectorAll('#champion-grid .champion-row'))
-        .map(r => r.dataset.champ);
+    const order = championGridOrder();
     CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name].win = 0; championRecords[c.name].loss = 0; });
     renderChampions(order);
     updateChampEditor();
@@ -1207,8 +1199,7 @@ async function resetLap() {
         'Reset the lap? This clears every champion’s up/down arrow. Win/loss counts are kept.',
         { confirmText: 'Reset Lap', cancelText: 'Cancel' }
     )) return;
-    const order = Array.from(document.querySelectorAll('#champion-grid .champion-row'))
-        .map(r => r.dataset.champ);
+    const order = championGridOrder();
     CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name].lap = null; });
     renderChampions(order);
     updateChampEditor();

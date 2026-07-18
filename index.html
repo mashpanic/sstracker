@@ -1,4 +1,3 @@
-<!-- Version 3: Last updated 2026-06-07 -->
 <!--
     Attribution (plain-text version):
     Game information sourced from the Monster Train 2 Wiki (https://monstertrain2.miraheze.org/wiki/Main_Page).
@@ -24,7 +23,6 @@
 
         select { background: #202024; color: #fff; border: 1px solid #323238; padding: 6px; border-radius: 4px; width: 95%; }
         button { background: #04d361; color: #000; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; text-transform: capitalize; }
-        pre { background: #19191c; padding: 15px; border-radius: 4px; overflow-x: auto; border: 1px solid #29292e; }
 
         /* Subtle grouping colors to keep paired rows visually connected */
         .group-maera { border-left: 4px solid #3b82f6; }
@@ -187,13 +185,6 @@
             border-bottom: 1px dotted #52525b;
             cursor: help;
         }
-        /* Prompt shown as the info-box top line when a mid-run region has no
-           Order selected yet (wave/stat lines can't resolve without it). */
-        #encounter-info .order-hint {
-            color: #d4a72c;
-            font-style: italic;
-            font-weight: bold;
-        }
         /* Enemies with a recorded ability note get the note popover on hover —
            solid green underline distinguishes them from name-only (dotted). */
         #encounter-info .enemy-stat[data-note] {
@@ -240,12 +231,6 @@
         }
         #attribution a { color: #9d9da3; }
         #attribution a:hover { color: #04d361; }
-
-        /* Subtle, low-emphasis reset control (distinct from the bold green
-           primary button) that clears all selections for the current run. */
-        /* (ALT: reset buttons are normalized to .screen-toggle's design above,
-           so the low-emphasis styling from the base file is intentionally
-           dropped here.) */
 
         /* Dark-themed replacement for the native confirm() dialog. */
         .modal-overlay {
@@ -309,14 +294,15 @@
         }
         .modal-buttons button.modal-neutral:hover { border-color: #04d361; color: #04d361; }
 
-        /* ---- Two-screen layout (ALT): one screen visible at a time, toggled
-           by the left button in each screen's button row. Both screens are
-           left-aligned. The toggle + reset buttons share one normalized style
-           and sit side by side (toggle left, reset right). ---- */
+        /* ---- Screen layout: three screens (Run Tracker / Win-Loss / Help),
+           one visible at a time, switched by the buttons at the bottom of each
+           screen. The toggle + reset buttons share one normalized style. ---- */
         .screen { display: none; }
         .screen.active { display: block; }
         .button-row { display: flex; gap: 10px; margin-top: 10px; }
-        .screen-toggle, #reset-grid, #reset-champions, #reset-order, #reset-lap, #export-state, #import-state {
+        /* One shared style for every nav/reset/export button in a .button-row
+           (uniform width keeps them aligned across screens). */
+        .bar-btn {
             background: #202024;
             color: #e1e1e6;
             border: 1px solid #323238;
@@ -325,15 +311,12 @@
             font-size: 0.9em;
             border-radius: 4px;
             cursor: pointer;
-            /* Uniform width across all nav/reset buttons. */
             min-width: 130px;
             text-align: center;
         }
-        .screen-toggle:hover, #reset-grid:hover, #reset-champions:hover, #reset-order:hover, #reset-lap:hover, #export-state:hover, #import-state:hover {
-            border-color: #04d361; color: #04d361;
-        }
+        .bar-btn:hover { border-color: #04d361; color: #04d361; }
 
-        /* ---- Champion win/loss record, two-column grid (ALT) ----
+        /* ---- Champion win/loss record, two-column grid ----
            24 rows split in half: rows 1-12 fill the left column top-to-bottom,
            13-24 the right, sized to roughly span the run-tracker table's width.
            Rows are flex (not table cells) so they can flow inside the grid. */
@@ -455,10 +438,8 @@
 </head>
 <body>
 
-
-
-    <!-- ALT layout: two screens, one visible at a time, toggled by the button
-         below. Screen 1 = run tracker; Screen 2 = champion record. -->
+    <!-- Three screens, one visible at a time, switched by the buttons at the
+         bottom of each screen (see showScreen in app.js). -->
 
     <!-- Screen 1: run tracker -->
     <div id="screen-tracker" class="screen active">
@@ -479,16 +460,16 @@
         </div>
 
         <div class="button-row">
-            <button type="button" class="screen-toggle" onclick="showScreen('champions')">Win-Loss</button>
-            <button type="button" class="screen-toggle" onclick="showScreen('help')">Help</button>
-            <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
+            <button type="button" class="bar-btn" onclick="showScreen('champions')">Win-Loss</button>
+            <button type="button" class="bar-btn" onclick="showScreen('help')">Help</button>
+            <button type="button" id="reset-grid" class="bar-btn" onclick="resetGrid()">Reset grid</button>
         </div>
     </div>
 
-    <!-- Screen 2: Champion Record — per-champion win/loss tally, laid out in
-         two columns (rows 1-12 left, 13-24 right). Populated by the inline
-         script below from CHAMPION_CLANS; shares the run grid's independence
-         (own storage key + reset). -->
+    <!-- Screen 2: Win-Loss — per-champion win/loss tally, laid out in two
+         columns (rows 1-12 left, 13-24 right). Populated by app.js from
+         CHAMPION_CLANS; fully independent of the run grid (own storage key
+         + reset buttons). -->
     <div id="screen-champions" class="screen">
         <div id="champion-grid"></div>
 
@@ -498,9 +479,9 @@
              reset buttons underneath the nav buttons. -->
         <div class="champ-bottom">
             <div class="button-row">
-                <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Run Tracker</button>
-                <button type="button" id="reset-lap" onclick="resetLap()">Reset Lap</button>
-                <button type="button" class="screen-toggle" onclick="showScreen('help')">Help</button>
+                <button type="button" class="bar-btn" onclick="showScreen('tracker')">Run Tracker</button>
+                <button type="button" id="reset-lap" class="bar-btn" onclick="resetLap()">Reset Lap</button>
+                <button type="button" class="bar-btn" onclick="showScreen('help')">Help</button>
             </div>
 
             <!-- Editor: joined W+/W−/L+/L− buttons, then the lap ▲/▼ buttons
@@ -525,8 +506,8 @@
 
             <!-- Reset buttons: row 2, underneath the nav buttons. -->
             <div class="button-row">
-                <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
-                <button type="button" id="reset-order" onclick="resetChampionOrder()">Reset order</button>
+                <button type="button" id="reset-champions" class="bar-btn" onclick="resetChampions()">Reset record</button>
+                <button type="button" id="reset-order" class="bar-btn" onclick="resetChampionOrder()">Reset order</button>
             </div>
         </div>
     </div>
@@ -577,8 +558,8 @@
                Tracker is not included — it's for a single run and isn't meant to
                carry over, and importing never touches an in-progress run.</p>
             <div class="button-row">
-                <button type="button" id="export-state" onclick="exportState()">Export data</button>
-                <button type="button" id="import-state" onclick="importState()">Import data</button>
+                <button type="button" id="export-state" class="bar-btn" onclick="exportState()">Export data</button>
+                <button type="button" id="import-state" class="bar-btn" onclick="importState()">Import data</button>
             </div>
             <ul>
                 <li><strong>Export data</strong> — shows your Win-Loss record as JSON text you can copy or download as a file.</li>
@@ -596,8 +577,10 @@
     <!-- Data + logic, split into separate files. Load order matters and these
          MUST stay classic <script> (not type="module") so the top-level consts
          remain visible across files and the page still works opened via file://.
-           gamedata.js  — pipeline-generated stats + wave compositions
-           gamefacts.js — hand-authored wiki facts (mutators, descriptions)
+           gamedata.js  — pipeline-extracted wave compositions
+           gamefacts.js — human-established facts: wiki prose (mutators,
+                          descriptions) + observed stats and ability notes
+                          (emitter-refreshed)
            app.js       — tracker logic, champion record, screen switching + UI
                           config (depends on both above) -->
     <script src="gamedata.js"></script>

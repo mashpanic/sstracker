@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-mt2_emit_enemy_stats.py — emit the ENEMY_STATS block for gamedata.js from the
+mt2_emit_enemy_stats.py — emit the ENEMY_STATS block for gamefacts.js (the
+observed-stats section; moved there from gamedata.js 2026-07-18) from the
 long-format observation file (default: difficulty_observations.csv at repo root),
 keeping only the OVERGROWTH, non-boss rows (the app's enemy hover is Overgrowth).
 
-Unlike BOSS_STATS (computed from the scaling formula), non-boss enemy order
-scaling has never been solved (see CLAUDE.md / docs/enemy_scaling.md), so these
-values are *observed in-game*, not computed. difficulty_observations.csv is the
+Non-boss enemy order scaling has never been solved (see CLAUDE.md /
+docs/enemy_scaling.md), so these values are *observed in-game*, not computed
+(as is BOSS_STATS, since 2026-06-28). difficulty_observations.csv is the
 source of truth (collected via mt2_collect_observations.py); the legacy wide
 enemy_observations.csv has been deprecated.
 
@@ -16,7 +17,7 @@ Lifemother (final battle) slot. Rows key on
 Internal; duplicate display names with a non-spawning Internal are dropped via
 EXCLUDE_INTERNALS, leaving one row per name (CLAUDE.md duplicate-rows TODO).
 
-Usage:  python3 mt2_emit_enemy_stats.py [--csv difficulty_observations.csv] [--write gamedata.js]
+Usage:  python3 mt2_emit_enemy_stats.py [--csv difficulty_observations.csv] [--write gamefacts.js]
 """
 import sys, os, re, csv, json
 
