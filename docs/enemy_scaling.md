@@ -182,3 +182,84 @@ Formula to implement:
 # HP:  ceil(base * (1.35 + n_regions * 0.07))
 # Support enemies: ATK stays at base (no bonus), HP uses the same ceil formula
 ```
+
+---
+
+## Session 4 — Re-analysis on completed Overgrowth observations (2026-07-10)
+
+Re-ran the formula hunt after the Overgrowth non-boss observations were (nearly) fully
+collected in `difficulty_observations.csv` — far more and cleaner data than Sessions 1–3.
+Working artifact: **`overgrowth_computation.csv`** (repo root), 30 non-boss SS enemies ×
+`base_atk/base_hp` (from `out/roster.json`) + observed O1–O5 ATK/HP. Regenerate by joining
+roster base stats to the Overgrowth non-boss rows of `difficulty_observations.csv` keyed by
+`internal`. O5 was excluded from fitting (flagged as possibly inconsistent).
+
+**Conclusion unchanged: O1 is exact; O2–O4 is NOT formula-derivable.** The better data did
+not reveal a cleaner closed form — it *confirmed* the earlier verdict and explained why.
+
+### O1 — SOLVED, exact (0 misses on the full dataset)
+
+```
+O1_ATK = ceil(base_ATK × 1.50)     # 14/14 exact  (Support ATK: stays = base, no scaling)
+O1_HP  = ceil(base_HP  × 1.35)     # 19/19 exact
+```
+
+`ceil` (not `rnd`) is correct for both stats at O1. Note `ceil(base×1.5)` and the old
+`rnd(base×1.5)` happen to agree on every observed ATK base, so ATK O1 rounding is not
+independently pinned — either works. HP O1 `ceil` is confirmed as before.
+
+### O2–O4 — best single closed forms (all approximate)
+
+`r = order − 1`. Exact-match rates over all observed O1–O4 cells:
+
+| Stat | Best formula | Exact | Within ±1 |
+|------|--------------|-------|-----------|
+| ATK  | `ceil(base × 1.50 × 1.114^r)` (multiplicative) | 40/61 (**66%**) | — |
+| ATK  | `ceil(base × (1.50 + 0.20·r))` (additive)       | 36/61 (59%)    | 50/61 (**82%**) |
+| HP   | `ceil(base × (1.35 + 0.07·r))` (additive)       | 41/83 (49%)    | 58/83 (**70%**) |
+| HP   | `ceil(base × 1.35 × 1.049^r)` (multiplicative)  | 40/83 (48%)    | — |
+
+No model family (additive-from-base, multiplicative-from-base, or step-by-step compounding),
+under any rounding (`ceil`/`rnd`/`floor`), broke past ~50% HP / ~66% ATK.
+
+### Why it plateaus — the residuals are cleanly signed by base size
+
+The observed values are a **deterministic function of the base stat alone** (see data-quality
+note below), yet the *effective per-ring rate falls as base grows* — so any single fixed rate
+over-predicts large enemies and under-predicts small ones. Measured per-ring HP rate:
+
+| base_HP | 30 | 60 | 80 | 140 | 250 |
+|---------|----|----|----|-----|-----|
+| eff. %/ring | ~8.9% | ~7.2% | ~7.1% | ~6.2% | ~6.0% |
+
+ATK shows the same crossover (small bases under-predicted, base ≥18 over-predicted). This
+monotonic small-fast / large-slow signature is the fingerprint of **per-effect integer
+rounding of stacked relic percentages at runtime**: the game applies DifficultyTier3, then
+RunDistance1/2/3, as separate `RelicEffectModifyCharacterAttackOrHealthPercentage` effects,
+each rounding its own delta from the already-rounded running stat. Small stats round up
+proportionally more at every step; large stats less. No single from-base formula with one
+rounding step can reproduce that — consistent with the Session 2 `int[2]=2` dead end.
+
+### Data quality — internal-consistency check (not a correctness proof)
+
+Many enemies share a base stat, giving independent cross-checks. Grouping all 149 observed
+non-boss cells (excl. constant Support-ATK and the trivial Energizing Flautist base-0/1) by
+`(stat, base, order)`:
+
+- **83 cells cohort-corroborated** — 2+ distinct enemies, same base, **all agree; 0 disagreements**
+  (e.g. base-60 HP = 81/86/90/94 across Glutmass, Mother's Knight, Mother's Fleshfruit; base-3
+  ATK = 5/6/8/9 across Flagellant, Supplicant, Hunter).
+- **66 cells single-source** — unique base, no cross-check possible. Consistency says nothing
+  about these; they rest on collection care alone, and skew toward the large-base enemies.
+
+So "no typos found" means the ~56% that *can* be cross-checked all pass — a good signal, not a
+guarantee. **Top re-verify candidate: Mother's Amalgam O3/O4 HP** (single-source base 140,
+largest systematic residual −3/−4, and already flagged in Session 2's "Amalgam vs Knight" HP
+conflict).
+
+### Practical takeaway
+
+Keep relying on the **observation table** — because each order is a stable function of base,
+the observed `ENEMY_STATS` lookup reproduces the game exactly. The additive formulas above are
+only a fallback for not-yet-observed enemies (±1 for ~70–82% of cells). No change to the
+pipeline or app was made from this session.
