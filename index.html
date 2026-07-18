@@ -217,11 +217,10 @@
         }
         #encounter-info .enemy-stat.unrecorded .es-num { color: #d4a72c; }
 
+        /* Attributions block — now a muted subsection at the bottom of the Help
+           screen (under the "Attributions" heading), not a page footer. */
         #attribution {
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px solid #29292e;
-            font-size: 0.8em;
+            font-size: 0.85em;
             color: #71717a;
         }
         #attribution a { color: #9d9da3; }
@@ -282,7 +281,7 @@
         .screen { display: none; }
         .screen.active { display: block; }
         .button-row { display: flex; gap: 10px; margin-top: 10px; }
-        .screen-toggle, #reset-grid, #reset-champions {
+        .screen-toggle, #reset-grid, #reset-champions, #reset-order {
             background: #202024;
             color: #e1e1e6;
             border: 1px solid #323238;
@@ -292,7 +291,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .screen-toggle:hover, #reset-grid:hover, #reset-champions:hover {
+        .screen-toggle:hover, #reset-grid:hover, #reset-champions:hover, #reset-order:hover {
             border-color: #04d361; color: #04d361;
         }
 
@@ -397,13 +396,6 @@
             <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
             <button type="button" class="screen-toggle" onclick="showScreen('help')">Help</button>
         </div>
-
-        <!-- Attribution lives only on the Run Tracker screen (screen 1), split
-             onto two lines. -->
-        <footer id="attribution">
-            <div>Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.</div>
-            <div>Content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a> unless otherwise noted.</div>
-        </footer>
     </div>
 
     <!-- Screen 2: Champion Record — per-champion win/loss tally, laid out in
@@ -415,6 +407,7 @@
         <div class="button-row">
             <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Show Run Tracker</button>
             <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
+            <button type="button" id="reset-order" onclick="resetChampionOrder()">Reset order</button>
         </div>
     </div>
 
@@ -443,10 +436,17 @@
                 <li><strong>Win / Loss</strong> — use the −/+ buttons on each row to adjust a champion's counts (they never go below 0).</li>
                 <li><strong>Reorder</strong> — drag a row by its grip (⠿) to move it; the new order is saved. The 24 champions fill the left column first, then the right.</li>
                 <li><strong>Highlight</strong> — click a champion's name (or work with its row) to highlight it; click the name again to clear it.</li>
+                <li><strong>Reset order</strong> — restores the default champion order without changing any win/loss counts (it asks first).</li>
                 <li><strong>Reset record</strong> — clears all counts and restores the default order (it asks first). It does not affect the Run Tracker.</li>
             </ul>
 
             <p>Everything you enter is saved in your browser and restored when you come back.</p>
+
+            <h3>Attributions</h3>
+            <div id="attribution">
+                <div>Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.</div>
+                <div>Content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a> unless otherwise noted.</div>
+            </div>
         </div>
         <div class="button-row">
             <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Show Run Tracker</button>

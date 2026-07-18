@@ -1123,6 +1123,18 @@ async function resetChampions() {
     renderChampions(CHAMPION_DEFAULTS.map(c => c.name));
 }
 
+// Restore the default champion order without touching the win/loss counts or
+// the highlight. Re-renders (which keeps current records + selection) and
+// persists the new order.
+async function resetChampionOrder() {
+    if (!await confirmModal(
+        'Reset the champion order to the default? Win/loss counts are kept.',
+        { confirmText: 'Reset order', cancelText: 'Cancel' }
+    )) return;
+    renderChampions(CHAMPION_DEFAULTS.map(c => c.name));
+    saveChampionState();
+}
+
 (function initChampions() {
     const grid = document.getElementById('champion-grid');
     if (!grid || typeof CHAMPION_CLANS === 'undefined') return;
