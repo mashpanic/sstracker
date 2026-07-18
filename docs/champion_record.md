@@ -39,27 +39,29 @@ record, and vice versa.
 - **Default order** is alphabetical by **clan**, then by **champion name** (so
   it opens Sentient, Wyldenten, Fel, Talos, …). The clan drives the sort even
   though it isn't shown, which is why same-clan champions sit adjacent.
-- Each row has two independent counters — a green **W** (wins) and a red **L**
-  (losses) — each with **−/+** buttons around the number. Counts never go below
-  0. A drag grip (`⠿`) sits on the left of each row.
+- Each row shows the champion's record as a read-only **win-loss score**
+  (e.g. "7-3", white text). A drag grip (`⠿`) sits on the left of each row.
+  Editing is done through the bottom editor, not per-row.
 
 ### Interactions
 
-- **Adjust a record** — click a row's **−**/**+** to change its win or loss
-  count. Wins and losses are independent; both clamp at 0.
+- **Select** — click a champion's row to select it (green highlight); click it
+  again to clear the selection. Only one champion is selected at a time.
+- **Adjust the record (bottom editor)** — a grouped, segmented
+  **W+ / W− / L+ / L−** button set sits on the bottom row (aligned with the
+  second champion column), followed by the selected champion's name and W-L
+  score. The buttons are **disabled until a champion is selected**; once one is,
+  they change that champion's counts (clamped at 0), updating both the row's
+  score and the editor's score live.
 - **Reorder** — drag any row by its grip (or anywhere on the row). The row
   moves live as it passes the others, and the new order is saved. Dragging
   **between the two columns** works — the insertion point is chosen by 2-D
   proximity to the nearest row.
-- **Highlight a row** — click a champion's **name** (or anywhere on the row
-  that isn't a +/- button) to highlight it (green background + green name).
-  Click the highlighted name again to clear it. **Working with** a row —
-  clicking one of its counter buttons, or starting a drag — also highlights it.
-  Only one row is highlighted at a time.
-- **Reset record** — clears every win/loss count, drops the highlight, and
-  restores the default order. It asks for confirmation first and does **not**
-  affect the run grid. The run grid's separate "Reset grid" button likewise
-  never touches this screen.
+- **Reset order** — restores the default champion order **without changing any
+  counts** (asks first).
+- **Reset record** — clears every win/loss count but **keeps the current
+  order** (asks first). It does **not** affect the run grid. The run grid's
+  separate "Reset grid" button likewise never touches this screen.
 
 ### Persistence
 
@@ -76,13 +78,18 @@ saved names are ignored.
   facts — the 24 champions grouped under their 12 clans, each with a short
   alias). The code reads this read-only; it never writes `gamefacts.js`.
 - **Markup:** the three `.screen` divs in `index.html` — `#screen-tracker`
-  (table + info box), `#screen-champions` (the `#champion-grid` two-column grid
-  + `#reset-champions`), and `#screen-help` (`#help-content` read-only text).
+  (table + info box), `#screen-champions` (the `#champion-grid` two-column grid,
+  plus the `.champ-bottom` row holding the nav/reset buttons and the
+  `#champ-editor` win/loss editor), and `#screen-help` (`#help-content`
+  read-only text).
 - **Styling:** the `.screen` / `.button-row` / `.screen-toggle`,
-  `#champion-grid`, `.champion-row` (flex div rows), `.champ-*` / `.counter-*`,
-  and `#help-content` rules in `index.html`'s `<style>` block.
+  `#champion-grid`, `.champion-row` (flex div rows), `.champ-*` (incl.
+  `.champ-record`, `.champ-bottom`, `.champ-editor`), `.btn-group` (the
+  segmented editor buttons), and `#help-content` rules in `index.html`'s
+  `<style>` block.
 - **Logic (all in `app.js`):** `showScreen` and `pickInitialScreen` for the
   screens; and the "Champion win/loss record" section — `CHAMPION_DEFAULTS`,
-  `loadChampionOrder`, `saveChampionState`, `setSelectedChamp`, `championRow`,
-  `renderChampions`, `resetChampions`, and the `initChampions` IIFE that wires
-  the click/drag handlers onto `#champion-grid`.
+  `loadChampionOrder`, `saveChampionState`, `setSelectedChamp`,
+  `updateChampEditor`, `championRow`, `renderChampions`, `resetChampions`,
+  `resetChampionOrder`, and the `initChampions` IIFE that wires the row-select,
+  drag, and bottom-editor handlers onto `#champion-grid` / `#champ-editor`.

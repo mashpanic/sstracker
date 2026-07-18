@@ -1074,7 +1074,26 @@ function setSelectedChamp(name) {
     document.querySelectorAll('#champion-grid .champion-row').forEach(r => {
         r.classList.toggle('champ-selected', r.dataset.champ === name);
     });
+    updateChampEditor();
     saveChampionState();
+}
+
+// Sync the bottom win/loss editor to the current selection: show the selected
+// champion's alias (or "none") and enable its buttons only when one is chosen.
+function updateChampEditor() {
+    const editor = document.getElementById('champ-editor');
+    if (!editor) return;
+    const nameEl = document.getElementById('champ-editor-name');
+    const scoreEl = document.getElementById('champ-editor-score');
+    if (selectedChamp) {
+        const r = championRecords[selectedChamp];
+        if (nameEl) nameEl.textContent = CHAMPION_BY_NAME[selectedChamp].alias;
+        if (scoreEl) scoreEl.innerHTML = `<span class="rec-w">${r.win}</span>-<span class="rec-l">${r.loss}</span>`;
+    } else {
+        if (nameEl) nameEl.textContent = 'none';
+        if (scoreEl) scoreEl.textContent = '';
+    }
+    editor.querySelectorAll('.btn-group button').forEach(b => { b.disabled = !selectedChamp; });
 }
 
 // One champion's row: a drag grip, the alias, and independent Win/Loss
@@ -1087,18 +1106,12 @@ function championRow(name) {
     row.className = 'champion-row';
     row.draggable = true;
     row.dataset.champ = name;
-    const counter = (stat, label, cls, val) =>
-        `<span class="champ-counter">` +
-        `<span class="counter-label ${cls}">${label}</span>` +
-        `<button type="button" class="counter-btn" data-stat="${stat}" data-delta="-1" aria-label="Decrease ${c.alias} ${stat}">−</button>` +
-        `<span class="counter-val" data-stat="${stat}">${val}</span>` +
-        `<button type="button" class="counter-btn" data-stat="${stat}" data-delta="1" aria-label="Increase ${c.alias} ${stat}">+</button>` +
-        `</span>`;
+    // Row is the grip, the name, and the read-only win-loss score. Editing is
+    // done through the bottom editor (acts on the selected champion).
     row.innerHTML =
         `<span class="champ-grip" title="Drag to reorder">⠿</span>` +
         `<span class="champ-alias">${c.alias}</span>` +
-        counter('win', 'W', 'win', rec.win) +
-        counter('loss', 'L', 'loss', rec.loss);
+        `<span class="champ-record"><span class="rec-w">${rec.win}</span>-<span class="rec-l">${rec.loss}</span></span>`;
     return row;
 }
 
@@ -1114,13 +1127,16 @@ function renderChampions(order) {
 
 async function resetChampions() {
     if (!await confirmModal(
-        'Reset the champion record? This clears every win/loss count and restores the default order. The run grid is not affected.',
+        'Reset the champion record? This clears every win/loss count. The current order is kept.',
         { confirmText: 'Reset', cancelText: 'Cancel' }
     )) return;
-    try { localStorage.removeItem(CHAMPION_STORAGE_KEY); } catch (e) { /* ignore */ }
+    // Zero the counts but keep the current row order (and selection).
+    const order = Array.from(document.querySelectorAll('#champion-grid .champion-row'))
+        .map(r => r.dataset.champ);
     CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name] = { win: 0, loss: 0 }; });
-    selectedChamp = null;
-    renderChampions(CHAMPION_DEFAULTS.map(c => c.name));
+    renderChampions(order);
+    updateChampEditor();
+    saveChampionState();
 }
 
 // Restore the default champion order without touching the win/loss counts or
@@ -1139,23 +1155,35 @@ async function resetChampionOrder() {
     const grid = document.getElementById('champion-grid');
     if (!grid || typeof CHAMPION_CLANS === 'undefined') return;
     renderChampions(loadChampionOrder());
+    updateChampEditor(); // reflect any restored selection
 
-    // Clicks in a row: a +/- button adjusts the count (and highlights the row);
-    // clicking anywhere else on the row toggles the highlight.
+    // Bottom win/loss editor: adjust the currently selected champion. The
+    // buttons are disabled while nothing is selected, so this only fires with a
+    // valid selectedChamp.
+    const editor = document.getElementById('champ-editor');
+    if (editor) {
+        editor.addEventListener('click', e => {
+            const btn = e.target.closest('button');
+            if (!btn || !selectedChamp) return;
+            const stat = btn.dataset.stat;
+            const next = Math.max(0, championRecords[selectedChamp][stat] + parseInt(btn.dataset.delta, 10));
+            championRecords[selectedChamp][stat] = next;
+            const row = [...grid.querySelectorAll('.champion-row')].find(r => r.dataset.champ === selectedChamp);
+            if (row) {
+                row.querySelector('.rec-w').textContent = championRecords[selectedChamp].win;
+                row.querySelector('.rec-l').textContent = championRecords[selectedChamp].loss;
+            }
+            updateChampEditor(); // refresh the editor's W-L score
+            saveChampionState();
+        });
+    }
+
+    // Click a row to select/highlight it (click again to clear). The bottom
+    // editor then adjusts the selected champion's record.
     grid.addEventListener('click', e => {
         const row = e.target.closest('.champion-row');
         if (!row) return;
         const name = row.dataset.champ;
-        const btn = e.target.closest('.counter-btn');
-        if (btn) {
-            const stat = btn.dataset.stat;
-            const next = Math.max(0, championRecords[name][stat] + parseInt(btn.dataset.delta, 10));
-            championRecords[name][stat] = next;
-            row.querySelector(`.counter-val[data-stat="${stat}"]`).textContent = next;
-            setSelectedChamp(name); // working with a row highlights it (also saves)
-            return;
-        }
-        // Toggle: click the highlighted row again to clear it.
         setSelectedChamp(selectedChamp === name ? null : name);
     });
 

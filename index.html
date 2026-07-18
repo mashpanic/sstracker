@@ -323,27 +323,53 @@
         .champ-grip { color: #52525b; user-select: none; padding: 0 4px 0 2px; }
         .champ-alias {
             font-weight: bold; white-space: nowrap; cursor: pointer;
-            flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis;
+            flex: 0 0 auto; min-width: 100px;
         }
-        .champ-counter { white-space: nowrap; flex: 0 0 auto; }
-        .counter-label {
-            display: inline-block; width: 1.1em; text-align: center;
-            font-size: 0.72em; font-weight: bold; vertical-align: middle;
+        /* Win-loss score (e.g. "7-3"), left-aligned a little after the name;
+           grows to fill the rest of the row. */
+        .champ-record {
+            flex: 1 1 auto; text-align: left; padding-left: 10px;
+            white-space: nowrap; font-weight: bold;
+            font-variant-numeric: tabular-nums;
         }
-        .counter-label.win { color: #04d361; }
-        .counter-label.loss { color: #ef4444; }
-        .counter-val {
-            display: inline-block; min-width: 1.6em; text-align: center;
-            vertical-align: middle; font-variant-numeric: tabular-nums;
+        /* W-L numbers use the default white text color (rec-w/rec-l kept for JS). */
+
+        /* Bottom row: nav/reset buttons (left) + the win/loss editor (right),
+           on the same two-column grid as #champion-grid so the editor lines up
+           with the second champion column. */
+        .champ-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 28px;
+            max-width: 900px;
+            align-items: center;
+            margin-top: 12px;
         }
-        .counter-btn {
+        .champ-bottom .button-row { margin-top: 0; }
+
+        /* Selection-based win/loss editor (acts on the highlighted champion):
+           a segmented (joined) button set, then the selected champion's name. */
+        .champ-editor { display: inline-flex; align-items: center; gap: 10px; }
+        .champ-editor-name { font-size: 0.9em; font-weight: bold; color: #e1e1e6; }
+        /* Selected champion's W-L score, shown after its name (empty when none). */
+        .champ-editor-score {
+            font-size: 0.9em; font-weight: bold; color: #e1e1e6;
+            font-variant-numeric: tabular-nums; margin-left: -4px;
+        }
+        .btn-group { display: inline-flex; }
+        .btn-group button {
             background: #202024; color: #c8c8ce; border: 1px solid #323238;
-            width: 22px; height: 22px; padding: 0; margin: 0 1px;
-            font-size: 0.95em; font-weight: bold; line-height: 1;
-            border-radius: 4px; vertical-align: middle; cursor: pointer;
+            border-left-width: 0; padding: 6px 12px; margin: 0;
+            font-size: 0.85em; font-weight: bold; border-radius: 0;
+            text-transform: none; cursor: pointer;
         }
-        .counter-btn:hover { color: #04d361; border-color: #04d361; }
-        .counter-btn:active { background: #19191c; }
+        .btn-group button:first-child { border-left-width: 1px; border-radius: 4px 0 0 4px; }
+        .btn-group button:last-child { border-radius: 0 4px 4px 0; }
+        .btn-group button[data-stat="win"] { color: #04d361; }
+        .btn-group button[data-stat="loss"] { color: #ef4444; }
+        .btn-group button:hover:not(:disabled) { border-color: #04d361; background: #26262b; }
+        /* Placed last so it wins over the per-stat colors when disabled. */
+        .btn-group button:disabled { color: #52525b; opacity: 0.55; cursor: not-allowed; }
 
         /* ---- Help screen (screen 3): read-only how-to text ---- */
         #help-content {
@@ -392,7 +418,7 @@
         </div>
 
         <div class="button-row">
-            <button type="button" class="screen-toggle" onclick="showScreen('champions')">Show Champion Record</button>
+            <button type="button" class="screen-toggle" onclick="showScreen('champions')">Champion Record</button>
             <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
             <button type="button" class="screen-toggle" onclick="showScreen('help')">Help</button>
         </div>
@@ -404,10 +430,29 @@
          (own storage key + reset). -->
     <div id="screen-champions" class="screen">
         <div id="champion-grid"></div>
-        <div class="button-row">
-            <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Show Run Tracker</button>
-            <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
-            <button type="button" id="reset-order" onclick="resetChampionOrder()">Reset order</button>
+
+        <!-- Bottom row: nav/reset buttons on the left; the selection-based
+             win/loss editor on the right, aligned with the second champion
+             column (both use the same two-column grid as #champion-grid). -->
+        <div class="champ-bottom">
+            <div class="button-row">
+                <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Run Tracker</button>
+                <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
+                <button type="button" id="reset-order" onclick="resetChampionOrder()">Reset order</button>
+            </div>
+
+            <!-- Editor: joined W+/W−/L+/L− buttons (disabled until a champion is
+                 selected) followed by the selected champion's name. -->
+            <div id="champ-editor" class="champ-editor">
+                <span class="btn-group">
+                    <button type="button" data-stat="win" data-delta="1" disabled>W+</button>
+                    <button type="button" data-stat="win" data-delta="-1" disabled>W−</button>
+                    <button type="button" data-stat="loss" data-delta="1" disabled>L+</button>
+                    <button type="button" data-stat="loss" data-delta="-1" disabled>L−</button>
+                </span>
+                <span class="champ-editor-name" id="champ-editor-name">none</span>
+                <span class="champ-editor-score" id="champ-editor-score"></span>
+            </div>
         </div>
     </div>
 
@@ -433,11 +478,12 @@
 
             <h3>Champion Record</h3>
             <ul>
-                <li><strong>Win / Loss</strong> — use the −/+ buttons on each row to adjust a champion's counts (they never go below 0).</li>
+                <li><strong>Win-loss score</strong> — each row shows the champion's record as wins-losses (e.g. "7-3").</li>
+                <li><strong>Select</strong> — click a champion's row to select it (green highlight); click it again to clear the selection.</li>
+                <li><strong>Adjust</strong> — with a champion selected, the grouped <strong>W+ / W− / L+ / L−</strong> buttons at the bottom change its record (counts never go below 0). They're disabled until a champion is selected.</li>
                 <li><strong>Reorder</strong> — drag a row by its grip (⠿) to move it; the new order is saved. The 24 champions fill the left column first, then the right.</li>
-                <li><strong>Highlight</strong> — click a champion's name (or work with its row) to highlight it; click the name again to clear it.</li>
                 <li><strong>Reset order</strong> — restores the default champion order without changing any win/loss counts (it asks first).</li>
-                <li><strong>Reset record</strong> — clears all counts and restores the default order (it asks first). It does not affect the Run Tracker.</li>
+                <li><strong>Reset record</strong> — clears all win/loss counts but keeps the current order (it asks first). It does not affect the Run Tracker.</li>
             </ul>
 
             <p>Everything you enter is saved in your browser and restored when you come back.</p>
@@ -449,7 +495,7 @@
             </div>
         </div>
         <div class="button-row">
-            <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Show Run Tracker</button>
+            <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Run Tracker</button>
         </div>
     </div>
 
