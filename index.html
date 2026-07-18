@@ -570,17 +570,18 @@
             <p>Everything you enter is saved in your browser and restored when you come back.</p>
 
             <h3>Backup &amp; transfer</h3>
-            <p>Your data lives only in this browser. Use these to move it to
-               another browser or device, or to keep a backup. The export is a
-               plain-text JSON file covering every screen (Run Tracker and
-               Win-Loss).</p>
+            <p>Your data lives only in this browser. Use these to move your
+               <strong>Win-Loss</strong> record to another browser or device, or
+               to keep a backup. The export is a plain-text JSON file. The Run
+               Tracker is not included — it's for a single run and isn't meant to
+               carry over, and importing never touches an in-progress run.</p>
             <div class="button-row">
                 <button type="button" id="export-state" onclick="exportState()">Export data</button>
                 <button type="button" id="import-state" onclick="importState()">Import data</button>
             </div>
             <ul>
-                <li><strong>Export data</strong> — shows your data as JSON text you can copy or download as a file.</li>
-                <li><strong>Import data</strong> — paste that text (or pick a downloaded file) to load it. Import only replaces the screens the file contains, then reloads the page (it asks first).</li>
+                <li><strong>Export data</strong> — shows your Win-Loss record as JSON text you can copy or download as a file.</li>
+                <li><strong>Import data</strong> — paste that text (or pick a downloaded file) to load it. It replaces your Win-Loss record, then reloads the page.</li>
             </ul>
 
             <h3>Attributions</h3>

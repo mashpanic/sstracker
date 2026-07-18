@@ -1144,8 +1144,8 @@ function updateChampEditor() {
         if (nameEl) nameEl.textContent = CHAMPION_BY_NAME[selectedChamp].alias;
         if (scoreEl) {
             const lap = lapArrow(r.lap);
-            scoreEl.innerHTML = `<span class="rec-w">${r.win}</span>-<span class="rec-l">${r.loss}</span>` +
-                (lap ? ` ${lap}` : '');
+            scoreEl.innerHTML = (lap ? `${lap} ` : '') +
+                `<span class="rec-w">${r.win}</span>-<span class="rec-l">${r.loss}</span>`;
         }
     } else {
         if (nameEl) nameEl.textContent = '';
@@ -1328,23 +1328,36 @@ async function resetChampionOrder() {
 })();
 
 // ---- Export / Import app state ----
-// A plain-text (JSON) backup covering every screen's saved data. Rather than
-// listing individual fields, it snapshots every localStorage entry under the
-// app's `mt2-` prefix, so any future feature that persists under a new `mt2-…`
-// key is carried by export/import automatically, with no change here. Each
-// store already versions its own schema inside its key name (…-state-v1,
-// …-records-v1); the envelope adds a separate `formatVersion` for the wrapper.
+// A plain-text (JSON) backup of the Win-Loss record. Rather than listing
+// individual fields, it snapshots every localStorage entry under the app's
+// `mt2-` prefix EXCEPT the excluded keys, so any future feature that persists
+// under a new `mt2-…` key is carried automatically, with no change here. Each
+// store already versions its own schema inside its key name (…-records-v1); the
+// envelope adds a separate `formatVersion` for the wrapper.
+//
+// The run tracker (`mt2-soul-savior-state-v1`) is deliberately EXCLUDED from
+// both export and import: it's single-run, throwaway state that isn't worth
+// transferring, and excluding it on import means restoring a backup can never
+// clobber an in-progress run. Exclusion is applied in both directions so an
+// older full export (which still contains the run key) also leaves it alone.
 const APP_STATE_PREFIX = 'mt2-';
 const EXPORT_APP_ID = 'mt2-soul-savior-tracker';
 const EXPORT_FORMAT_VERSION = 1;
+const EXPORT_EXCLUDE_KEYS = new Set(['mt2-soul-savior-state-v1']); // run tracker — not transferred
 
-// Gather { key: parsedValue } for every mt2- localStorage entry. Values are
-// stored parsed (not as escaped strings) so the export stays human-readable.
+// True for the app-owned, transferable localStorage keys (mt2- prefix, minus
+// the excluded run-tracker key). Used by both export and import.
+function isTransferableKey(key) {
+    return !!key && key.startsWith(APP_STATE_PREFIX) && !EXPORT_EXCLUDE_KEYS.has(key);
+}
+
+// Gather { key: parsedValue } for every transferable localStorage entry. Values
+// are stored parsed (not as escaped strings) so the export stays human-readable.
 function collectAppState() {
     const data = {};
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (!key || !key.startsWith(APP_STATE_PREFIX)) continue;
+        if (!isTransferableKey(key)) continue;
         const raw = localStorage.getItem(key);
         try { data[key] = JSON.parse(raw); } catch (e) { data[key] = raw; }
     }
@@ -1364,8 +1377,9 @@ function buildExportEnvelope() {
 // Validate an export envelope and write its stores to localStorage. Per-key
 // REPLACE: only keys present in the file are overwritten; every other store the
 // browser holds is left untouched (so importing an old export that predates a
-// screen won't wipe that screen). Foreign (non-mt2-) keys are ignored. Returns
-// the written keys, or throws with a user-facing message. Does not reload.
+// screen won't wipe that screen). Foreign (non-mt2-) and excluded keys — e.g. a
+// run tracker section in an older export — are ignored. Returns the written
+// keys, or throws with a user-facing message. Does not reload.
 function applyImport(text) {
     let env;
     try { env = JSON.parse(text); } catch (e) { throw new Error('That isn’t valid JSON.'); }
@@ -1374,7 +1388,7 @@ function applyImport(text) {
     }
     const written = [];
     Object.entries(env.data).forEach(([key, value]) => {
-        if (!key.startsWith(APP_STATE_PREFIX)) return; // ignore foreign keys
+        if (!isTransferableKey(key)) return; // ignore foreign/excluded keys
         try { localStorage.setItem(key, JSON.stringify(value)); written.push(key); }
         catch (e) { /* storage unavailable/full — skip this key */ }
     });
@@ -1400,7 +1414,7 @@ function dataModal(innerHTML) {
 function exportState() {
     const json = JSON.stringify(buildExportEnvelope(), null, 2);
     const { overlay, close } = dataModal(`
-        <p class="modal-message">Your saved data as JSON — copy it or download it as a file, then Import it in another browser.</p>
+        <p class="modal-message">Your Win-Loss record as JSON — copy it or download it as a file, then Import it in another browser.</p>
         <textarea readonly spellcheck="false"></textarea>
         <div class="modal-buttons">
             <span class="modal-error"></span>
@@ -1436,7 +1450,7 @@ function exportState() {
 
 function importState() {
     const { overlay, close } = dataModal(`
-        <p class="modal-message">Paste exported JSON below, or choose a file. Importing replaces the screens the file contains, then reloads the page.</p>
+        <p class="modal-message">Paste exported JSON below, or choose a file. Importing replaces your Win-Loss record, then reloads the page.</p>
         <textarea spellcheck="false" placeholder="Paste exported JSON here…"></textarea>
         <label class="modal-file">Or load a file:
             <input type="file" accept="application/json,.json,text/plain">
