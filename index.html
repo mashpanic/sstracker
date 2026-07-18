@@ -290,6 +290,9 @@
             font-size: 0.9em;
             border-radius: 4px;
             cursor: pointer;
+            /* Uniform width across all nav/reset buttons. */
+            min-width: 130px;
+            text-align: center;
         }
         .screen-toggle:hover, #reset-grid:hover, #reset-champions:hover, #reset-order:hover {
             border-color: #04d361; color: #04d361;
@@ -341,6 +344,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             column-gap: 28px;
+            row-gap: 10px;
             max-width: 900px;
             align-items: center;
             margin-top: 12px;
@@ -380,7 +384,18 @@
             border-radius: 4px;
             line-height: 1.55;
         }
-        #help-content h2 { margin: 0 0 10px; font-size: 1.1em; }
+        #help-content h2 { margin: 0; font-size: 1.1em; }
+        /* Help title row: title on the left, "Close Help" button on the right. */
+        .help-header {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; margin: 0 0 10px;
+        }
+        .help-close {
+            background: #202024; color: #e1e1e6; border: 1px solid #323238;
+            padding: 6px 12px; font-size: 0.85em; font-weight: bold;
+            border-radius: 4px; cursor: pointer; flex: 0 0 auto;
+        }
+        .help-close:hover { border-color: #04d361; color: #04d361; }
         #help-content h3 { margin: 18px 0 6px; font-size: 1em; color: #04d361; }
         #help-content ul { margin: 6px 0; padding-left: 20px; }
         #help-content li { margin: 5px 0; }
@@ -418,9 +433,9 @@
         </div>
 
         <div class="button-row">
-            <button type="button" class="screen-toggle" onclick="showScreen('champions')">Champion Record</button>
-            <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
+            <button type="button" class="screen-toggle" onclick="showScreen('champions')">Win-Loss</button>
             <button type="button" class="screen-toggle" onclick="showScreen('help')">Help</button>
+            <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
         </div>
     </div>
 
@@ -431,18 +446,18 @@
     <div id="screen-champions" class="screen">
         <div id="champion-grid"></div>
 
-        <!-- Bottom row: nav/reset buttons on the left; the selection-based
-             win/loss editor on the right, aligned with the second champion
-             column (both use the same two-column grid as #champion-grid). -->
+        <!-- Bottom area (two-column grid, matching #champion-grid so the editor
+             lines up with the second champion column): row 1 has the nav
+             buttons (left) and the win/loss editor (right); row 2 has the two
+             reset buttons underneath the nav buttons. -->
         <div class="champ-bottom">
             <div class="button-row">
                 <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Run Tracker</button>
-                <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
-                <button type="button" id="reset-order" onclick="resetChampionOrder()">Reset order</button>
+                <button type="button" class="screen-toggle" onclick="showScreen('help')">Help</button>
             </div>
 
             <!-- Editor: joined W+/W−/L+/L− buttons (disabled until a champion is
-                 selected) followed by the selected champion's name. -->
+                 selected) followed by the selected champion's name + score. -->
             <div id="champ-editor" class="champ-editor">
                 <span class="btn-group">
                     <button type="button" data-stat="win" data-delta="1" disabled>W+</button>
@@ -453,30 +468,39 @@
                 <span class="champ-editor-name" id="champ-editor-name">none</span>
                 <span class="champ-editor-score" id="champ-editor-score"></span>
             </div>
+
+            <!-- Reset buttons: row 2, underneath the nav buttons. -->
+            <div class="button-row">
+                <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
+                <button type="button" id="reset-order" onclick="resetChampionOrder()">Reset order</button>
+            </div>
         </div>
     </div>
 
     <!-- Screen 3: Help — read-only how-to text for the app. -->
     <div id="screen-help" class="screen">
         <div id="help-content">
-            <h2>How to use this app</h2>
+            <div class="help-header">
+                <h2>How to use this app</h2>
+                <button type="button" class="help-close" onclick="closeHelp()">Close Help</button>
+            </div>
             <p>This tracker has three screens, switched with the buttons at the
                bottom of each screen:</p>
             <ul>
-                <li><strong>Run Tracker</strong> (screen 1) — plan and follow a Soul Savior run.</li>
-                <li><strong>Champion Record</strong> (screen 2) — keep a win/loss tally per starting champion.</li>
-                <li><strong>Help</strong> (screen 3) — this page.</li>
+                <li><strong>Run Tracker</strong> — plan and follow a Soul Savior run.</li>
+                <li><strong>Win-Loss</strong> — keep a win/loss tally per starting champion.</li>
+                <li><strong>Help</strong> — this page.</li>
             </ul>
 
             <h3>Run Tracker</h3>
             <ul>
-                <li><strong>Order</strong> — set each mid-run region's combat order (1–4) in its Order box. A number you pick is greyed out for the other regions, and the rows re-sort into that order. Astrael is always first, the Lifemother always last.</li>
+                <li><strong>Order</strong> — set each mid-run region's combat order (1–4) in its Order box. A number you pick is greyed out for the other regions, and the rows re-sort into that order.</li>
                 <li><strong>Variant &amp; Central Nodes</strong> — for each encounter, pick its boss / wave-set Variant and its Central Nodes from the dropdowns.</li>
-                <li><strong>Info box</strong> — click a Battle or Boss row to see its waves and enemy stats below. Hover an enemy name for its ability note; a boss's curse box shows its mutator on hover.</li>
-                <li><strong>Reset grid</strong> — clears every selection for the current run (it asks first). It does not affect your Champion Record.</li>
+                <li><strong>Wave box</strong> — click a Battle or Boss row to see its waves. You must select the enemy wave set if required. If no order is selected, a preview of the next unselected Order will show. You must still manually set that order.</li>
+                <li><strong>Reset grid</strong> — clears every selection for the current run (it asks first). It does not affect your Win-Loss record.</li>
             </ul>
 
-            <h3>Champion Record</h3>
+            <h3>Win-Loss</h3>
             <ul>
                 <li><strong>Win-loss score</strong> — each row shows the champion's record as wins-losses (e.g. "7-3").</li>
                 <li><strong>Select</strong> — click a champion's row to select it (green highlight); click it again to clear the selection.</li>
@@ -493,9 +517,6 @@
                 <div>Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.</div>
                 <div>Content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a> unless otherwise noted.</div>
             </div>
-        </div>
-        <div class="button-row">
-            <button type="button" class="screen-toggle" onclick="showScreen('tracker')">Run Tracker</button>
         </div>
     </div>
 

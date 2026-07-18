@@ -1,14 +1,16 @@
-# App layout: three screens + Champion Record
+# App layout: three screens + Win-Loss
 
 `index.html` presents the app as **three screens, one visible at a time**,
 switched by the buttons at the bottom of each screen. This replaced the earlier
-side-by-side layout (tracker left, champion panel right) on 2026-07-17.
+side-by-side layout (tracker left, champion panel right) on 2026-07-17. The
+per-champion win/loss screen is labelled **Win-Loss** in the UI (its internal
+id is still `#screen-champions`).
 
 | # | Screen | id | Button row (left → right) |
 |---|--------|----|---------------------------|
-| 1 | **Run Tracker** | `#screen-tracker` | *Show Champion Record* · *Reset grid* · *Help* |
-| 2 | **Champion Record** | `#screen-champions` | *Show Run Tracker* · *Reset record* |
-| 3 | **Help** | `#screen-help` | *Show Run Tracker* |
+| 1 | **Run Tracker** | `#screen-tracker` | *Win-Loss* · *Reset grid* · *Help* |
+| 2 | **Win-Loss** | `#screen-champions` | *Run Tracker* · *Reset record* · *Reset order* |
+| 3 | **Help** | `#screen-help` | *Run Tracker* |
 
 Screens are toggled by `showScreen('tracker'|'champions'|'help')` (in `app.js`),
 which just flips the `.active` class. Each screen has its own fixed-label
@@ -22,7 +24,7 @@ before any interaction — then never again.
 **Attribution.** The two-line data-source / CC-BY-SA notice lives only on the
 Run Tracker screen (screen 1).
 
-## Screen 2 — Champion Record
+## Screen 2 — Win-Loss
 
 A per-champion **Win/Loss tally** for the 24 Soul Savior starting champions,
 kept across many runs. It is **completely independent of the run grid** — its

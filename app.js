@@ -1230,13 +1230,18 @@ async function resetChampionOrder() {
 
 // ---- Screens ----
 // Three screens, one visible at a time: 'tracker' (Run Tracker), 'champions'
-// (Champion Record), 'help' (Help). The buttons at the bottom of each screen
-// switch between them.
+// (Win-Loss), 'help' (Help). The buttons at the bottom of each screen switch
+// between them.
+let lastNonHelpScreen = 'tracker'; // where "Close Help" returns to
 function showScreen(name) {
+    if (name !== 'help') lastNonHelpScreen = name; // remember the pre-Help screen
     ['tracker', 'champions', 'help'].forEach(n => {
         document.getElementById('screen-' + n).classList.toggle('active', n === name);
     });
 }
+
+// "Close Help" returns to whichever screen was showing before Help opened.
+function closeHelp() { showScreen(lastNonHelpScreen); }
 
 // First-time visitors (nothing saved in localStorage) land on Help; returning
 // visitors keep the default Run Tracker. State is only written once the user
