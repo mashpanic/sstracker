@@ -1015,3 +1015,167 @@ document.addEventListener('click', (e) => {
         table.addEventListener('focusout', hide);
     }
 })();
+
+// ---- Champion win/loss record (right-side panel) ----
+// A per-champion Win/Loss tally, fully independent of the run grid: its own
+// localStorage key and Reset button (resetGrid never touches it, and vice
+// versa), with drag-reorderable rows. Built from CHAMPION_CLANS (gamefacts.js);
+// default order is alphabetical by clan then champion, but the clan isn't shown.
+const CHAMPION_STORAGE_KEY = 'mt2-champion-records-v1';
+
+// Flattened default order: sort by clan name, then champion name.
+const CHAMPION_DEFAULTS = CHAMPION_CLANS
+    .flatMap(c => c.champions.map(ch => ({ name: ch.name, alias: ch.alias, clan: c.clan })))
+    .sort((a, b) => a.clan.localeCompare(b.clan) || a.name.localeCompare(b.name));
+const CHAMPION_BY_NAME = Object.fromEntries(CHAMPION_DEFAULTS.map(c => [c.name, c]));
+
+// In-memory records: { name: {win, loss} }. Row order lives in the DOM and is
+// serialized alongside the counts on save. selectedChamp is the currently
+// highlighted row (name), or null.
+let championRecords = {};
+let selectedChamp = null;
+
+function loadChampionOrder() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(CHAMPION_STORAGE_KEY)); } catch (e) { /* ignore */ }
+    // Seed every champion at 0/0, then overlay any saved counts.
+    championRecords = {};
+    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name] = { win: 0, loss: 0 }; });
+    if (saved && saved.records) {
+        Object.entries(saved.records).forEach(([name, rec]) => {
+            if (!championRecords[name]) return; // dropped from the game since saved
+            championRecords[name].win = Math.max(0, parseInt(rec.win, 10) || 0);
+            championRecords[name].loss = Math.max(0, parseInt(rec.loss, 10) || 0);
+        });
+    }
+    selectedChamp = (saved && CHAMPION_BY_NAME[saved.selected]) ? saved.selected : null;
+    // Start from the saved order (valid names only), then append any champions
+    // it's missing so new ones show up at the bottom rather than vanishing.
+    const order = (saved && Array.isArray(saved.order)) ? saved.order.filter(n => CHAMPION_BY_NAME[n]) : [];
+    CHAMPION_DEFAULTS.forEach(c => { if (!order.includes(c.name)) order.push(c.name); });
+    return order;
+}
+
+function saveChampionState() {
+    const order = Array.from(document.querySelectorAll('#champion-tbody .champion-row'))
+        .map(r => r.dataset.champ);
+    try {
+        localStorage.setItem(CHAMPION_STORAGE_KEY,
+            JSON.stringify({ order, records: championRecords, selected: selectedChamp }));
+    } catch (e) { /* storage unavailable — ignore */ }
+}
+
+// Highlight one champion row (or clear with null). Updates the DOM class,
+// stores the choice, and persists.
+function setSelectedChamp(name) {
+    selectedChamp = name;
+    document.querySelectorAll('#champion-tbody .champion-row').forEach(r => {
+        r.classList.toggle('champ-selected', r.dataset.champ === name);
+    });
+    saveChampionState();
+}
+
+function championRow(name) {
+    const c = CHAMPION_BY_NAME[name];
+    const rec = championRecords[name];
+    const tr = document.createElement('tr');
+    tr.className = 'champion-row';
+    tr.draggable = true;
+    tr.dataset.champ = name;
+    const counter = (stat, label, cls, val) => `
+        <td class="champ-counter">
+            <span class="counter-label ${cls}">${label}</span>
+            <button type="button" class="counter-btn" data-stat="${stat}" data-delta="-1" aria-label="Decrease ${c.alias} ${stat}">−</button>
+            <span class="counter-val" data-stat="${stat}">${val}</span>
+            <button type="button" class="counter-btn" data-stat="${stat}" data-delta="1" aria-label="Increase ${c.alias} ${stat}">+</button>
+        </td>`;
+    tr.innerHTML =
+        `<td class="champ-grip" title="Drag to reorder">⠿</td>` +
+        `<td class="champ-alias">${c.alias}</td>` +
+        counter('win', 'W', 'win', rec.win) +
+        counter('loss', 'L', 'loss', rec.loss);
+    return tr;
+}
+
+function renderChampions(order) {
+    const tbody = document.getElementById('champion-tbody');
+    tbody.innerHTML = '';
+    order.forEach(name => {
+        const row = championRow(name);
+        if (name === selectedChamp) row.classList.add('champ-selected');
+        tbody.appendChild(row);
+    });
+}
+
+async function resetChampions() {
+    if (!await confirmModal(
+        'Reset the champion record? This clears every win/loss count and restores the default order. The run grid is not affected.',
+        { confirmText: 'Reset', cancelText: 'Cancel' }
+    )) return;
+    try { localStorage.removeItem(CHAMPION_STORAGE_KEY); } catch (e) { /* ignore */ }
+    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name] = { win: 0, loss: 0 }; });
+    selectedChamp = null;
+    renderChampions(CHAMPION_DEFAULTS.map(c => c.name));
+}
+
+(function initChampions() {
+    const tbody = document.getElementById('champion-tbody');
+    if (!tbody || typeof CHAMPION_CLANS === 'undefined') return;
+    renderChampions(loadChampionOrder());
+
+    // Clicks in a row: a +/- button adjusts the count (and highlights the row);
+    // clicking anywhere else on the row (the name, the cell) toggles highlight.
+    tbody.addEventListener('click', e => {
+        const row = e.target.closest('.champion-row');
+        if (!row) return;
+        const name = row.dataset.champ;
+        const btn = e.target.closest('.counter-btn');
+        if (btn) {
+            const stat = btn.dataset.stat;
+            const next = Math.max(0, championRecords[name][stat] + parseInt(btn.dataset.delta, 10));
+            championRecords[name][stat] = next;
+            row.querySelector(`.counter-val[data-stat="${stat}"]`).textContent = next;
+            setSelectedChamp(name); // working with a row highlights it (also saves)
+            return;
+        }
+        // Toggle: click the highlighted row again to clear it.
+        setSelectedChamp(selectedChamp === name ? null : name);
+    });
+
+    // Drag-to-reorder: the dragged row moves live as it passes the others,
+    // and the new order is persisted on drop.
+    let dragRow = null;
+    function champDragAfter(y) {
+        const rows = [...tbody.querySelectorAll('.champion-row:not(.dragging)')];
+        let closest = null, closestOffset = -Infinity;
+        rows.forEach(row => {
+            const box = row.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closestOffset) { closestOffset = offset; closest = row; }
+        });
+        return closest;
+    }
+    tbody.addEventListener('dragstart', e => {
+        dragRow = e.target.closest('.champion-row');
+        if (!dragRow) return;
+        dragRow.classList.add('dragging');
+        setSelectedChamp(dragRow.dataset.champ); // working with a row highlights it
+        e.dataTransfer.effectAllowed = 'move';
+        try { e.dataTransfer.setData('text/plain', dragRow.dataset.champ); } catch (_) { /* Firefox needs data set */ }
+    });
+    tbody.addEventListener('dragover', e => {
+        if (!dragRow) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const after = champDragAfter(e.clientY);
+        if (after == null) tbody.appendChild(dragRow);
+        else if (after !== dragRow) tbody.insertBefore(dragRow, after);
+    });
+    tbody.addEventListener('drop', e => e.preventDefault());
+    tbody.addEventListener('dragend', () => {
+        if (!dragRow) return;
+        dragRow.classList.remove('dragging');
+        dragRow = null;
+        saveChampionState();
+    });
+})();

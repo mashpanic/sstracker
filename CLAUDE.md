@@ -14,6 +14,24 @@ A Soul Savior run is a specific mode of Monster Train 2.  Most web searches will
     Unique enemies set.
     Unique map and node set.
 
+**Run setup — champion + clans.** Each run begins with the player choosing a
+**Primary Champion**; that champion's clan supplies the primary clan cards. The
+player also picks a **secondary clan** whose cards are added to the pool, but
+**not** its champion (only the primary clan contributes a champion). This
+selection can be set to **randomize** (a random primary champion + secondary
+clan). The 24 champions and their 12 clans are hand-curated in
+`CHAMPION_CLANS` (`gamefacts.js`).
+
+The run setup also picks a **Pyre Heart** — the train's core, giving starting
+ATK/HP plus (usually) a run-long effect. There are 13 selectable hearts, hand-
+curated in `PYRE_HEARTS` (`gamefacts.js`) with alias, ATK/HP, and effect text.
+Four effect texts reference resource symbols spelled as words: **Gold**,
+**Energy** (ember), **Space** (floor capacity), and **Deployment Energy** (a
+distinct resource from Energy). Like the champion/clan choice, the heart can be
+set to **randomize** ("Random Pyre Heart" — a random unlocked heart at run
+start), which is an option in the picker, not a heart, so it's not in
+`PYRE_HEARTS`.
+
 A Soul Savior run has one of three difficulty levels, **in order from easiest to hardest: Bloom → Tangle → Overgrowth.**
     Bloom       (easiest)
     Tangle      (medium)

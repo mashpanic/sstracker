@@ -216,7 +216,7 @@
 
         /* Subtle, low-emphasis reset control (distinct from the bold green
            primary button) that clears all selections for the current run. */
-        #reset-grid {
+        #reset-grid, #reset-champions {
             margin-top: 12px;
             background: none;
             color: #9d9da3;
@@ -227,7 +227,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        #reset-grid:hover { color: #ef4444; border-color: #ef4444; }
+        #reset-grid:hover, #reset-champions:hover { color: #ef4444; border-color: #ef4444; }
 
         /* Dark-themed replacement for the native confirm() dialog. */
         .modal-overlay {
@@ -271,29 +271,79 @@
         }
         .modal-confirm:hover { background: #dc2626; }
 
+        /* ---- Two-column layout: run tracker on the left, champion record on
+           the right. Wraps to stacked on narrow screens. ---- */
+        #app-layout { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+        #main-column { flex: 1 1 520px; min-width: 0; }
+        #champion-panel { flex: 0 0 auto; }
+
+        /* ---- Champion win/loss record grid ---- */
+        #champion-table { margin-bottom: 0; }
+        #champion-table td { padding: 3px 8px; border-color: #212126; }
+        .champion-row { cursor: grab; }
+        .champion-row.dragging { opacity: 0.4; }
+        /* Highlighted (clicked / worked-with) row. */
+        .champion-row.champ-selected td { background: #1f3a2d; }
+        .champion-row.champ-selected .champ-alias { color: #04d361; }
+        .champ-grip { color: #52525b; text-align: center; user-select: none; padding: 3px 2px 3px 6px; }
+        .champ-alias { font-weight: bold; white-space: nowrap; cursor: pointer; }
+        .champ-counter { white-space: nowrap; }
+        .counter-label {
+            display: inline-block; width: 1.1em; text-align: center;
+            font-size: 0.72em; font-weight: bold; vertical-align: middle;
+        }
+        .counter-label.win { color: #04d361; }
+        .counter-label.loss { color: #ef4444; }
+        .counter-val {
+            display: inline-block; min-width: 1.6em; text-align: center;
+            vertical-align: middle; font-variant-numeric: tabular-nums;
+        }
+        .counter-btn {
+            background: #202024; color: #c8c8ce; border: 1px solid #323238;
+            width: 22px; height: 22px; padding: 0; margin: 0 1px;
+            font-size: 0.95em; font-weight: bold; line-height: 1;
+            border-radius: 4px; vertical-align: middle; cursor: pointer;
+        }
+        .counter-btn:hover { color: #04d361; border-color: #04d361; }
+        .counter-btn:active { background: #19191c; }
+
     </style>
 </head>
 <body>
 
 
 
-    <table id="encounter-table">
-        <thead>
-            <tr>
-                <th>Order</th>
-                <th>Region</th>
-                <th>Variant</th>
-                <th>Central Nodes</th>
-            </tr>
-        </thead>
-        <tbody id="encounter-tbody"></tbody>
-    </table>
+    <div id="app-layout">
+        <div id="main-column">
+            <table id="encounter-table">
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Region</th>
+                        <th>Variant</th>
+                        <th>Central Nodes</th>
+                    </tr>
+                </thead>
+                <tbody id="encounter-tbody"></tbody>
+            </table>
 
-    <div id="encounter-info">
-        Select a battle or boss to see information.
+            <div id="encounter-info">
+                Select a battle or boss to see information.
+            </div>
+
+            <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
+        </div>
+
+        <!-- Per-champion win/loss tally. Rows are hand-orderable (drag) and
+             persist independently of the run grid (separate localStorage key +
+             its own reset button). Populated from CHAMPION_CLANS in app.js. -->
+        <aside id="champion-panel">
+            <table id="champion-table">
+                <tbody id="champion-tbody"></tbody>
+            </table>
+            <button type="button" id="reset-champions" onclick="resetChampions()">Reset record</button>
+        </aside>
     </div>
-
-    <button type="button" id="reset-grid" onclick="resetGrid()">Reset grid</button>
 
     <footer id="attribution">
         Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.
