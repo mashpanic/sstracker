@@ -23,5 +23,8 @@ venv/
 # macOS
 .DS_Store
 
+# Editor workspace files — local only
+*.code-workspace
+
 # Throwaway headless-test harness copies of index.html (temp files)
 _t*.html
