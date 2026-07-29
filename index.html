@@ -63,6 +63,24 @@
            opacity:0, so its native ring never shows). */
         .node-slot:focus-within { outline: 2px solid #04d361; outline-offset: 1px; border-color: #04d361; }
 
+        /* Touch (no-hover, coarse-pointer) devices — e.g. iPad — can't hover a
+           variant to preview it, and a single tap on the transparent <select>
+           would open the native picker before any preview shows. So there we
+           make variant slots "arm on first tap": the <select> starts inert
+           (pointer-events:none) and a tap lands on the box, which selects the
+           row + shows the stat/note popover (the hover equivalent) and adds
+           .armed; .armed flips the <select> live so a SECOND tap opens the
+           native picker. .armed also mimics the :focus-within double outline
+           (the select isn't focused on the arming tap, so we can't rely on it).
+           Desktop/mouse is untouched — this whole block is hover:none only. */
+        @media (hover: none) and (pointer: coarse) {
+            .node-slot select.variant-select,
+            .node-slot select.wave-set-select { pointer-events: none; }
+            .node-slot.armed select.variant-select,
+            .node-slot.armed select.wave-set-select { pointer-events: auto; }
+            .node-slot.armed { outline: 2px solid #04d361; outline-offset: 1px; border-color: #04d361; }
+        }
+
         /* Fixed-width slots for selectors that display full names (Central Nodes,
            Variant, Wave Set) so longer labels stay aligned, consistent, and readable */
         .full-name-slot {

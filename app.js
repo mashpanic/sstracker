@@ -1044,6 +1044,54 @@ document.addEventListener('click', (e) => {
         table.addEventListener('focusin', e => showForTarget(e.target));
         table.addEventListener('focusout', hide);
     }
+
+    // Touch / no-hover devices (iPad): variant slots "arm on first tap" instead
+    // of opening the native picker immediately. CSS keeps a variant <select>
+    // inert until its slot has .armed, so the first tap lands on the box — the
+    // row's onclick selects it and here we show the stat/note popover (the
+    // hover equivalent; a no-op for empty variants → "no change") and mark the
+    // slot armed. A second tap now lands on the live <select> and opens the
+    // native picker (we don't — can't reliably — open it from script on iOS).
+    // Only one slot is armed at a time; tapping another variant re-arms, and a
+    // tap anywhere else disarms and returns to reveal-first. Desktop keeps its
+    // one-click-opens-picker behavior (this branch is hover:none only).
+    if (table && window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+        let armed = null;
+        // The slot for an event target, but only if it owns an armable <select>:
+        // a variant, or an editable wave-set (locked single-wave-set regions are
+        // disabled — leave those alone). Both are also .variant-slot, so we key
+        // on the select's class, not the slot's.
+        const armableSlotOf = el => {
+            const slot = el.closest && el.closest('.node-slot');
+            if (!slot) return null;
+            const sel = slot.querySelector('select.variant-select, select.wave-set-select');
+            return sel && !sel.disabled ? slot : null;
+        };
+        const disarm = () => {
+            if (!armed) return;
+            armed.classList.remove('armed');
+            armed = null;
+            hide();
+        };
+        // Capture so we arm before the row/select handlers, and so re-arming a
+        // different slot runs before this same click bubbles to the document.
+        table.addEventListener('click', e => {
+            const slot = armableSlotOf(e.target);
+            if (!slot) { disarm(); return; }
+            if (slot === armed) return;   // second tap → live <select> opens picker
+            disarm();
+            armed = slot;
+            slot.classList.add('armed');
+            // Variant slots preview their stat/note popover; wave-set slots have
+            // no popover, so arming just selects the row + shows the outline.
+            const sel = slot.querySelector('select.variant-select');
+            if (sel) showBossSelect(sel);
+        }, true);
+        // A tap outside any armable slot returns to reveal-first.
+        document.addEventListener('click', e => {
+            if (!armableSlotOf(e.target)) disarm();
+        });
+    }
 })();
 
 // ---- Champion win/loss record (Champion Record screen) ----
