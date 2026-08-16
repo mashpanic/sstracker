@@ -26,10 +26,10 @@ Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,2,8,140,"Resolve: If you h
 Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,3,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,4,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Bloom,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,5,8,140,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
-Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,4,8,Strike: Apply Malaise 5.,No
-Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,4,8,Strike: Apply Malaise 5.,No
-Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,4,8,Strike: Apply Malaise 5.,No
-Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,4,8,Strike: Apply Malaise 5.,No
+Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,4,8,Sweep<br>Strike: Apply Malaise 5.,No
+Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,4,8,Sweep<br>Strike: Apply Malaise 5.,No
+Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,4,8,Sweep<br>Strike: Apply Malaise 5.,No
+Bloom,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,4,8,Sweep<br>Strike: Apply Malaise 5.,No
 Bloom,R3_HeavyT1_Basic_Ver2,Mother's Blade,1,5,80,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Bloom,R3_HeavyT1_Basic_Ver2,Mother's Blade,2,5,80,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Bloom,R3_HeavyT1_Basic_Ver2,Mother's Blade,3,5,80,Infested 2. Hellborne Harvest: Gain Infested 4.,No
@@ -144,10 +144,10 @@ Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,2,,,"Resolve: If you have
 Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,3,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,4,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
 Tangle,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,5,,,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",No
-Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,,,Strike: Apply Malaise 5.,No
-Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,,,Strike: Apply Malaise 5.,No
-Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,,,Strike: Apply Malaise 5.,No
-Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,,,Strike: Apply Malaise 5.,No
+Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,,,Sweep<br>Strike: Apply Malaise 5.,No
+Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,,,Sweep<br>Strike: Apply Malaise 5.,No
+Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,,,Sweep<br>Strike: Apply Malaise 5.,No
+Tangle,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,,,Sweep<br>Strike: Apply Malaise 5.,No
 Tangle,R3_HeavyT1_Basic_Ver2,Mother's Blade,1,,,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Tangle,R3_HeavyT1_Basic_Ver2,Mother's Blade,2,,,Infested 2. Hellborne Harvest: Gain Infested 4.,No
 Tangle,R3_HeavyT1_Basic_Ver2,Mother's Blade,3,,,Infested 2. Hellborne Harvest: Gain Infested 4.,No
@@ -295,10 +295,10 @@ Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,2,14,198,"Resolve: If
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,3,15,206,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",Yes
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,4,17,215,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",Yes
 Overgrowth,RAny_Heavy_T2_BurstIfUnblocked,Mother's Amalgam,5,17,215,"Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",Yes
-Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,8,13,Strike: Apply Malaise 6.,Yes
-Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,9,14,Strike: Apply Malaise 6.,Yes
-Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,11,15,Strike: Apply Malaise 8.,Yes
-Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,11,15,Strike: Apply Malaise 9.,Yes
+Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,2,8,13,Sweep<br>Strike: Apply Malaise 6.,Yes
+Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,3,9,14,Sweep<br>Strike: Apply Malaise 6.,Yes
+Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,4,11,15,Sweep<br>Strike: Apply Malaise 8.,Yes
+Overgrowth,R4_Attacker_SweepDebuffer_Ver2,Mother's Assassin,5,11,15,Sweep<br>Strike: Apply Malaise 9.,Yes
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,1,8,108,Infested 3<br>Hellborne Harvest: Gain Infested 6.,Yes
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,2,9,114,Infested 3. Hellborne Harvest: Gain Infested 6.,Yes
 Overgrowth,R3_HeavyT1_Basic_Ver2,Mother's Blade,3,11,119,Infested 2. Hellborne Harvest: Gain Infested 6.,Yes

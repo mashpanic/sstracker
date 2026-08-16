@@ -272,7 +272,7 @@ const ENEMY_NOTES = {
     "Longlash": "Sniper<br>Stealth 1",
     "Mischevious Child": "Sniper<br>Strike: Advance the attacked unit.",
     "Mother's Amalgam": "Resolve: If you have no units on the floor, deals 3 damage to the Pyre and gains Burst 1.",
-    "Mother's Assassin": [null, "Strike: Apply Malaise 6.", "Strike: Apply Malaise 6.", "Strike: Apply Malaise 8.", "Strike: Apply Malaise 9."],
+    "Mother's Assassin": [null, "Sweep<br>Strike: Apply Malaise 6.", "Sweep<br>Strike: Apply Malaise 6.", "Sweep<br>Strike: Apply Malaise 8.", "Sweep<br>Strike: Apply Malaise 9."],
     "Mother's Blade": ["Infested 3<br>Hellborne Harvest: Gain Infested 6.", "Infested 3. Hellborne Harvest: Gain Infested 6.", "Infested 2. Hellborne Harvest: Gain Infested 6.", "Infested 4. Hellborne Harvest: Gain Infested 8.", null],
     "Mother's Cherub": ["Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.", "Infested 1<br>Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self."],
     "Mother's Fiend": ["Extinguish: Apply Infested 2 to enemy units.", null, null, "Extinguish: Apply Infested 5 to enemy units.", "Infested 5<br>Extinguish: Apply Infested 5 to enemy units."],
