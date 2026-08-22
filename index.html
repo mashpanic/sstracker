@@ -59,6 +59,8 @@
         .node-slot.locked:hover { border-color: #323238; }
         .node-slot.locked select { cursor: default; pointer-events: none; }
         .node-slot.selected { color: #04d361; border-color: #04d361; background: #19191c; }
+        /* Quick-fill mode indicator: same green as a filled variant box. */
+        #variant-col-header.quick-fill-indicator { color: #04d361; }
         /* Visible focus for keyboard central-node entry (the select itself is
            opacity:0, so its native ring never shows). */
         .node-slot:focus-within { outline: 2px solid #04d361; outline-offset: 1px; border-color: #04d361; }
@@ -466,7 +468,7 @@
                 <tr>
                     <th>Order</th>
                     <th>Region</th>
-                    <th>Variant</th>
+                    <th id="variant-col-header">Variant</th>
                     <th>Central Nodes</th>
                 </tr>
             </thead>
@@ -546,11 +548,27 @@
                 <li><strong>Import/Export</strong> — your win-loss data, later on this page.</li>
             </ul>
 
+            <h3>Quick Start</h3>
+            <p>Set the region bosses with a single keystroke at the beginning of a run.
+               Focus a boss's Variant box and press the letter shown at the end of its
+               option. Generally this is the first letter of the last word of the boss
+               name, with Maera's three being different. For example, press
+               <strong>S</strong> (tab) <strong>C</strong> (tab) <strong>D</strong> (tab)
+               <strong>V</strong> (tab) <strong>C</strong> to select Stern Sister, Train
+               Chomper, Duplicitous, Energy Vampire, and Corpseflower.</p>
+            <p>After the Astrael battle, quickly set the Central Nodes using the
+               keyboard. Enter sets such as Magic, Trinkets, Boons by hitting
+               M (tab) T (tab) B (tab).</p>
+            <p>View a row's enemy waves in the bottom box by highlighting it. Make
+               sure its Boss Variant, Wave Set, and Region Order are all selected for
+               full information — Region Order will temporarily set to the next Order
+               to allow easy comparison of routes.</p>
+
             <h3>Run Tracker</h3>
             <ul>
                 <li><strong>Order</strong> — set each mid-run region's combat order (1–4) in its Order box. A number you pick is greyed out for the other regions, and the rows re-sort into that order.</li>
                 <li><strong>Variant</strong> — for each encounter, pick its boss / wave-set Variant.</li>
-                <li><strong>Central Nodes</strong> — select Central Nodes from the dropdown, or focus a box and press the first letter of a choice. Quickly enter sets such as Magic, Trinkets, Boons by hitting M (Tab) T (Tab) B (Tab).</li>
+                <li><strong>Central Nodes</strong> — select Central Nodes from the dropdown, or focus a box and press the first letter of a choice.</li>
                 <li><strong>Wave box</strong> — click a Battle or Boss row to see its waves. You must select the enemy wave set if required. If no order is selected, a preview of the next unselected Order will show. You must still manually set that order.</li>
                 <li><strong>Reset grid</strong> — clears every selection for the current run (it asks first). It does not affect your Win-Loss record.</li>
             </ul>

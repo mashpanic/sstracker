@@ -35,11 +35,34 @@ function populateCentralNodeSelects() {
 }
 
 // Variant options live in gamefacts.js (VARIANT_OPTIONS).
+//
+// The 4 region-boss variants + Lifemother's variant additionally get a
+// single-keystroke shortcut (see "Quick-fill: boss + Lifemother variant
+// keystrokes" below) so a fresh run's 5 story-critical picks can be filled
+// from the keyboard. Letter = first letter of the variant's last word,
+// except Maera's Eldest Scion (bumped to its first word "Eldest" since
+// Scion's last-word letter collides with Stern Sister's). Keyed by select
+// id → { letter: variant name }; the reverse lookup (name → letter) is used
+// below to suffix each option's visible label, e.g. "Stern Sister — S", so
+// the shortcut is discoverable straight from the dropdown.
+const BOSS_FILL_LETTERS = {
+    'maera-boss-variant':    { s: 'Stern Sister', h: 'Sibling Hierarchy', e: 'Eldest Scion' },
+    'thaddeus-boss-variant': { c: 'Train Chomper', s: 'Thick Skinned', i: 'Insatiable' },
+    'tivi-boss-variant':     { d: 'Duplicitous', c: 'Mischevious Child', p: 'Prankster' },
+    'lylith-boss-variant':   { p: 'Plaguebringer', v: 'Energy Vampire', i: 'Inoculation' },
+    'lifemother-variant':    { c: 'Corpseflower', s: 'Swarmhost', b: 'Undying Bloom' }
+};
+
 function populateVariantSelects() {
     document.querySelectorAll('.variant-select').forEach(sel => {
         const names = VARIANT_OPTIONS[sel.id] || [];
+        const letters = BOSS_FILL_LETTERS[sel.id];
         sel.innerHTML = '<option value="">-- Select Variant --</option>' +
-            names.map(name => `<option value="${name}">${name}</option>`).join('');
+            names.map(name => {
+                const letter = letters && Object.keys(letters).find(k => letters[k] === name);
+                const label = letter ? `${name} — ${letter.toUpperCase()}` : name;
+                return `<option value="${name}">${label}</option>`;
+            }).join('');
     });
 }
 
@@ -107,6 +130,18 @@ function populateEncounterLabels() {
 }
 
 function updateNodeDisplay(selectEl) {
+    // Any real change to a control OUTSIDE the 5 boss/Lifemother boxes means
+    // the user isn't doing the guided start-of-run fill (e.g. a one-off wave
+    // check mid-session) — drop quick-fill mode immediately rather than
+    // leaving the green header / restricted Tab ring stuck on. Every value
+    // change (native or synthetic) funnels through here, so this one check
+    // covers mouse picks, native keyboard selection, and letter shortcuts
+    // (central nodes) alike. Ring-box changes themselves never cancel; their
+    // own completion check lives in checkQuickFillExit (see handleVariantChange).
+    if (quickFillActive && !BOSS_FILL_RING_IDS.includes(selectEl.id)) {
+        setQuickFillActive(false);
+    }
+
     const slotEl = selectEl.parentElement;
     const labelEl = slotEl.querySelector('.label');
 
@@ -121,8 +156,12 @@ function updateNodeDisplay(selectEl) {
     const isUnselected = selectEl.value === '?' || selectEl.value === '';
 
     if (showsFullName) {
-        const selectedOption = selectEl.options[selectEl.selectedIndex];
-        const fullText = selectedOption ? selectedOption.textContent : selectEl.value;
+        // Use the option's value, not its label text: the 5 boss/Lifemother
+        // variant options carry a " — <letter>" keystroke-hint suffix in their
+        // label (see BOSS_FILL_LETTERS), but the value stays the plain variant
+        // name, so reading value keeps that hint out of the collapsed box and
+        // its tooltip.
+        const fullText = selectEl.value;
         // Variant placeholder text ("-- Select Variant --") is too long for the
         // box, so show a plain "?" until a real variant is chosen.
         labelEl.textContent = isUnselected ? '?' : fullText;
@@ -378,6 +417,8 @@ function refreshMutatorBox(variantSelectEl) {
 }
 
 function handleVariantChange(selectEl) {
+    checkQuickFillExit(); // native (mouse) picks can also complete quick-fill mode
+
     const row = selectEl.closest('tr');
     if (!row) return;
 
@@ -519,6 +560,7 @@ async function resetGrid() {
     try {
         localStorage.removeItem(STORAGE_KEY);
     } catch (e) { /* ignore */ }
+    enterQuickFillMode(); // fresh run → arm the boss/Lifemother quick-fill tab ring
 }
 
 // ---- Turn order: disable taken numbers & re-sort the four groups ----
@@ -644,7 +686,10 @@ function updateTempOrderForSelection(key) {
     if (isMid) {
         const sel = document.getElementById(`${region}-order`);
         const orderUnset = sel && sel.value === '?';
-        if (orderUnset && (!tempOrder || tempOrder.region !== region)) {
+        // The Order-box preview pulse is a distraction during quick-fill mode
+        // (it'd otherwise fire on every boss keystroke, since picking a variant
+        // auto-selects its row) — skip it there; it resumes once quick-fill exits.
+        if (orderUnset && (!tempOrder || tempOrder.region !== region) && !quickFillActive) {
             applyTempOrder(region);
         }
         if (orderUnset) flagNeededBoxes(key); // temp mode → flag its needed boxes
@@ -837,6 +882,64 @@ function handleCentralNodeMousedown(e) {
     sel.focus();
 }
 
+// ---- Quick-fill mode: boss + Lifemother variant keystrokes ----
+// The 5 story-critical variant picks (the 4 region bosses + Lifemother) can
+// be set by a single keystroke — see BOSS_FILL_LETTERS above for the letter
+// map and rationale. The shortcut itself is always live (like the central-
+// node letters), but right after a run starts (a Reset, or true first use)
+// we additionally narrow the Tab ring to just these 5 boxes, so Tab/Shift+Tab
+// walks through them in order (top to bottom) for quick correction, until
+// all 5 hold a real value — then we drop back to the normal full tab ring.
+const BOSS_FILL_RING_IDS = Object.keys(BOSS_FILL_LETTERS);
+
+let quickFillActive = false;
+
+function allBossVariantsFilled() {
+    return BOSS_FILL_RING_IDS.every(id => document.getElementById(id)?.value);
+}
+
+// Also flips the "Variant" column header the same green as a filled variant
+// box (.node-slot.selected), as a subtle reminder the keystroke shortcuts are
+// live and Tab is scoped to just the 5 boss/Lifemother boxes.
+function setQuickFillActive(active) {
+    quickFillActive = active;
+    document.getElementById('variant-col-header')?.classList.toggle('quick-fill-indicator', active);
+}
+
+function enterQuickFillMode() {
+    setQuickFillActive(!allBossVariantsFilled());
+    // Jump straight to the first box so keystrokes work immediately. On first
+    // use the Run Tracker screen isn't visible yet (Help shows instead), so
+    // focus() is a no-op here; showScreen('tracker') retries it once the
+    // screen actually becomes visible.
+    if (quickFillActive) document.getElementById(BOSS_FILL_RING_IDS[0])?.focus();
+}
+
+function checkQuickFillExit() {
+    if (quickFillActive && allBossVariantsFilled()) setQuickFillActive(false);
+}
+
+function setBossVariant(sel, value) {
+    sel.value = value;
+    updateNodeDisplay(sel);   // programmatic value change doesn't fire 'change'
+    handleVariantChange(sel);
+    saveState();
+}
+
+function handleBossVariantKeydown(e) {
+    const sel = e.target;
+    if (!sel.classList || !sel.classList.contains('variant-select')) return;
+    const letters = BOSS_FILL_LETTERS[sel.id];
+    if (!letters) return;
+
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const name = letters[e.key.toLowerCase()];
+        if (!name) return;
+        e.preventDefault();
+        setBossVariant(sel, name);
+    }
+}
+
 // ---- Global keyboard tab ring ----
 // A curated, closed Tab order over the form's primary inputs, following the
 // visual top-to-bottom layout (which tracks turn-order sorting). Order:
@@ -875,7 +978,11 @@ function buildTabRing() {
 
 function handleTabRing(e) {
     if (e.key !== 'Tab') return;
-    const ring = buildTabRing();
+    // While quick-fill mode is active, Tab is scoped to just the 5 boss/
+    // Lifemother variant boxes instead of the full form.
+    const ring = quickFillActive
+        ? BOSS_FILL_RING_IDS.map(id => document.getElementById(id)).filter(Boolean)
+        : buildTabRing();
     const i = ring.indexOf(document.activeElement);
     if (i === -1) return;   // focus off the ring (e.g. a mouse-focused track) → native
     e.preventDefault();
@@ -897,6 +1004,7 @@ function highlightRegionRows(region, on) {
 (() => {
     const encTable = document.getElementById('encounter-table');
     encTable.addEventListener('keydown', handleCentralNodeKeydown);
+    encTable.addEventListener('keydown', handleBossVariantKeydown);
     encTable.addEventListener('keydown', handleTabRing);
     encTable.addEventListener('mousedown', handleCentralNodeMousedown);
     // While an Order box is focused, highlight both of its region's rows;
@@ -926,9 +1034,12 @@ function highlightRegionRows(region, on) {
 
 // Restore the saved run last, after every select has its options, then
 // apply the saved turn order (disabled numbers + group sort).
+let isFirstUse = false;
+try { isFirstUse = localStorage.getItem(STORAGE_KEY) === null; } catch (e) { /* ignore */ }
 restoreState();
 refreshOrderOptions();
 reorderGroups();
+if (isFirstUse) enterQuickFillMode(); // no saved run at all → arm the quick-fill tab ring
 
 // Refresh mutator boxes after state is restored.
 document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(sel));
@@ -1528,6 +1639,12 @@ function showScreen(name) {
     ['tracker', 'champions', 'help'].forEach(n => {
         document.getElementById('screen-' + n).classList.toggle('active', n === name);
     });
+    // Quick-fill mode may have been armed while the tracker was hidden (e.g.
+    // first use lands on Help first) — focus couldn't land then, so retry now
+    // that the screen is actually visible.
+    if (name === 'tracker' && quickFillActive) {
+        document.getElementById(BOSS_FILL_RING_IDS[0])?.focus();
+    }
 }
 
 // "Close Help" returns to whichever screen was showing before Help opened.
