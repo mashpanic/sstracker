@@ -310,13 +310,41 @@ function swapBattleBoss(waves, region, selected) {
     return waves;
 }
 
+// When no boss variant is chosen yet, a battle's wave text still has the
+// extractor's baked-in candidate name sitting in it — remove it (and whichever
+// one adjacent comma joins it to the rest of that wave; the boss's position
+// within a wave varies — front, middle, or back — so try both the trailing-
+// comma and leading-comma form) so getDisplayText can show a generic wave
+// list with a placeholder appended instead (see appendBossPlaceholder).
+function stripBattleBoss(waves, region) {
+    (VARIANT_OPTIONS[`${region}-battle-variant`] || []).forEach(name => {
+        if (!waves.includes(name)) return;
+        const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        waves = waves.replace(new RegExp(`(?:${escaped}, )|(?:, ${escaped})`), '');
+    });
+    return waves;
+}
+
+// Append a placeholder "Boss" token to the end of the LAST wave (waves are
+// '<br>'-joined) once the real boss name has been stripped out. Not
+// positionally accurate (we don't know where the eventual boss will actually
+// stand), but the last wave is always where the region's minor boss appears,
+// so that's close enough; hovering explains why it's a placeholder.
+function appendBossPlaceholder(waves) {
+    const parts = waves.split('<br>');
+    const last = parts.length - 1;
+    parts[last] += ', <span class="enemy-stat" title="Select a boss for more information">Select Boss Variant</span>';
+    return parts.join('<br>');
+}
+
 // The default info-box prompt for an encounter that is missing one or more of
 // its required selections. Astrael/Lifemother (standalone, no order dropdown)
-// need only a Variant; region battle rows need Order + Variant + Wave set;
-// region boss rows need Order + Variant. Rendered in the default white text so
-// it reads as a plain instruction (no amber warning styling).
+// need only a Variant; region battle rows need Order + Wave set (their boss
+// Variant is optional — see getDisplayText's placeholder path); region boss
+// rows need Order + Variant. Rendered in the default white text so it reads
+// as a plain instruction (no amber warning styling).
 function requirementPrompt(key) {
-    if (key.endsWith('-battle')) return 'Select an Order, Variant and Wave set for information';
+    if (key.endsWith('-battle')) return 'Select an Order and Wave set for information';
     if (key.endsWith('-boss')) return 'Select an Order and Variant for information';
     return 'Select a Variant for information';
 }
@@ -325,16 +353,19 @@ function requirementPrompt(key) {
 // If any required selection is later cleared this returns false, so the prompt
 // returns automatically.
 function hasRequiredSelections(key) {
+    if (key.endsWith('-battle')) {
+        // Battles show a (possibly generic) wave list from Order + Wave Set
+        // alone; the boss Variant is optional (see getDisplayText).
+        if (encounterOrder(key) === null) return false;
+        const waveEl = document.getElementById(`${key.split('-')[0]}-wave-set`);
+        return !!(waveEl && waveEl.value);
+    }
     const variantEl = document.getElementById(`${key}-variant`);
     if (!variantEl || !variantEl.value) return false;
     if (!key.includes('-')) return true; // astrael/lifemother: variant only
     // Order dropdown's placeholder is "?" (truthy); encounterOrder returns null
     // for it, so use that rather than a raw value check.
     if (encounterOrder(key) === null) return false;
-    if (key.endsWith('-battle')) {
-        const waveEl = document.getElementById(`${key.split('-')[0]}-wave-set`);
-        if (!waveEl || !waveEl.value) return false;
-    }
     return true;
 }
 
@@ -354,12 +385,17 @@ function getDisplayText(key) {
     const bossStat = pickByOrder(BOSS_STATS[variant], region);
 
     // Battle row: the minor boss is the selected variant (swapBattleBoss puts
-    // it in the wave string); it gets inline stats like any enemy. The wave-set
-    // select is guaranteed filled by hasRequiredSelections above.
+    // it in the wave string); it gets inline stats like any enemy. With no
+    // boss chosen yet, show the wave list generically instead (stripped of
+    // the baked candidate name, with a placeholder appended — see
+    // stripBattleBoss/appendBossPlaceholder). The wave-set select is
+    // guaranteed filled by hasRequiredSelections above.
     if (key.endsWith('-battle')) {
         const waveSet = document.getElementById(`${region}-wave-set`).value;
         const waves = pickByOrder(WAVE_SET_DESCRIPTIONS[waveSet], region);
-        return waves ? wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat, variant) : '';
+        if (!waves) return '';
+        if (!variant) return appendBossPlaceholder(wrapEnemyStats(stripBattleBoss(waves, region), order, null, null, null));
+        return wrapEnemyStats(swapBattleBoss(waves, region, variant), order, variant, bossStat, variant);
     }
 
     // Boss/standalone row: the boss appears under its in-game name — region
@@ -424,25 +460,13 @@ function handleVariantChange(selectEl) {
 
     refreshMutatorBox(selectEl);
 
-    // Keep the battle row's wave set in step with its variant. A wave set
-    // without a chosen minor boss is meaningless, so clearing the variant back
-    // to "?" clears the wave set too — but switching between two real variants
-    // leaves it alone (the player's wave-set pick stands). Single-wave-set
-    // regions (Thaddeus/Lylith) additionally auto-fill their one, locked wave
-    // set when a variant is chosen (see populateWaveSetSelects). Done before the
-    // info-box refresh below so it reflects the wave set immediately.
-    if (selectEl.id.endsWith('-battle-variant')) {
-        const region = selectEl.id.split('-')[0];
-        const opts = WAVE_SET_OPTIONS[region] || [];
-        const waveSel = document.getElementById(`${region}-wave-set`);
-        let want = null; // null = leave the wave set as-is
-        if (!selectEl.value) want = '';             // variant cleared → clear wave set
-        else if (opts.length === 1) want = opts[0]; // locked region → auto-fill its one set
-        if (waveSel && want !== null && waveSel.value !== want) {
-            waveSel.value = want;
-            updateNodeDisplay(waveSel);
-        }
-    }
+    // Note: a battle's wave set used to be synced to its boss variant here
+    // (auto-filled for locked Thaddeus/Lylith, cleared when the variant was
+    // cleared). Both are unnecessary now that a battle's wave list can show
+    // generically without a boss (see getDisplayText/stripBattleBoss): locked
+    // regions are filled by fillLockedWaveSets() instead (once quick-fill mode
+    // isn't in the way), and a manually-picked wave set (Maera/Tivi) stays
+    // meaningful on its own, so clearing the boss no longer clears it.
 
     // Picking a variant should select its row automatically (as if the
     // user had clicked it), so the info box updates without an extra click.
@@ -904,6 +928,40 @@ function allBossVariantsFilled() {
 function setQuickFillActive(active) {
     quickFillActive = active;
     document.getElementById('variant-col-header')?.classList.toggle('quick-fill-indicator', active);
+    if (!active) {
+        // Leaving quick-fill mode (however it ends) is the cue to fill in any
+        // still-blank locked wave sets — see fillLockedWaveSets.
+        fillLockedWaveSets();
+        // The Order-box preview was suppressed while quick-fill mode was
+        // active (see updateTempOrderForSelection), even though the row got
+        // selected — e.g. picking a battle's wave set both selects the row
+        // AND cancels quick-fill mode in the same action, but by then
+        // updateTempOrderForSelection has already run once (skipped) and
+        // nothing re-triggers it. Re-evaluate it now for whichever row is
+        // currently selected so the preview appears without an extra click.
+        const row = document.querySelector('.selected-row');
+        const key = row && row.dataset.encounterKey;
+        if (key) updateTempOrderForSelection(key);
+        refreshSelectedInfo();
+    }
+}
+
+// Thaddeus/Lylith have exactly one possible wave set, so a battle row can show
+// it immediately — but not while quick-fill mode is active: a new user
+// working through the 5 boss keystrokes doesn't need Thaddeus/Lylith's wave
+// boxes also changing on their own in the background. Called once at startup
+// and every time quick-fill mode ends (setQuickFillActive).
+function fillLockedWaveSets() {
+    if (quickFillActive) return;
+    document.querySelectorAll('.wave-set-select').forEach(sel => {
+        if (sel.value) return;
+        const region = sel.id.replace(/-wave-set$/, '');
+        const names = WAVE_SET_OPTIONS[region] || [];
+        if (names.length === 1) {
+            sel.value = names[0];
+            updateNodeDisplay(sel);
+        }
+    });
 }
 
 function enterQuickFillMode() {
@@ -1040,6 +1098,7 @@ restoreState();
 refreshOrderOptions();
 reorderGroups();
 if (isFirstUse) enterQuickFillMode(); // no saved run at all → arm the quick-fill tab ring
+fillLockedWaveSets(); // returning users (quick-fill never armed): fill immediately; no-op otherwise
 
 // Refresh mutator boxes after state is restored.
 document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(sel));
