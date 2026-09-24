@@ -54,7 +54,7 @@ GROUPS = [
     ('Tivi Battle', [('Phalanx', None), ('The Undying Spirit', None)]),
     ('Tivi Boss',   [('Duplicitous', None), ('Mischevious Child', None), ('Prankster', None)]),
     ('Lylith Battle', [('Qel the Malaiser', None), ('Ajax the Deathbringer', None)]),
-    ('Lylith Boss',   [('Plaguebringer', None), ('Energy Vampire', None), ('Inoculation', None)]),
+    ('Lylith Boss',   [('Plaguebringer', None), ('Energy Vampire', None), ('Innoculation', None)]),
 ]
 
 

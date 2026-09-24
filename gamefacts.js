@@ -22,7 +22,7 @@ const VARIANT_OPTIONS = {
     'tivi-battle-variant':      ['Phalanx', 'The Undying Spirit'],
     'tivi-boss-variant':        ['Duplicitous', 'Mischevious Child', 'Prankster'],
     'lylith-battle-variant':    ['Ajax the Deathbringer', 'Qel the Malaiser'],
-    'lylith-boss-variant':      ['Energy Vampire', 'Inoculation', 'Plaguebringer'],
+    'lylith-boss-variant':      ['Energy Vampire', 'Innoculation', 'Plaguebringer'],
     'lifemother-variant':       ['Corpseflower', 'Swarmhost', 'Undying Bloom']
 };
 
@@ -56,7 +56,7 @@ const MUTATORS = {
     // Lylith Boss
     'Plaguebringer':     { name: 'Reclusive',    short: 'Malaise 10',     effect: 'Champions enter with Malaise 10.' },
     'Energy Vampire':    { name: 'Masochist',    short: 'Regen 2 on hit', effect: 'Enemy units gain Regen 2 when hit.' },
-    'Inoculation':       { name: 'Sadist',       short: 'Witherbloom 1',  effect: 'Your units enter with Witherbloom 1.' },
+    'Innoculation':       { name: 'Sadist',       short: 'Witherbloom 1',  effect: 'Your units enter with Witherbloom 1.' },
 };
 
 // ---- Champions by clan ----
@@ -203,7 +203,7 @@ const BOSS_STATS = {
     // Lylith Boss
     "Plaguebringer": ["24⚔️ 1980❤️", "37⚔️ 3324❤️", "52⚔️ 6147❤️", "75⚔️ 10204❤️"],
     "Energy Vampire": ["21⚔️ 1485❤️", "34⚔️ 2799❤️", "49⚔️ 5591❤️", "72⚔️ 9603❤️"],
-    "Inoculation": ["21⚔️ 1650❤️", "34⚔️ 2974❤️", "49⚔️ 5777❤️", "72⚔️ 9805❤️"],
+    "Innoculation": ["21⚔️ 1650❤️", "34⚔️ 2974❤️", "49⚔️ 5777❤️", "72⚔️ 9805❤️"],
 };
 
 // ---- Per-enemy observed stats by visit order ----
@@ -265,7 +265,7 @@ const ENEMY_NOTES = {
     "Energy Vampire": ["Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 5 and Witherbloom 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", null],
     "Fleshfruit": ["Buffet 3<br>Infested 2<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", "Buffet 3<br>Eaten: Grant Infested 3.  Deal 10 damage to self.", null, null, null],
     "Glutmass": "Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.",
-    "Inoculation": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", null],
+    "Innoculation": ["Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.", "Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.", null],
     "Insatiable": ["Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.", "Trample<br>Gorge: Gain Rage 6.<br>Slay: Trigger Gorge.", null],
     "Jeermask": "Revenge: Apply Dazed 2 to the attacker.",
     "Korin the Judged": "Summon: Descend all friendly units to this floor and Retreat.",

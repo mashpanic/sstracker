@@ -55,7 +55,7 @@ BOSSVARIANT_TO_SCENARIO = {
     'Mischevious Child':   'SoulSavior_R3_BossBattle_StealBuffs1',
     # Lylith (R4) — by boss internal name
     'Plaguebringer':       'SoulSavior_R4_BossBattle_EstrangedChild_1',  # DualismAt50
-    'Inoculation':         'SoulSavior_R4_BossBattle_EstrangedChild_2',  # ArmorPerDebuff
+    'Innoculation':         'SoulSavior_R4_BossBattle_EstrangedChild_2',  # ArmorPerDebuff
     'Energy Vampire':      'SoulSavior_R4_BossBattle_EstrangedChild_3',  # WitherbloomOnAction
     # Lifemother (R5, O5 — one fixed set) — by mechanic suffix
     'Corpseflower':        'SoulSavior_R5_BossBattle_Lifemother_Debuffs',

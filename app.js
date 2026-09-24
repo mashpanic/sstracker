@@ -49,7 +49,7 @@ const BOSS_FILL_LETTERS = {
     'maera-boss-variant':    { s: 'Stern Sister', h: 'Sibling Hierarchy', e: 'Eldest Scion' },
     'thaddeus-boss-variant': { c: 'Train Chomper', s: 'Thick Skinned', i: 'Insatiable' },
     'tivi-boss-variant':     { d: 'Duplicitous', c: 'Mischevious Child', p: 'Prankster' },
-    'lylith-boss-variant':   { p: 'Plaguebringer', v: 'Energy Vampire', i: 'Inoculation' },
+    'lylith-boss-variant':   { p: 'Plaguebringer', v: 'Energy Vampire', i: 'Innoculation' },
     'lifemother-variant':    { c: 'Corpseflower', s: 'Swarmhost', b: 'Undying Bloom' }
 };
 
