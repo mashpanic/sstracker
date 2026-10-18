@@ -151,14 +151,16 @@ const PYRE_HEARTS = [
         effect: 'Add a Vengeful Shard to your deck after each battle. Draw 1 extra card for every 2 Blights in your deck.' },
 ];
 
-// ---- Starting Souls (Unit tab, Tier III) ----
+// ---- Starting Souls (Tier III) ----
 // The Soul-selection screen at run start ("Choose 3 Souls to start your run").
-// Hand-collected in-game, in the order the screen lists them (alphabetical
-// within each of its three pages). Icons are cropped from screenshots with the
-// diamond frame removed (souls/*.png). The text is the in-game wording with the
-// resource symbols written as emoji: ⚔️ attack, ❤️ health, 🔥 ember (Energy),
-// 🟠 Space (floor capacity), 💰 gold, ♦️ Pyre Health. Only the Unit tab's 33
-// souls so far — the Spell and Global tabs are not collected yet.
+// Hand-collected in-game, in the order that screen lists them: its three tabs
+// back to back, 12 Unit + 9 Spell + 12 Global = all 33 souls, each tab
+// alphabetical. The tab a soul came from makes no difference in game (the
+// random-souls option draws from all 33), so the list is flat. Icons are
+// cropped from screenshots with the diamond frame removed (souls/*.png). The
+// text is the in-game wording with the resource symbols written as emoji: ⚔️
+// attack, ❤️ health, 🔥 ember (Energy), 🟠 Space (floor capacity), 💰 gold,
+// ♦️ Pyre Health.
 const SOULS = [
     { name: 'Butterball', icon: 'souls/butterball.png',
         text: '+25❤️. Buffet 3. This unit can be Eaten to gain its ⚔️ and ❤️.' },
