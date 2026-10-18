@@ -151,6 +151,83 @@ const PYRE_HEARTS = [
         effect: 'Add a Vengeful Shard to your deck after each battle. Draw 1 extra card for every 2 Blights in your deck.' },
 ];
 
+// ---- Starting Souls (Unit tab, Tier III) ----
+// The Soul-selection screen at run start ("Choose 3 Souls to start your run").
+// Hand-collected in-game, in the order the screen lists them (alphabetical
+// within each of its three pages). Icons are cropped from screenshots with the
+// diamond frame removed (souls/*.png). The text is the in-game wording with the
+// resource symbols written as emoji: ⚔️ attack, ❤️ health, 🔥 ember (Energy),
+// 🟠 Space (floor capacity), 💰 gold, ♦️ Pyre Health. Only the Unit tab's 33
+// souls so far — the Spell and Global tabs are not collected yet.
+const SOULS = [
+    { name: 'Butterball', icon: 'souls/butterball.png',
+        text: '+25❤️. Buffet 3. This unit can be Eaten to gain its ⚔️ and ❤️.' },
+    { name: 'Dipper', icon: 'souls/dipper.png',
+        text: "Summon: Apply 100% of this unit's Buff stacks to friendly units." },
+    { name: 'Ghastbud', icon: 'souls/ghastbud.png',
+        text: 'Gain Titanite, Damage Shield 4, Endless, and -2🔥.' },
+    { name: 'Grump', icon: 'souls/grump.png',
+        text: 'Revenge: Gain +2⚔️ permanently. Action: Gain +3❤️ permanently.' },
+    { name: 'Heartbreaker', icon: 'souls/heartbreaker.png',
+        text: 'Gain Fragile and Reanimate 2. Extinguish: Apply Fragile to the non-boss unit that killed it.' },
+    { name: 'Karma', icon: 'souls/karma.png',
+        text: 'Revenge: Deal damage to the attacker equal to ⚔️ and gain Malaise 1.' },
+    { name: 'Lamb', icon: 'souls/lamb.png',
+        text: 'Endless. Extinguish: Draw +2 next turn and apply -1🔥.' },
+    { name: 'Maniac', icon: 'souls/maniac.png',
+        text: 'Vanguard: Multistrike 1. Resolve: Advance and gain Pyregel 4. Friendly units gain Burst 1 and +5⚔️.' },
+    { name: 'Meanmug', icon: 'souls/meanmug.png',
+        text: 'Gain Avarice 9. Celebrate: Gain Avarice 4 permanently. For every 100💰 spent, gain +10⚔️.' },
+    { name: 'Sarge', icon: 'souls/sarge.png',
+        text: 'Celebrate: Gain 3 upgrade slots and +30❤️ permanently. Units have a max of 5 upgrade slots.' },
+    { name: 'Slacy', icon: 'souls/slacy.png',
+        text: 'Equipped: The attached equipment gains +10⚔️ permanently. Slay: The attached equipment gains +3⚔️ and Armor 10 permanently.' },
+    { name: 'Sprout', icon: 'souls/sprout.png',
+        text: 'Gain ⚔️ equal to all Infested stacks. Siphon: Gain +4⚔️ permanently when an Infested unit dies.' },
+    { name: 'Beeziebub', icon: 'souls/beeziebub.png',
+        text: 'Purge this card. Deal damage to your Pyre equal to 10% of its current health. Draw 5 cards and apply -2🔥.' },
+    { name: 'Bougie', icon: 'souls/bougie.png',
+        text: 'Gain Attuned and +30 Magic Power.' },
+    { name: 'Goldie', icon: 'souls/goldie.png',
+        text: 'Gain Holdover. When played, gain 30💰 per 🔥 cost.' },
+    { name: 'Gorgon', icon: 'souls/gorgon.png',
+        text: 'Slay: +2🟠. Friendly units gain +4⚔️ and +8❤️.' },
+    { name: 'Metamind', icon: 'souls/metamind.png',
+        text: 'When played, add 3 upgrade slots. Spells have a max of 5 upgrade slots.' },
+    { name: 'Mollis', icon: 'souls/mollis.png',
+        text: 'Gain Quadrastack. Apply Frostbite 3 to targeted enemy units and Armor 3 to targeted friendly units.' },
+    { name: 'Red Hot', icon: 'souls/red-hot.png',
+        text: 'Gain Explosive and +10 Magic Power. Slay: Apply -1🔥 to a random card.' },
+    { name: 'Savanta', icon: 'souls/savanta.png',
+        text: 'Apply 0🔥. Take ♦️ damage equal to the base cost -1🔥. Spellchain.' },
+    { name: 'Wizlord', icon: 'souls/wizlord.png',
+        text: 'When played other spells in hand gain +3 Magic Power permanently. Consume: Double the effect.' },
+    { name: 'Daemos', icon: 'souls/daemos.png',
+        text: 'Your Pyre takes an additional 1 damage from all sources and gains Revenge: Draw +1 next turn and gain +1 permanent ♦️ and +1 permanent Pyre ⚔️.' },
+    { name: 'Elle', icon: 'souls/elle.png',
+        text: '4 random starter cards are upgraded with: Gain 1🔥 and draw +1 next turn.' },
+    { name: 'Equilibrius', icon: 'souls/equilibrius.png',
+        text: 'At the end of battle, If your deck is over 25 cards then purge down to 25 cards. After you purge a total of 5 cards, permanently draw +1 each turn.' },
+    { name: "Lil' Cap", icon: 'souls/lil-cap.png',
+        text: 'Units gain +6⚔️ and +12❤️ for every 10 cards you have in your Deck.' },
+    { name: 'Mimic', icon: 'souls/mimic.png',
+        text: 'Gain the allied champion. It gains a random upgrade the next 3 times you use a lightforge.' },
+    { name: 'Showtime', icon: 'souls/showtime.png',
+        text: 'A random floor has +5🟠. At the end of combat, the front friendly unit on that floor gains +1🟠, +10⚔️ and +30❤️ if there is 🟠 available (max 6🟠).' },
+    { name: 'Silver', icon: 'souls/silver.png',
+        text: 'Your Pyre randomly gains either +10❤️ or +10⚔️ after any boss is defeated. Gain an artifact that gives either +1🔥, +1 Draw, or +2🟠 after the next 3 flying bosses are defeated.' },
+    { name: 'Solaris', icon: 'souls/solaris.png',
+        text: 'Gain 5🔥. Reduce this amount by 1 each turn.' },
+    { name: 'Sparky', icon: 'souls/sparky.png',
+        text: 'Your Pyre gains +3⚔️ and +4❤️ permanently when a Champion kills a unit. Champions gain +4⚔️ and +4❤️ permanently when the Pyre kills a unit.' },
+    { name: 'Thik', icon: 'souls/thik.png',
+        text: 'Each time you draft a card, gain a second copy. Your Pyre has +5♦️ and +2⚔️ for each card in your deck.' },
+    { name: 'Warborne', icon: 'souls/warborne.png',
+        text: 'Draw +1 for each floor that has enemy units on it at turn end. Draw +1 each turn during Relentless. Draw 2 after playing 10 cards in a turn.' },
+    { name: 'Wormgut', icon: 'souls/wormgut.png',
+        text: '+1🟠 on each floor. If all three floors have friendly units at turn start, gain 1🔥. If you are filling at least 20 capacity, gain 2🔥.' },
+];
+
 // ============================================================
 // OBSERVED stats & ability notes — hand-collected in-game into
 // difficulty_observations.csv, which is why they live here with the

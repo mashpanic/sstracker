@@ -1689,15 +1689,18 @@ function importState() {
 }
 
 // ---- Screens ----
-// Three screens, one visible at a time: 'tracker' (Run Tracker), 'champions'
-// (Win-Loss), 'help' (Help). The buttons at the bottom of each screen switch
-// between them.
-let lastNonHelpScreen = 'tracker'; // where "Close Help" returns to
+// Four screens, one visible at a time: 'tracker' (Run Tracker), 'champions'
+// (Win-Loss), 'help' (Help), 'souls' (Souls). The buttons at the bottom of each
+// screen switch between them. Help and Souls are read-only pages opened on top
+// of whichever main screen you were on; their Close buttons return there.
+const SCREEN_NAMES = ['tracker', 'champions', 'help', 'souls'];
+let lastMainScreen = 'tracker'; // where "Close Help" / "Close Souls" returns to
 function showScreen(name) {
-    if (name !== 'help') lastNonHelpScreen = name; // remember the pre-Help screen
-    ['tracker', 'champions', 'help'].forEach(n => {
+    if (name !== 'help' && name !== 'souls') lastMainScreen = name; // remember the pre-Help/Souls screen
+    SCREEN_NAMES.forEach(n => {
         document.getElementById('screen-' + n).classList.toggle('active', n === name);
     });
+    if (name === 'souls') window.scrollTo(0, 0); // always open the long list at its top
     // Quick-fill mode may have been armed while the tracker was hidden (e.g.
     // first use lands on Help first) — focus couldn't land then, so retry now
     // that the screen is actually visible.
@@ -1706,8 +1709,43 @@ function showScreen(name) {
     }
 }
 
-// "Close Help" returns to whichever screen was showing before Help opened.
-function closeHelp() { showScreen(lastNonHelpScreen); }
+// "Close Help" / "Close Souls" return to whichever main screen was showing
+// before the page opened.
+function closeHelp() { showScreen(lastMainScreen); }
+function closeSouls() { showScreen(lastMainScreen); }
+
+// ---- Souls list ----
+// Builds the Souls screen's list once from SOULS (gamefacts.js): icon, name and
+// in-game text per soul, in the order the game's Soul screen shows them.
+(function renderSouls() {
+    const list = document.getElementById('souls-list');
+    if (!list || typeof SOULS === 'undefined') return;
+    SOULS.forEach(soul => {
+        const li = document.createElement('li');
+        li.className = 'soul';
+
+        const iconBox = document.createElement('div');
+        iconBox.className = 'soul-icon';
+        const img = document.createElement('img');
+        img.src = soul.icon;
+        img.alt = soul.name + ' icon';
+        img.loading = 'lazy';
+        iconBox.appendChild(img);
+
+        const textBox = document.createElement('div');
+        textBox.className = 'soul-text';
+        const name = document.createElement('h3');
+        name.className = 'soul-name';
+        name.textContent = soul.name;
+        const desc = document.createElement('p');
+        desc.className = 'soul-desc';
+        desc.textContent = soul.text;
+        textBox.append(name, desc);
+
+        li.append(iconBox, textBox);
+        list.appendChild(li);
+    });
+})();
 
 // First-time visitors (nothing saved in localStorage) land on Help; returning
 // visitors keep the default Run Tracker. State is only written once the user

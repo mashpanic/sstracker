@@ -1,6 +1,6 @@
-# App layout: three screens + Win-Loss
+# App layout: four screens + Win-Loss
 
-`index.html` presents the app as **three screens, one visible at a time**,
+`index.html` presents the app as **four screens, one visible at a time**,
 switched by the buttons at the bottom of each screen. This replaced the earlier
 side-by-side layout (tracker left, champion panel right) on 2026-07-17. The
 per-champion win/loss screen is labelled **Win-Loss** in the UI (its internal
@@ -8,11 +8,12 @@ id is still `#screen-champions`).
 
 | # | Screen | id | Button row (left → right) |
 |---|--------|----|---------------------------|
-| 1 | **Run Tracker** | `#screen-tracker` | *Win-Loss* · *Reset grid* · *Help* |
+| 1 | **Run Tracker** | `#screen-tracker` | *Win-Loss* · *Help* · *Souls* · *Reset grid* |
 | 2 | **Win-Loss** | `#screen-champions` | *Run Tracker* · *Reset record* · *Reset order* |
 | 3 | **Help** | `#screen-help` | *Run Tracker* |
+| 4 | **Souls** | `#screen-souls` | *Close Souls* (top right, sticky; returns to the screen you came from) |
 
-Screens are toggled by `showScreen('tracker'|'champions'|'help')` (in `app.js`),
+Screens are toggled by `showScreen('tracker'|'champions'|'help'|'souls')` (in `app.js`),
 which just flips the `.active` class. Each screen has its own fixed-label
 navigation button, so there is no single shared toggle.
 

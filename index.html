@@ -451,6 +451,38 @@
         #help-content p { margin: 8px 0; }
         #help-content a { color: #9d9da3; }
 
+        /* ---- Souls screen (screen 4): long scrollable reference list ----
+           Reuses the Help panel look and its title row / close button. The
+           title row sticks to the top so Close stays reachable mid-scroll. */
+        #souls-content {
+            max-width: 900px;
+            padding: 0 20px 16px;
+            background: #19191c;
+            border: 1px solid #29292e;
+            border-radius: 4px;
+            line-height: 1.45;
+        }
+        #souls-content h2 { margin: 0; font-size: 1.1em; }
+        .souls-header {
+            position: sticky; top: 0; z-index: 1;
+            margin: 0; padding: 16px 0 10px;
+            background: #19191c; border-bottom: 1px solid #29292e;
+        }
+        #souls-list { list-style: none; margin: 0; padding: 0; }
+        .soul {
+            display: flex; align-items: center; gap: 14px;
+            padding: 10px 0; border-bottom: 1px solid #29292e;
+        }
+        .soul:last-child { border-bottom: none; }
+        .soul-icon {
+            flex: 0 0 84px; height: 84px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .soul-icon img { max-width: 84px; max-height: 84px; object-fit: contain; }
+        .soul-text { min-width: 0; }
+        .soul-name { margin: 0 0 2px; font-size: 1em; color: #04d361; }
+        .soul-desc { margin: 0; }
+
         /* Two-line attribution on the Run Tracker screen. */
         #attribution div + div { margin-top: 2px; }
 
@@ -458,7 +490,7 @@
 </head>
 <body>
 
-    <!-- Three screens, one visible at a time, switched by the buttons at the
+    <!-- Four screens, one visible at a time, switched by the buttons at the
          bottom of each screen (see showScreen in app.js). -->
 
     <!-- Screen 1: run tracker -->
@@ -482,6 +514,7 @@
         <div class="button-row">
             <button type="button" class="bar-btn" onclick="showScreen('champions')">Win-Loss</button>
             <button type="button" class="bar-btn" onclick="showScreen('help')">Help</button>
+            <button type="button" class="bar-btn" onclick="showScreen('souls')">Souls</button>
             <button type="button" id="reset-grid" class="bar-btn" onclick="resetGrid()">Reset grid</button>
         </div>
     </div>
@@ -539,11 +572,12 @@
                 <h2>How to use this app</h2>
                 <button type="button" class="help-close" onclick="closeHelp()">Close Help</button>
             </div>
-            <p>This tracker has three screens, switched with the buttons at the
+            <p>This tracker has four screens, switched with the buttons at the
                bottom of each screen:</p>
             <ul>
                 <li><strong>Run Tracker</strong> — plan and follow a Soul Savior run.</li>
                 <li><strong>Win-Loss</strong> — keep a win/loss tally per starting champion.</li>
+                <li><strong>Souls</strong> — A reference list.</li>
                 <li><strong>Help</strong> — this page.</li>
                 <li><strong>Import/Export</strong> — your win-loss data, later on this page.</li>
             </ul>
@@ -607,6 +641,20 @@
                 <div>Game information sourced from the <a href="https://monstertrain2.miraheze.org/wiki/Main_Page" target="_blank" rel="noopener">Monster Train 2 Wiki</a>.</div>
                 <div>Content is available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a> unless otherwise noted.</div>
             </div>
+        </div>
+    </div>
+
+    <!-- Screen 4: Souls — read-only reference list of the starting Souls, filled
+         in by renderSouls() in app.js from SOULS (gamefacts.js). Opened from the
+         Run Tracker's Souls button; "Close Souls" returns to the screen it came
+         from (like Help). -->
+    <div id="screen-souls" class="screen">
+        <div id="souls-content">
+            <div class="help-header souls-header">
+                <h2>Souls</h2>
+                <button type="button" class="help-close" onclick="closeSouls()">Close Souls</button>
+            </div>
+            <ul id="souls-list"></ul>
         </div>
     </div>
 
