@@ -7,6 +7,9 @@ out/
 # Working observation spreadsheets — local only
 data/
 
+# Raw in-game screenshots (source for the souls/ icons) — local only
+screenshots/
+
 # Deprecated/legacy data — superseded sources, kept locally for reference, not versioned
 deprecated/
 
