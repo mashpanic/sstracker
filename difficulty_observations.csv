@@ -269,10 +269,10 @@ Overgrowth,R2_Heavy_HealGorge,Glutmass,1,12,81,Trample<br>Gorge: Gain Titanskin 
 Overgrowth,R2_Heavy_HealGorge,Glutmass,2,14,86,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,Yes
 Overgrowth,R2_Heavy_HealGorge,Glutmass,3,15,90,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,Yes
 Overgrowth,R2_Heavy_HealGorge,Glutmass,4,17,94,Trample<br>Gorge: Gain Titanskin 3 and restore 20 health.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,1,21,1650,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,2,34,2974,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,3,49,5777,Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.,Yes
-Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,4,72,9805,Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,1,21,1650,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.<br>Relentless: Lose Strike.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,2,34,2974,Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.<br>Relentless: Lose Strike.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,3,49,5777,Action: Apply Malaise 3 to your units.<br>Strike: Gain Armor equal to 3x Malaise.<br>Relentless: Lose Strike.,Yes
+Overgrowth,Boss_SoulSavior_R4_Spurned_ArmorPerDebuff,Innoculation,4,72,9805,Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.  Gain Armor equal to 3x Malaise.<br>Relentless: Lose Strike.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,1,20,1815,Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,2,33,3149,Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.,Yes
 Overgrowth,Boss_SoulSavior_R2_Indulgent_GorgeOnSlay,Insatiable,3,48,5962,Trample<br>Gorge: Gain Rage 5.<br>Slay: Trigger Gorge.,Yes
