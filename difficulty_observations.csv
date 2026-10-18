@@ -40,7 +40,6 @@ Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,3,0,30,"Buffet 3<br>Eaten: Grant
 Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,4,0,30,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Bloom,R2_Support_FeedBuffs_Ver2,Mother's Cherub,5,0,30,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Bloom,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,2,3,Extinguish: Apply Infested 1 to enemy units.,No
-Bloom,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,2,3,Extinguish: Apply Infested 1 to enemy units.,No
 Bloom,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,5,2,3,Extinguish: Apply Infested 1 to enemy units.,No
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Bloom,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,3,80,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
@@ -158,7 +157,6 @@ Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,3,,,"Buffet 3<br>Eaten: Grant D
 Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,4,,,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Tangle,R2_Support_FeedBuffs_Ver2,Mother's Cherub,5,,,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",No
 Tangle,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,,,Extinguish: Apply Infested 1 to enemy units.,No
-Tangle,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,,,Extinguish: Apply Infested 1 to enemy units.,No
 Tangle,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,5,,,Extinguish: Apply Infested 1 to enemy units.,No
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
 Tangle,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,,,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,No
@@ -308,8 +306,7 @@ Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,2,0,44,"Buffet 3<br>Eaten: 
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,3,0,46,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,4,0,49,"Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
 Overgrowth,R2_Support_FeedBuffs_Ver2,Mother's Cherub,5,0,49,"Infested 1<br>Buffet 3<br>Eaten: Grant Damage Shield 1, Spell Shield 1 and Life Steal 1.  Deal 10 damage to self.",Yes
-Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,3,5,Extinguish: Apply Infested 2 to enemy units.,Yes
-Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,4,6,9,Extinguish: Apply Infested 5 to enemy units.,Yes
+Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,1,3,5,Infested 2<br>Extinguish: Apply Infested 2 to enemy units.,Yes
 Overgrowth,RAny_Horde_T1_DeathAddsHivemind_Ver2,Mother's Fiend,5,6,9,Infested 5<br>Extinguish: Apply Infested 5 to enemy units.,Yes
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,1,5,108,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
 Overgrowth,R1_HeavyT1_LoseHealthOnMove_Ver2,Mother's Flagellant,2,6,114,Resolve: Take 20 damage.<br>Revenge: Gain Burst 1.,Yes
