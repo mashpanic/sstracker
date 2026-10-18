@@ -295,7 +295,7 @@ const ENEMY_NOTES = {
     "Phalanx": "Spikes 8<br>Strike: Lose Spikes 1.",
     "Plaguebringer": ["Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Gain Dualism at 50% Health<br>Action: Apply Malaise 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Gain Dualism at 50% Health<br>Action: Apply Malaise 5 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", null],
     "Plaguehost": "Extinguish: Apply Witherbloom 5 to your front unit.",
-    "Prankster": "Siphon: Add Tivi's Scourge to your hand.",
+    "Prankster": "Siphon: Add Tivi's Scourge to your hand.<br>Relentless: Lose Siphon.",
     "Qel the Malaiser": ["Incant: Apply Witherbloom 2 and Malaise 3 to your units.", "Incant: Apply Witherbloom 2 and Malaise 3 to your units.", "Incant: Apply Witherbloom 2 and Malaise 3 to your units.", "Incant: Apply Witherbloom 3 and Malaise 5 to your units.", null],
     "Quoto the Destroyer": ["Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 3.", null],
     "Sharp-Eye Sniper": "Slay: Gain Rage 2.",
