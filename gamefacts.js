@@ -338,7 +338,7 @@ const ENEMY_NOTES = {
     "Athane the Fallen": ["Incant: Apply Rage 2 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.", "Incant: Apply Rage 2 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.", "Incant: Apply Rage 2 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.", "Incant: Apply Rage 3 to enemy units.<br>Ascension: Spawn an Ossivane Sentinel.<br>Strike: Retreat.", null],
     "Corpseflower": "Trample<br>Strike: Apply Malaise 27.<br>Hellborne Harvest: Transfer all Debuff effects to your front unit.<br>On Team Turn: Lose Dazed 5.",
     "Duplicitous": "Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",
-    "Eldest Scion": "Resolve: Enemy units gain armor equal to their attack.",
+    "Eldest Scion": "Resolve: Enemy units gain armor equal to their attack.<br>Relentless: Remove Resolve.",
     "Elebor the Unstoppable": "Resolve: Gain Titanskin 5.",
     "Energizing Flautist": "Haste<br>Enchant: Grant enemy units Haste.",
     "Energy Vampire": ["Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 3 and Witherbloom 2 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", "Action: Apply Malaise 5 and Witherbloom 3 to your units.<br>Strike: Apply Witherbloom equal to Malaise.", null],

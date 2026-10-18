@@ -247,10 +247,10 @@ Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,1,18,1320,"Resol
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,2,31,2624,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,3,46,5406,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
 Overgrowth,Boss_SoulSavior_R3_Unruly_DuplicateEnemy,Duplicitous,4,69,9404,"Resolve: Creates a copy of the front enemy unit on the floor.  If there are no enemy units, create a Jeermask unit.",Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,1,18,1650,Resolve: Enemy units gain armor equal to their attack.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,31,2974,Resolve: Enemy units gain armor equal to their attack.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,3,46,5777,Resolve: Enemy units gain armor equal to their attack.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,4,69,9805,Resolve: Enemy units gain armor equal to their attack.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,1,18,1650,Resolve: Enemy units gain armor equal to their attack.<br>Relentless: Remove Resolve.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,2,31,2974,Resolve: Enemy units gain armor equal to their attack.<br>Relentless: Remove Resolve.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,3,46,5777,Resolve: Enemy units gain armor equal to their attack.<br>Relentless: Remove Resolve.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Armor,Eldest Scion,4,69,9805,Resolve: Enemy units gain armor equal to their attack.<br>Relentless: Remove Resolve.,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,1,18,594,Resolve: Gain Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,2,31,1855,Resolve: Gain Titanskin 5.,Yes
 Overgrowth,Boss_SoulSavior_R2_TrainBoss_BigStats,Elebor the Unstoppable,3,46,4591,Resolve: Gain Titanskin 5.,Yes
