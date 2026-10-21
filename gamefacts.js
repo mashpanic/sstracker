@@ -379,7 +379,7 @@ const ENEMY_NOTES = {
     "Quoto the Destroyer": ["Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 2.", "Titanskin 10<br>Revenge: Lose Titanskin 1 and Gain Rage 3.", null],
     "Sharp-Eye Sniper": "Slay: Gain Rage 2.",
     "Sibling Hierarchy": ["Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 5 to enemy units.", "Shift: Apply Rage 6 to enemy units.", null],
-    "Stern Sister": "Resolve: Apply Burst 1 to self and enemy units.",
+    "Stern Sister": "Resolve: Apply Burst 1 to self and enemy units.<br>Relentless: Remove Resolve.",
     "Swarmhost": "Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.",
     "The Undying Spirit": ["Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.", "Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.", "Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.", "Infested 7<br>Reanimate 6<br>Strike: Gain Infested 3.", null],
     "Thick Skinned": ["Trample<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Titanskin 3<br>Gorge: Gain Rage 5 and Titanskin 5.", "Trample<br>Gorge: Gain Rage 6 and Titanskin 6.", null],

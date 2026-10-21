@@ -390,10 +390,10 @@ Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,1,23,1485,
 Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,2,36,2799,Shift: Apply Rage 5 to enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,3,51,5591,Shift: Apply Rage 5 to enemy units.,Yes
 Overgrowth,Boss_SoulSavior_R1_Dutiful_AscendDescend,Sibling Hierarchy,4,74,9603,Shift: Apply Rage 6 to enemy units.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,1,24,1320,Resolve: Apply Burst 1 to self and enemy units.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,2,37,2624,Resolve: Apply Burst 1 to self and enemy units.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,3,52,5406,Resolve: Apply Burst 1 to self and enemy units.,Yes
-Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9404,Resolve: Apply Burst 1 to self and enemy units.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,1,24,1320,Resolve: Apply Burst 1 to self and enemy units.<br>Relentless: Remove Resolve.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,2,37,2624,Resolve: Apply Burst 1 to self and enemy units.<br>Relentless: Remove Resolve.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,3,52,5406,Resolve: Apply Burst 1 to self and enemy units.<br>Relentless: Remove Resolve.,Yes
+Overgrowth,Boss_SoulSavior_R1_Dutiful_Burst,Stern Sister,4,75,9404,Resolve: Apply Burst 1 to self and enemy units.<br>Relentless: Remove Resolve.,Yes
 Overgrowth,Boss_SoulSavior_Final_Lifemother_Infested,Swarmhost,5,123,25821,Trample<br>Harvest: Gain Infested 6.<br>On Team Turn: Lose Dazed 5.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,1,11,413,Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.,Yes
 Overgrowth,Boss_SoulSavior_R3_TrainBoss_Reanimate,The Undying Spirit,2,22,1662,Infested 6<br>Reanimate 6<br>Strike: Gain Infested 2.,Yes
