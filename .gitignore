@@ -31,3 +31,6 @@ venv/
 
 # Throwaway headless-test harness copies of index.html (temp files)
 _t*.html
+
+# Champion log-book screenshots (source for thumbnails/card art) — local only
+champions/

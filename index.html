@@ -336,77 +336,48 @@
         }
         .bar-btn:hover { border-color: #04d361; color: #04d361; }
 
-        /* ---- Champion win/loss record, two-column grid ----
-           24 rows split in half: rows 1-12 fill the left column top-to-bottom,
-           13-24 the right, sized to roughly span the run-tracker table's width.
-           Rows are flex (not table cells) so they can flow inside the grid. */
+        /* ---- Win-Loss screen: fixed 6x4 grid of square champion card-art tiles.
+           Tile size follows the window (floor 150px); the grid never reflows, so
+           a small window just cuts it off. W-L pill bottom right; a green inset
+           border marks champions in the current streak, a white one the selected. ---- */
         #champion-grid {
+            --cgap: 2px;
+            --cw: max(150px, min(calc((100vw - 40px) / 6), calc((100vh - 40px - 70px) / 4)));
             display: grid;
-            grid-auto-flow: column;
-            grid-template-rows: repeat(12, auto);
-            grid-template-columns: 1fr 1fr;
-            column-gap: 28px;
-            max-width: 900px;
+            grid-template-columns: repeat(6, var(--cw));
+            gap: var(--cgap);
+            width: max-content;
         }
-        .champion-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: grab;
-            border-bottom: 1px solid #212126;
-            /* ~50% taller rows (text size unchanged) via extra vertical padding. */
-            padding: 10px 4px;
-        }
-        .champion-row.dragging { opacity: 0.4; }
-        /* Highlighted (clicked / worked-with) row. */
-        .champion-row.champ-selected { background: #1f3a2d; border-radius: 4px; }
-        .champion-row.champ-selected .champ-alias { color: #04d361; }
-        .champ-grip { color: #52525b; user-select: none; padding: 0 4px 0 2px; }
-        .champ-alias {
-            font-weight: bold; white-space: nowrap; cursor: pointer;
-            flex: 0 0 auto; min-width: 100px;
-        }
-        /* Lap indicator column: a green up / red down arrow (or blank), shown
-           just before the win-loss score. Fixed narrow width so the scores line
-           up whether or not a lap arrow is present. */
-        .champ-lap {
-            flex: 0 0 18px; text-align: center; font-weight: bold;
-            font-size: 0.95em; line-height: 1;
-        }
-        .lap-up { color: #04d361; }
-        .lap-down { color: #ef4444; }
-        /* Win-loss score (e.g. "7-3"), left-aligned a little after the name;
-           grows to fill the rest of the row. */
+        .champion-tile { position: relative; width: var(--cw); height: var(--cw); cursor: pointer; }
+        .champion-tile img { display: block; width: 100%; height: 100%; }
         .champ-record {
-            flex: 1 1 auto; text-align: left; padding-left: 10px;
-            white-space: nowrap; font-weight: bold;
-            font-variant-numeric: tabular-nums;
+            position: absolute; right: calc(var(--cw) * .03); bottom: calc(var(--cw) * .03);
+            padding: .2em .38em .24em; border-radius: .4em; background: rgba(0,0,0,.62);
+            font: 700 calc(var(--cw) * .13)/1 system-ui, sans-serif;
+            font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px #000;
         }
-        /* W-L numbers use the default white text color (rec-w/rec-l kept for JS). */
-
-        /* Bottom row: nav/reset buttons (left) + the win/loss editor (right),
-           on the same two-column grid as #champion-grid so the editor lines up
-           with the second champion column. */
-        .champ-bottom {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            column-gap: 28px;
-            row-gap: 10px;
-            max-width: 900px;
-            align-items: center;
-            margin-top: 12px;
+        .champ-record .rec-w { color: #7be07b; }
+        .champ-record .rec-l { color: #ff7a7a; }
+        .champ-record i { font-style: normal; color: #aaa; font-weight: 400; }
+        .champion-tile.in-streak::after {
+            content: ""; position: absolute; inset: 0; box-sizing: border-box; pointer-events: none;
+            border: calc(var(--cw) * .03) solid #3ddc4f;
+            box-shadow: inset 0 0 calc(var(--cw) * .05) rgba(61,220,79,.55);
         }
-        .champ-bottom .button-row { margin-top: 0; }
+        .champion-tile.champ-selected::before {
+            content: ""; position: absolute; inset: 0; box-sizing: border-box; z-index: 2; pointer-events: none;
+            border: calc(var(--cw) * .02) solid #fff;
+        }
 
-        /* Selection-based win/loss editor (acts on the highlighted champion):
-           a segmented (joined) button set, then the selected champion's name. */
+        /* Bottom bar (same .button-row/.bar-btn look as the other screens). */
+        .champ-bottom .button-row { flex-wrap: wrap; align-items: center; }
+        #streak-count { cursor: default; }
+        #streak-count b { color: #3ddc4f; font-variant-numeric: tabular-nums; }
+        #champ-streak-toggle.in-streak { background: #1d4d24; border-color: #3ddc4f; }
+        #champ-streak-toggle.in-streak:hover { color: #e1e1e6; }
         .champ-editor { display: inline-flex; align-items: center; gap: 10px; }
         .champ-editor-name { font-size: 0.9em; font-weight: bold; color: #e1e1e6; }
-        /* Selected champion's W-L score, shown after its name (empty when none). */
-        .champ-editor-score {
-            font-size: 0.9em; font-weight: bold; color: #e1e1e6;
-            font-variant-numeric: tabular-nums; margin-left: -4px;
-        }
+        .champ-editor-score { font-size: 0.9em; font-weight: bold; color: #e1e1e6; font-variant-numeric: tabular-nums; }
         .btn-group { display: inline-flex; }
         .btn-group button {
             background: #202024; color: #c8c8ce; border: 1px solid #323238;
@@ -418,8 +389,6 @@
         .btn-group button:last-child { border-radius: 0 4px 4px 0; }
         .btn-group button[data-stat="win"] { color: #04d361; }
         .btn-group button[data-stat="loss"] { color: #ef4444; }
-        .btn-group button[data-lap="up"] { color: #04d361; }
-        .btn-group button[data-lap="down"] { color: #ef4444; }
         .btn-group button:hover:not(:disabled) { border-color: #04d361; background: #26262b; }
         /* Placed last so it wins over the per-stat colors when disabled. */
         .btn-group button:disabled { color: #52525b; opacity: 0.55; cursor: not-allowed; }
@@ -519,48 +488,31 @@
         </div>
     </div>
 
-    <!-- Screen 2: Win-Loss — per-champion win/loss tally, laid out in two
-         columns (rows 1-12 left, 13-24 right). Populated by app.js from
-         CHAMPION_CLANS; fully independent of the run grid (own storage key
-         + reset buttons). -->
+    <!-- Screen 2: Win-Loss — fixed 6x4 grid of champion card-art tiles (log-book
+         order), built by app.js from CHAMPION_LOG_ORDER. Bottom bar: streak
+         count, the selected champion's editor, streak buttons, nav. Fully
+         independent of the run grid (own storage key). -->
     <div id="screen-champions" class="screen">
         <div id="champion-grid"></div>
 
-        <!-- Bottom area (two-column grid, matching #champion-grid so the editor
-             lines up with the second champion column): row 1 has the nav
-             buttons (left) and the win/loss editor (right); row 2 has the two
-             reset buttons underneath the nav buttons. -->
         <div class="champ-bottom">
             <div class="button-row">
-                <button type="button" class="bar-btn" onclick="showScreen('tracker')">Run Tracker</button>
-                <button type="button" id="reset-lap" class="bar-btn" onclick="resetLap()">Reset Lap</button>
-                <button type="button" class="bar-btn" onclick="showScreen('help')">Help</button>
-            </div>
-
-            <!-- Editor: joined W+/W−/L+/L− buttons, then the lap ▲/▼ buttons
-                 (all disabled until a champion is selected) followed by the
-                 selected champion's name + score. The lap arrows set a
-                 per-champion, per-lap indicator independent of the win/loss
-                 tally (cleared by Reset Lap, not Reset record). -->
-            <div id="champ-editor" class="champ-editor">
-                <span class="btn-group">
-                    <button type="button" data-lap="up" title="Lap: up" disabled>▲</button>
-                    <button type="button" data-lap="down" title="Lap: down" disabled>▼</button>
-                </span>
-                <span class="btn-group">
-                    <button type="button" data-stat="win" data-delta="1" disabled>W+</button>
-                    <button type="button" data-stat="win" data-delta="-1" disabled>W−</button>
-                    <button type="button" data-stat="loss" data-delta="1" disabled>L+</button>
-                    <button type="button" data-stat="loss" data-delta="-1" disabled>L−</button>
-                </span>
-                <span class="champ-editor-name" id="champ-editor-name"></span>
-                <span class="champ-editor-score" id="champ-editor-score"></span>
-            </div>
-
-            <!-- Reset buttons: row 2, underneath the nav buttons. -->
-            <div class="button-row">
+                <button type="button" id="streak-count" class="bar-btn" tabindex="-1">Streak: <b id="streak-n">0</b></button>
+                <div id="champ-editor" class="champ-editor">
+                    <span class="champ-editor-name" id="champ-editor-name"></span>
+                    <span class="champ-editor-score" id="champ-editor-score"></span>
+                    <span class="btn-group">
+                        <button type="button" data-stat="win" data-delta="1">W+</button>
+                        <button type="button" data-stat="win" data-delta="-1">W−</button>
+                        <button type="button" data-stat="loss" data-delta="1">L+</button>
+                        <button type="button" data-stat="loss" data-delta="-1">L−</button>
+                    </span>
+                </div>
+                <button type="button" id="champ-streak-toggle" class="bar-btn" onclick="toggleStreak()">Add to streak</button>
+                <button type="button" id="reset-streak" class="bar-btn" onclick="resetStreak()">Reset streak</button>
                 <button type="button" id="reset-champions" class="bar-btn" onclick="resetChampions()">Reset record</button>
-                <button type="button" id="reset-order" class="bar-btn" onclick="resetChampionOrder()">Reset order</button>
+                <button type="button" class="bar-btn" onclick="showScreen('tracker')">Run Tracker</button>
+                <button type="button" class="bar-btn" onclick="showScreen('help')">Help</button>
             </div>
         </div>
     </div>
@@ -609,14 +561,12 @@
 
             <h3>Win-Loss</h3>
             <ul>
-                <li><strong>Win-loss score</strong> — each row shows the champion's record as wins-losses (e.g. "7-3").</li>
-                <li><strong>Select</strong> — click a champion's row to select it (green highlight); click it again to clear the selection.</li>
-                <li><strong>Adjust</strong> — with a champion selected, the grouped <strong>W+ / W− / L+ / L−</strong> buttons at the bottom change its record (counts never go below 0). They're disabled until a champion is selected.</li>
-                <li><strong>Lap</strong> — with a champion selected, <strong>▲</strong> records a win (win +1, green up arrow) and <strong>▼</strong> records a loss (loss +1, red down arrow); the arrow shows just before its win-loss score. Click the same arrow again to undo it (and clear the arrow); clicking the opposite arrow switches the result. <strong>Reset Lap</strong> clears the arrows for a new lap while keeping the win/loss totals.</li>
-                <li><strong>Reorder</strong> — drag a row by its grip (⠿) to move it; the new order is saved. The 24 champions fill the left column first, then the right.</li>
-                <li><strong>Reset order</strong> — restores the default champion order without changing any win/loss counts (it asks first).</li>
-                <li><strong>Reset record</strong> — clears all win/loss counts but keeps the current order and lap arrows (it asks first). It does not affect the Run Tracker.</li>
-                <li><strong>Reset Lap</strong> — clears every champion's lap arrow but keeps the win/loss counts and order (it asks first).</li>
+                <li><strong>Tiles</strong> — each champion is a card-art tile showing its record as wins-losses (e.g. "7-3") at the bottom right.</li>
+                <li><strong>Select</strong> — click a tile to select it (white outline). One champion is always selected; Fel is selected by default.</li>
+                <li><strong>Adjust</strong> — the bottom bar shows the selected champion's name and record. <strong>W+ / W− / L+ / L−</strong> change its record (counts never go below 0).</li>
+                <li><strong>Streak</strong> — <strong>Add to streak</strong> puts the selected champion in the current streak (green border); click it again (it reads "In streak ✓") to take it out. The bar shows how many champions are in the streak. Wins and losses are separate from the streak, so W+ / L+ never change it.</li>
+                <li><strong>Reset streak</strong> — clears the streak for a new one but keeps every win/loss count (it asks first).</li>
+                <li><strong>Reset record</strong> — clears all win/loss counts but keeps the streak (it asks first). It does not affect the Run Tracker.</li>
             </ul>
 
             <p>Everything you enter is saved in your browser and restored when you come back.</p>

@@ -1264,276 +1264,130 @@ document.addEventListener('click', (e) => {
     }
 })();
 
-// ---- Champion win/loss record (Champion Record screen) ----
+// ---- Champion win/loss record (Win-Loss screen) ----
 // A per-champion Win/Loss tally, fully independent of the run grid: its own
 // localStorage key and Reset button (resetGrid never touches it, and vice
-// versa), drag-reorderable rows, and a click-to-highlight selection. Rendered
-// into the two-column grid (#champion-grid) on the Champion Record screen.
-// Built from CHAMPION_CLANS (gamefacts.js); default order is alphabetical by
-// clan then champion, but the clan isn't shown.
+// versa). Rendered as a fixed 6x4 grid of card-art tiles (#champion-grid) in
+// the game's log-book order (CHAMPION_LOG_ORDER, gamefacts.js). One champion is
+// always selected; the bottom bar edits it. A separate "streak" marks the
+// champions in the current run of play (green border), independent of W/L.
 const CHAMPION_STORAGE_KEY = 'mt2-champion-records-v1';
+const CHAMPION_DEFAULT_SELECTED = 'Fel';
 
-// Flattened default order: sort by clan name, then champion name.
-const CHAMPION_DEFAULTS = CHAMPION_CLANS
-    .flatMap(c => c.champions.map(ch => ({ name: ch.name, alias: ch.alias, clan: c.clan })))
-    .sort((a, b) => a.clan.localeCompare(b.clan) || a.name.localeCompare(b.name));
-const CHAMPION_BY_NAME = Object.fromEntries(CHAMPION_DEFAULTS.map(c => [c.name, c]));
+const CHAMPION_ALIAS = Object.fromEntries(
+    CHAMPION_CLANS.flatMap(c => c.champions.map(ch => [ch.name, ch.alias])));
+const CHAMPION_BY_NAME = Object.fromEntries(CHAMPION_LOG_ORDER.map(c => [c.name, c]));
 
-// In-memory records: { name: {win, loss, lap} }. Row order lives in the DOM and
-// is serialized alongside the counts on save. `lap` is a short-term per-lap
-// indicator ('up' | 'down' | null), independent of the win/loss tally: it's set
-// by the editor's ▲/▼ buttons, shown as a green/red arrow before the score, and
-// cleared by Reset Lap (not Reset record). selectedChamp is the currently
-// highlighted row (name), or null.
+// In-memory state: records { name: {win, loss} }, the selected champion's name,
+// and the set of champions in the current streak. Saved on every change as
+// { records, selected, streak }. (Older saves also carried a row order and a
+// per-champion lap arrow; both are ignored now, and the lap's wins/losses are
+// already part of the win/loss totals.)
 let championRecords = {};
-let selectedChamp = null;
+let selectedChamp = CHAMPION_DEFAULT_SELECTED;
+let streakChamps = new Set();
 
-// Render a champion's lap state as an arrow (empty string when no lap set).
-function lapArrow(lap) {
-    if (lap === 'up') return '<span class="lap-up">▲</span>';
-    if (lap === 'down') return '<span class="lap-down">▼</span>';
-    return '';
-}
-
-function loadChampionOrder() {
+function loadChampionState() {
     let saved = null;
     try { saved = JSON.parse(localStorage.getItem(CHAMPION_STORAGE_KEY)); } catch (e) { /* ignore */ }
-    // Seed every champion at 0/0, then overlay any saved counts.
     championRecords = {};
-    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name] = { win: 0, loss: 0, lap: null }; });
+    CHAMPION_LOG_ORDER.forEach(c => { championRecords[c.name] = { win: 0, loss: 0 }; });
     if (saved && saved.records) {
         Object.entries(saved.records).forEach(([name, rec]) => {
             if (!championRecords[name]) return; // dropped from the game since saved
             championRecords[name].win = Math.max(0, parseInt(rec.win, 10) || 0);
             championRecords[name].loss = Math.max(0, parseInt(rec.loss, 10) || 0);
-            championRecords[name].lap = (rec.lap === 'up' || rec.lap === 'down') ? rec.lap : null;
         });
     }
-    selectedChamp = (saved && CHAMPION_BY_NAME[saved.selected]) ? saved.selected : null;
-    // Start from the saved order (valid names only), then append any champions
-    // it's missing so new ones show up at the bottom rather than vanishing.
-    const order = (saved && Array.isArray(saved.order)) ? saved.order.filter(n => CHAMPION_BY_NAME[n]) : [];
-    CHAMPION_DEFAULTS.forEach(c => { if (!order.includes(c.name)) order.push(c.name); });
-    return order;
-}
-
-// Current champion row order as rendered in the grid (the DOM is the source
-// of truth for order — drag-reorder moves nodes directly).
-function championGridOrder() {
-    return Array.from(document.querySelectorAll('#champion-grid .champion-row'))
-        .map(r => r.dataset.champ);
+    selectedChamp = (saved && CHAMPION_BY_NAME[saved.selected]) ? saved.selected : CHAMPION_DEFAULT_SELECTED;
+    streakChamps = new Set(saved && Array.isArray(saved.streak) ? saved.streak.filter(n => CHAMPION_BY_NAME[n]) : []);
 }
 
 function saveChampionState() {
-    const order = championGridOrder();
     try {
-        localStorage.setItem(CHAMPION_STORAGE_KEY,
-            JSON.stringify({ order, records: championRecords, selected: selectedChamp }));
+        localStorage.setItem(CHAMPION_STORAGE_KEY, JSON.stringify(
+            { records: championRecords, selected: selectedChamp, streak: [...streakChamps] }));
     } catch (e) { /* storage unavailable — ignore */ }
 }
 
-// Highlight one champion row (or clear with null). Updates the DOM class,
-// stores the choice, and persists.
+// Sync every tile (score, streak border, selection) and the bottom bar to state.
+function updateChampUI() {
+    document.querySelectorAll('#champion-grid .champion-tile').forEach(t => {
+        const name = t.dataset.champ, r = championRecords[name];
+        t.classList.toggle('champ-selected', name === selectedChamp);
+        t.classList.toggle('in-streak', streakChamps.has(name));
+        t.querySelector('.rec-w').textContent = r.win;
+        t.querySelector('.rec-l').textContent = r.loss;
+    });
+    const r = championRecords[selectedChamp];
+    document.getElementById('streak-n').textContent = streakChamps.size;
+    document.getElementById('champ-editor-name').textContent = selectedChamp;
+    document.getElementById('champ-editor-score').innerHTML =
+        `<span class="rec-w">${r.win}</span>-<span class="rec-l">${r.loss}</span>`;
+    const tog = document.getElementById('champ-streak-toggle');
+    const inStreak = streakChamps.has(selectedChamp);
+    tog.classList.toggle('in-streak', inStreak);
+    tog.textContent = inStreak ? 'In streak ✓' : 'Add to streak';
+}
+
 function setSelectedChamp(name) {
     selectedChamp = name;
-    document.querySelectorAll('#champion-grid .champion-row').forEach(r => {
-        r.classList.toggle('champ-selected', r.dataset.champ === name);
-    });
-    updateChampEditor();
+    updateChampUI();
     saveChampionState();
 }
 
-// Sync the bottom win/loss editor to the current selection: show the selected
-// champion's alias (or "none") and enable its buttons only when one is chosen.
-function updateChampEditor() {
-    const editor = document.getElementById('champ-editor');
-    if (!editor) return;
-    const nameEl = document.getElementById('champ-editor-name');
-    const scoreEl = document.getElementById('champ-editor-score');
-    if (selectedChamp) {
-        const r = championRecords[selectedChamp];
-        if (nameEl) nameEl.textContent = CHAMPION_BY_NAME[selectedChamp].alias;
-        if (scoreEl) {
-            const lap = lapArrow(r.lap);
-            scoreEl.innerHTML = (lap ? `${lap} ` : '') +
-                `<span class="rec-w">${r.win}</span>-<span class="rec-l">${r.loss}</span>`;
-        }
-    } else {
-        if (nameEl) nameEl.textContent = '';
-        if (scoreEl) scoreEl.textContent = '';
-    }
-    editor.querySelectorAll('.btn-group button').forEach(b => { b.disabled = !selectedChamp; });
+function toggleStreak() {
+    if (!streakChamps.delete(selectedChamp)) streakChamps.add(selectedChamp);
+    updateChampUI();
+    saveChampionState();
 }
 
-// One champion's row: a drag grip, the alias, and independent Win/Loss
-// counters. A <div> row (not a table row) so the 24 rows can flow into the
-// two-column grid (#champion-grid).
-function championRow(name) {
-    const c = CHAMPION_BY_NAME[name];
-    const rec = championRecords[name];
-    const row = document.createElement('div');
-    row.className = 'champion-row';
-    row.draggable = true;
-    row.dataset.champ = name;
-    // Row is the grip, the name, and the read-only win-loss score. Editing is
-    // done through the bottom editor (acts on the selected champion).
-    row.innerHTML =
-        `<span class="champ-grip" title="Drag to reorder">⠿</span>` +
-        `<span class="champ-alias">${c.alias}</span>` +
-        `<span class="champ-lap">${lapArrow(rec.lap)}</span>` +
-        `<span class="champ-record"><span class="rec-w">${rec.win}</span>-<span class="rec-l">${rec.loss}</span></span>`;
-    return row;
-}
-
-function renderChampions(order) {
-    const grid = document.getElementById('champion-grid');
-    grid.innerHTML = '';
-    order.forEach(name => {
-        const row = championRow(name);
-        if (name === selectedChamp) row.classList.add('champ-selected');
-        grid.appendChild(row);
-    });
+async function resetStreak() {
+    if (!await confirmModal(
+        'Reset the streak? This clears the green borders. Win/loss counts are kept.',
+        { confirmText: 'Reset streak', cancelText: 'Cancel' }
+    )) return;
+    streakChamps.clear();
+    updateChampUI();
+    saveChampionState();
 }
 
 async function resetChampions() {
     if (!await confirmModal(
-        'Reset the champion record? This clears every win/loss count. The current order is kept.',
+        'Reset the champion record? This clears every win/loss count. The streak is kept.',
         { confirmText: 'Reset', cancelText: 'Cancel' }
     )) return;
-    // Zero the counts but keep the current row order, selection, and lap state
-    // (laps are cleared separately by Reset Lap).
-    const order = championGridOrder();
-    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name].win = 0; championRecords[c.name].loss = 0; });
-    renderChampions(order);
-    updateChampEditor();
-    saveChampionState();
-}
-
-// Clear every champion's lap indicator without touching win/loss counts, the
-// order, or the selection. Its own reset (Reset Lap), independent of Reset
-// record and the Run Tracker.
-async function resetLap() {
-    if (!await confirmModal(
-        'Reset the lap? This clears every champion’s up/down arrow. Win/loss counts are kept.',
-        { confirmText: 'Reset Lap', cancelText: 'Cancel' }
-    )) return;
-    const order = championGridOrder();
-    CHAMPION_DEFAULTS.forEach(c => { championRecords[c.name].lap = null; });
-    renderChampions(order);
-    updateChampEditor();
-    saveChampionState();
-}
-
-// Restore the default champion order without touching the win/loss counts or
-// the highlight. Re-renders (which keeps current records + selection) and
-// persists the new order.
-async function resetChampionOrder() {
-    if (!await confirmModal(
-        'Reset the champion order to the default? Win/loss counts are kept.',
-        { confirmText: 'Reset order', cancelText: 'Cancel' }
-    )) return;
-    renderChampions(CHAMPION_DEFAULTS.map(c => c.name));
+    CHAMPION_LOG_ORDER.forEach(c => { championRecords[c.name].win = 0; championRecords[c.name].loss = 0; });
+    updateChampUI();
     saveChampionState();
 }
 
 (function initChampions() {
     const grid = document.getElementById('champion-grid');
-    if (!grid || typeof CHAMPION_CLANS === 'undefined') return;
-    renderChampions(loadChampionOrder());
-    updateChampEditor(); // reflect any restored selection
-
-    // Bottom win/loss editor: adjust the currently selected champion. The
-    // buttons are disabled while nothing is selected, so this only fires with a
-    // valid selectedChamp.
-    const editor = document.getElementById('champ-editor');
-    if (editor) {
-        editor.addEventListener('click', e => {
-            const btn = e.target.closest('button');
-            if (!btn || !selectedChamp) return;
+    if (!grid) return;
+    loadChampionState();
+    CHAMPION_LOG_ORDER.forEach(c => {
+        const tile = document.createElement('div');
+        tile.className = 'champion-tile';
+        tile.dataset.champ = c.name;
+        tile.innerHTML = `<img src="${c.art}" alt="${c.name}">` +
+            `<span class="champ-record"><span class="rec-w"></span><i>–</i><span class="rec-l"></span></span>`;
+        grid.appendChild(tile);
+    });
+    grid.addEventListener('click', e => {
+        const tile = e.target.closest('.champion-tile');
+        if (tile) setSelectedChamp(tile.dataset.champ);
+    });
+    // W+/W−/L+/L− act on the selected champion (counts clamp at 0).
+    document.getElementById('champ-editor').querySelectorAll('.btn-group button').forEach(btn => {
+        btn.addEventListener('click', () => {
             const rec = championRecords[selectedChamp];
-            const row = [...grid.querySelectorAll('.champion-row')].find(r => r.dataset.champ === selectedChamp);
-            if (btn.dataset.lap) {
-                // Lap arrow ▲/▼ doubles as a quick win/loss entry: ▲ records a
-                // win (win+1, green up), ▼ records a loss (loss+1, red down).
-                // The lap holds one result, so the counts stay in sync with the
-                // arrow: re-clicking the current direction undoes it (and clears
-                // the arrow); clicking the opposite direction undoes the old
-                // result before applying the new one.
-                const dir = btn.dataset.lap;      // 'up' | 'down'
-                const undo = { up: 'win', down: 'loss' };
-                if (rec.lap) rec[undo[rec.lap]] = Math.max(0, rec[undo[rec.lap]] - 1);
-                if (rec.lap === dir) {
-                    rec.lap = null;               // re-click: undo only, no re-apply
-                } else {
-                    rec[undo[dir]] += 1;
-                    rec.lap = dir;
-                }
-                if (row) {
-                    row.querySelector('.champ-lap').innerHTML = lapArrow(rec.lap);
-                    row.querySelector('.rec-w').textContent = rec.win;
-                    row.querySelector('.rec-l').textContent = rec.loss;
-                }
-            } else {
-                const stat = btn.dataset.stat;
-                rec[stat] = Math.max(0, rec[stat] + parseInt(btn.dataset.delta, 10));
-                if (row) {
-                    row.querySelector('.rec-w').textContent = rec.win;
-                    row.querySelector('.rec-l').textContent = rec.loss;
-                }
-            }
-            updateChampEditor(); // refresh the editor's W-L score / lap
+            rec[btn.dataset.stat] = Math.max(0, rec[btn.dataset.stat] + parseInt(btn.dataset.delta, 10));
+            updateChampUI();
             saveChampionState();
         });
-    }
-
-    // Click a row to select/highlight it (click again to clear). The bottom
-    // editor then adjusts the selected champion's record.
-    grid.addEventListener('click', e => {
-        const row = e.target.closest('.champion-row');
-        if (!row) return;
-        const name = row.dataset.champ;
-        setSelectedChamp(selectedChamp === name ? null : name);
     });
-
-    // Drag-to-reorder across the two columns: pick the insertion point by 2-D
-    // proximity (nearest row center) so moving between columns works. The
-    // dragged row moves live, and the new order is persisted on drop.
-    let dragRow = null;
-    function champDragAfter(x, y) {
-        const rows = [...grid.querySelectorAll('.champion-row:not(.dragging)')];
-        let best = null, bestDist = Infinity, before = true;
-        rows.forEach(row => {
-            const b = row.getBoundingClientRect();
-            const cx = b.left + b.width / 2, cy = b.top + b.height / 2;
-            const d = Math.hypot(x - cx, y - cy);
-            if (d < bestDist) { bestDist = d; best = row; before = y < cy; }
-        });
-        if (!best) return null;
-        return before ? best : best.nextElementSibling; // insertBefore ref; null -> append
-    }
-    grid.addEventListener('dragstart', e => {
-        dragRow = e.target.closest('.champion-row');
-        if (!dragRow) return;
-        dragRow.classList.add('dragging');
-        setSelectedChamp(dragRow.dataset.champ); // working with a row highlights it
-        e.dataTransfer.effectAllowed = 'move';
-        try { e.dataTransfer.setData('text/plain', dragRow.dataset.champ); } catch (_) { /* Firefox needs data set */ }
-    });
-    grid.addEventListener('dragover', e => {
-        if (!dragRow) return;
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        const ref = champDragAfter(e.clientX, e.clientY);
-        if (ref == null) grid.appendChild(dragRow);
-        else if (ref !== dragRow) grid.insertBefore(dragRow, ref);
-    });
-    grid.addEventListener('drop', e => e.preventDefault());
-    grid.addEventListener('dragend', () => {
-        if (!dragRow) return;
-        dragRow.classList.remove('dragging');
-        dragRow = null;
-        saveChampionState();
-    });
+    updateChampUI();
 })();
 
 // ---- Export / Import app state ----

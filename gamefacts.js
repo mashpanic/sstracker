@@ -114,6 +114,37 @@ const CHAMPION_CLANS = [
     ] },
 ];
 
+// ---- Champion log-book order + card art ----
+// The 24 champions in the order the in-game log book lists them (also the tile
+// order on the Win-Loss screen). `art` is the square card-art crop in
+// champion-art/ (source PNGs live in the git-ignored champions/ folder).
+const CHAMPION_LOG_ORDER = [
+    { name: 'Fel'                     , art: 'champion-art/fel.webp' },
+    { name: 'Talos'                   , art: 'champion-art/talos.webp' },
+    { name: 'Lord Fenix'              , art: 'champion-art/lord-fenix.webp' },
+    { name: 'Lady Gilda'              , art: 'champion-art/lady-gilda.webp' },
+    { name: 'Ekka'                    , art: 'champion-art/ekka.webp' },
+    { name: 'Arduhn'                  , art: 'champion-art/arduhn.webp' },
+    { name: 'Bolete the Guillotine'   , art: 'champion-art/bolete-the-guillotine.webp' },
+    { name: 'Madame Lionsmane'        , art: 'champion-art/madame-lionsmane.webp' },
+    { name: 'Orechi'                  , art: 'champion-art/orechi.webp' },
+    { name: 'Baron Grael'             , art: 'champion-art/baron-grael.webp' },
+    { name: 'Herzal'                  , art: 'champion-art/herzal.webp' },
+    { name: 'Heph'                    , art: 'champion-art/heph.webp' },
+    { name: 'Hornbreaker Prince'      , art: 'champion-art/hornbreaker-prince.webp' },
+    { name: 'Shardtail Queen'         , art: 'champion-art/shardtail-queen.webp' },
+    { name: 'The Sentient'            , art: 'champion-art/the-sentient.webp' },
+    { name: 'Wyldenten'               , art: 'champion-art/wyldenten.webp' },
+    { name: 'Tethys Titansbane'       , art: 'champion-art/tethys-titansbane.webp' },
+    { name: 'Solgard the Martyr'      , art: 'champion-art/solgard-the-martyr.webp' },
+    { name: 'Penumbra'                , art: 'champion-art/penumbra.webp' },
+    { name: 'Primordium'              , art: 'champion-art/primordium.webp' },
+    { name: 'Rector Flicker'          , art: 'champion-art/rector-flicker.webp' },
+    { name: 'Little Fade'             , art: 'champion-art/little-fade.webp' },
+    { name: 'Spine Chief'             , art: 'champion-art/spine-chief.webp' },
+    { name: 'Echowright'              , art: 'champion-art/echowright.webp' },
+];
+
 // ---- Pyre Hearts ----
 // The 13 selectable Pyre Hearts, each with a short one-word alias, its starting
 // ATK/HP, and its effect text. Hand-curated from in-game (does not change
