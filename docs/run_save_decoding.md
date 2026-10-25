@@ -27,6 +27,8 @@ indexes). This file explains the structure; that one lists the values.
 | `mt2_resolve_guids.py` | Resolves localization keys to English (`resources.assets`) and reads each clan's champion order → `out/guid_names.json`, `out/class_champions.json`. With `--history` it reports any run GUID missing from the game data (**none**: all 234 GUIDs used by the 100 runs resolve). |
 | `mt2_decode_runs.py` | Decodes `RunHistory.json` into readable per-run JSON (`out/runs_decoded.json`) and prints a per-champion W–L summary. |
 | `mt2_emit_run_reference.py` | Writes `run_save_reference.md`. |
+| `mt2_decode_map.py` | Decodes the pre-generated map in an in-progress save; `--stats DIR` tallies minor nodes over many snapshots. |
+| `mt2_snapshot_saves.sh` | Run by the player: keeps every distinct version of the run save for later study. |
 
 Order: `guid_scan` → `resolve_guids` → `decode_runs` / `emit_run_reference`.
 Re-run after a game patch. Why it works: Unity stores each object's name and its
@@ -164,26 +166,81 @@ abandoned/unfinished run, counted as not a win). A loss, or presumably an
 abandon, resets the current streak. (This is the game's own streak, unrelated to
 the tracker's Win-Loss "streak" of champions, but it is the same word.)
 
-## In-progress run (`save-regionRun.json[.backup]`)
+## In-progress run and the pre-generated map (`save-regionRun.json[.backup]`)
 
-The save holds the **whole run set-up decided in advance** — read from one
-backup, and consistent with the finished-run structure:
+The save holds the **whole run map, generated before you reach it**. Decode with
+`extraction/mt2_decode_map.py SAVE.json` (checked on the one Soul Savior save we
+have, a run with 3 battles done; consistent with the finished-run structure).
 
-- `runState.nodes[i]` ↔ `battleIndex i` (0 Astrael … 9 Lifemother, 10 spare).
-  Each node has `scenarioIndex` (variant, same meaning as above), `trialInfo`
-  (`trialDataId` = the trial offered there, `trialEnabled` = taken),
-  `chosenBranch` (left/right pick, −1 until chosen), `mapNodes[0]._nodes[]`
-  (GUIDs of the 3–4 minor nodes offered: merchants, reward nodes, unit packs,
-  upgraded nodes…) and, for the **first battle of each region only**, `bossId`:
-  the *minor boss* (a `CharacterData`: `…R1_TrainBoss_Athane`, `…R2_TrainBoss_BigStats`
-  = Elebor, `…R3_TrainBoss_Spikes`, `…R4_TrainBoss_EmberGranter` = Ajax; and
-  `…R0_TrainBoss_Defensive` for Astrael).
-- So a live save reveals, before you play them, each region's minor boss, wave
-  set, boss variant and trial offer — the things the tracker records by hand.
-  **Finished-run records do not keep the minor boss** (no `runState`).
-- `regionRunVisitedRegions` and `regionRunDefeatedBosses` record progress;
-  `souls` is the souls taken so far.
-- The history's newest unfinished row (score 27,529) is this run.
+**Is it known before it is shown? Yes, in the saves we have.** In that Soul
+Savior save, the future slots (the regions not yet visited) already carry their
+minor boss, wave set, boss variant and left/right minor nodes, with
+`chosenBranch = −1`. And two non-Soul-Savior saves taken 28 s and 32 s into a
+run, before any battle, already contain the full map. So the map is built at run
+start. **INFERRED for Soul Savior** (no start-of-run Soul Savior save yet).
+
+Structure of `runState.nodes[i]` (`i` = `battleIndex`; slot 10 is spare):
+
+| Field | Meaning |
+|---|---|
+| `scenarioIndex` | variant for that slot (same lists as finished runs) |
+| `bossId` | first battle of each region only: the **minor boss** (`CharacterData`; names resolve, e.g. Athane the Fallen, Elebor the Unstoppable, Phalanx, Ajax the Deathbringer; slot 0 = Astrael) |
+| `trialInfo` | `trialDataId` (trial offered/taken) and `trialEnabled` (taken). The trial's tier depends on the ring, so the value for an unvisited slot may be provisional. |
+| `chosenBranch` | the left/right pick: 0 or 1, −1 until chosen |
+| `mapNodes[0]`, `mapNodes[1]` | the **left and right** branches; each lists `_nodes[]` |
+
+Each branch lists the region's **shared central nodes first** (identical on both
+sides), then that side's **two minor nodes**: the first battle of a region has
+1 central node, the boss battle has 2, so a region has 3 central nodes in all
+(matching the wiki rule). Central nodes that show as `SoulSavior_…Upgraded…` are
+the "+" versions earned by beating another region's boss; in the examined save,
+the region that had been won first left every *other* region with exactly one
+upgraded central node, as the rule says.
+
+**Minor nodes.** The nine in-game names and the node each is in the data
+(all nine CONFIRMED by Benj 2026-10-25; Hoard gives a relic, matching the blessing node):
+
+| In-game name | Internal node |
+|---|---|
+| UnitPrimary | `RewardNodeUnitPack<primary clan>` |
+| UnitAllied | `RewardNodeUnitPack<allied clan>` |
+| Boons | `RewardNodeCoinMedium` (coins) |
+| Well | `RewardNodePurgeTwo` (purge) |
+| Remains | `RewardNodeHeal` (heal) |
+| Armory | `RewardNodeEquipmentOrRoom` |
+| Hoard | `RewardNodeBlessingOnly` |
+| Vortex | `RewardNodeDuplicateCard` |
+| Celestial | `StoryEventPoolData` |
+
+Observed in the one Soul Savior map (16 sides = 32 minor nodes), **a sample, not
+a distribution**:
+- Every side is one "A" node plus one "B" node: A ∈ {UnitPrimary, UnitAllied,
+  Hoard, Vortex, Celestial} (16 of them), B ∈ {Armory, Boons, Well, Remains}
+  (16 of them).
+- Counts: Armory 6, UnitPrimary 4, UnitAllied 4, Well 4, Boons 3, Celestial 3,
+  Remains 3, Hoard 3, Vortex 2.
+- Pairs that always appeared together: Celestial + Well (3 of 3), Hoard +
+  Armory (3 of 3), Vortex + Boons (2 of 2); the unit nodes paired with Armory,
+  Remains, Well or Boons. (Could be chance with this few.)
+- Benj's hypothesis (to test): a fixed set of nodes is always present,
+  randomly placed, and a few extra random nodes fill the remaining slots. The
+  one sample is consistent with it (every type appears at least 2 times; A
+  nodes at least 2, B nodes at least 3), but cannot show it.
+- The game's `RunDataSoulSavior` object lists the node slots and pools (a node
+  list per ring with `RandomChosenMainClassUnit`, `RandomChosenSubClassUnit`,
+  `DuplicateCard`, `StoryEventPool`, `BlessingOnly`, `Heal`, `CoinMedium`,
+  `EquipmentOrRoom`, plus integer fields that may be weights); not decoded.
+  If the hypothesis is right, the fixed set and the "fill" count should be in it.
+
+To study the **distribution** one needs many saves: finished-run records do not
+keep the map. `extraction/mt2_snapshot_saves.sh` (run it in the account that
+plays) keeps every distinct version of the run save; then
+`mt2_decode_map.py --stats DIR` tallies minor nodes and side pairs over the
+distinct runs. It also answers whether a Soul Savior map exists at run start.
+
+`regionRunVisitedRegions` and `regionRunDefeatedBosses` record progress;
+`souls` is the souls taken so far. The history's newest unfinished row (score
+27,529) is this run.
 
 ## How this was verified
 
@@ -198,8 +255,8 @@ and trials named by hover, damage figures): all agree. The Run History list
 - **Points formula** beyond Astrael (code, not data).
 - **Gold medal**: confirm the meaning in game; check the other 55 history rows.
 - **Minor boss names** for finished runs: not recorded; only in a live save.
-- Not every `nodes[]` GUID in the in-progress save was resolved by hand
-  (several resolve to `RewardNodeData`/`MerchantData` names).
+- Minor-node **distribution** (needs many saves; see above), the pools/weights in
+  `RunDataSoulSavior`.
 - `metagameSave.json`: `trackedValues`, `classStats` (per-clan win counts), unlocks are not decoded.
 
 ## Corrections to earlier drafts
