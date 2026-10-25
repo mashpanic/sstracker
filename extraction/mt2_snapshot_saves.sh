@@ -4,12 +4,13 @@
 # over many runs. Run it in the account that plays the game, in a Terminal window,
 # and leave it open (Ctrl-C to stop). Needs bash 3.2+ (no 4+ features used).
 #
-#   bash extraction/mt2_snapshot_saves.sh [OUTDIR]       # default: ~/mt2-snapshots
+#   bash extraction/mt2_snapshot_saves.sh [OUTDIR]
 #
-# Then copy OUTDIR into the project (git-ignored) and run
-#   python3 extraction/mt2_decode_map.py --stats OUTDIR
+# Default OUTDIR is <project>/mt2-save-copy/snapshots (git-ignored), so afterwards just run
+#   python3 extraction/mt2_decode_map.py --stats mt2-save-copy/snapshots
 SAVES="$HOME/Library/Application Support/Shiny Shoe/MonsterTrain2/saves"
-OUT="${1:-$HOME/mt2-snapshots}"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OUT="${1:-$HERE/../mt2-save-copy/snapshots}"
 mkdir -p "$OUT"
 last=""
 echo "watching $SAVES -> $OUT (Ctrl-C to stop)"

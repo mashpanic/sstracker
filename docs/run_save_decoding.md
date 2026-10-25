@@ -155,6 +155,11 @@ and losses) are those that used **no undo and no restart combat**. Test on the
 has both at 0. 45 of 45 agree. Strongly supported; the meaning is not confirmed
 in game, and the other 55 history rows were not screenshotted.
 
+Controlled test, 2026-10-25: a winning run with exactly one deliberate undo and
+no restart (`numUndosUsedThisRun` 1, `numRestartsUsedThisRun` 0) showed **no gold
+medal** on its Run Summary, as predicted. So an undo alone removes it. Whether a
+restart alone does too is not tested.
+
 ## Win streaks (`metagameSave.json`)
 
 The game keeps its own win streaks: `winStreaks[]` and `bestWinStreaks[]`, each
