@@ -34,3 +34,9 @@ _t*.html
 
 # Champion log-book screenshots (source for thumbnails/card art) — local only
 champions/
+
+# Local copy of the game save folder (private, for exploration only)
+mt2-save-copy/
+
+# Run-summary screenshots (contain the player name) — local only
+rundata/
