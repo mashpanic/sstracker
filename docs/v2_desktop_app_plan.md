@@ -1,7 +1,11 @@
 # v2 desktop app (Tauri) — draft plan
 
-*Draft, 2026-10-25. Nothing here is built. The existing web tracker (`index.html` /
-`app.js`, served from GitHub Pages) stays as it is; v2 is a separate product.*
+*Drafted 2026-10-25. First Mac version built the same day in the separate repo
+`../sstracker-desktop` (Tauri; reveal engine in Rust with tests, page auto-fill layer,
+polling file watcher). Decided: separate repo, Mac first, Win-Loss unchanged for now.
+The existing web tracker (`index.html` / `app.js`, served from GitHub Pages) stays
+as it is; v2 is a separate product. Not yet verified: windowed UI on screen, Windows
+and Linux save locations, a full live run with the app open.*
 
 ## Why
 
