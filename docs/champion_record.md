@@ -50,7 +50,7 @@ gone).
 
 Left to right: `Streak: N` · selected champion's name + W-L · **W+ W− L+ L−** ·
 **Add to streak** (reads *In streak ✓* when the champion is in) · **Reset
-streak** · **Reset record** · **Run Tracker** · **Help**.
+streak** · **Reset record** · **Help** · **Close** (back to the Run Tracker).
 
 - **Select** — click a tile. One champion is always selected (never cleared);
   Fel is selected by default.
