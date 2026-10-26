@@ -21,7 +21,7 @@ dst = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
 
 N = json.load(open(src))
 KEEP = re.compile(r'^(RewardNode|SoulSavior_(RewardNode)?Upgraded|Boss_SoulSavior_R\d_TrainBoss_)')
-KINDS = {'MerchantData', 'StoryEventPoolData'}
+KINDS = {'MerchantData', 'StoryEventPoolData', 'ClassData'}  # ClassData: which clan packs are yours
 out = {}
 for g, v in N.items():
     i = v.get('internal') or ''
