@@ -139,11 +139,38 @@ soul upgrades. One other exception he has seen is hatched (egg) units, where bot
 keep a copy of the soul upgrade; he has not had a run to check whether it behaves like the
 box.
 
+## Experiment 2 (2026-10-27, 16:35-16:54): three boxes (the box duplicated twice)
+
+Same run. Deck had three box cards, all with `boxedCardStateIds [0, 1, 2]`; `boxedCardStates`
+still held only the three original units (the stored Hermit had 15 entries after
+experiment 1). All three boxes were played.
+
+- **Pop-out order**: not the same for every box this time. Turn 1: Shield, Spear, Shield.
+  Turn 2: Spear, Hermit, Spear. Turn 3: Hermit, Shield, Hermit. Each box walks the same
+  cycle Shield -> Spear -> Hermit, but boxes can start at different points (box 2 started one
+  step ahead). In experiment 1 both boxes started at the same point. Benj predicted the turn-3
+  wrap-around from the first two turns and it held. After three turns each box has produced
+  each of its three units once, so three Hermits were in play.
+- **Result (16:54:41, victory)**: the stored Hermit went from 15 to 21 entries: six new
+  entries, three Plus3HP (health +15, +12, +36) and three Plus2Attack (+14, +4, +6). So
+  three sets, one per Hermit that fought, added as separate entries to the one stored Hermit.
+  The Shield and the Spear did not change.
+- **Against Benj's turn notes**: totals match exactly. Health: 5 + 4 + 12 = 21 scales
+  (63 health) in both. Attack: 12 scales (24) in both. Per Hermit, health matches for all
+  three (5, 4, 12 scales) and attack matches for Hermit 3 (3 scales). For Hermits 1 and 2
+  the save has 7 and 2 attack scales where the notes have 3 and 6: four scales moved between
+  them, most likely the notes attributed some "damaged" events to the wrong Hermit.
+
+Conclusion: the rule from experiment 1 holds with three boxes. Each Hermit's gains in a
+fight are appended to the single stored Hermit as their own upgrade entries, so the next
+fight every Hermit from any box starts with all of them. The number of boxes opened only
+changes how many sets are appended.
+
 ## Next experiments
 
-1. **Play only one of the two boxes** in the next fight (Benj, 2026-10-27) and check what
-   the stored Hermit receives: does it get only that Hermit's gains, or also something for
-   the unopened box? Verify every stat against Benj's notes.
+1. **Play only one of the boxes** in a fight (Benj, 2026-10-27) and check what the stored
+   Hermit receives: does it get only that Hermit's gains, or also something for the unopened
+   boxes? Verify every stat against Benj's notes.
 2. Spells: the Wizlord spells with several upgrades are in the deck; no spell has been
    boxed (boxes only take units). Still open whether copies of a spell share changes.
 3. The egg-unit case, if a run with a hatching unit and a scaling soul comes up.
