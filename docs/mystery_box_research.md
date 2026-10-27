@@ -6,7 +6,8 @@ decoding details (see memory `public-release-info-hygiene`). Do not push this fi
 ## The question (short)
 
 The Celestial alcove event **Garfield Boxes** (the "Richard Garfield mystery box"
-event) gives a large box and small boxes. A **Jack in the Box** unit, and the
+event; designed by Richard Garfield, the Magic: The Gathering designer, as a guest
+event for Monster Train 2, per Benj) gives a large box and small boxes. A **Jack in the Box** unit, and the
 small boxes, interact with permanent card changes (and, for small boxes, with
 souls) in ways nobody fully understands. Benj saw one game where a card with
 permanent changes seemed to affect *copies* of the same card. A related open
