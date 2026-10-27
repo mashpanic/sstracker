@@ -274,3 +274,19 @@ and trials named by hover, damage figures): all agree. The Run History list
 - `2e24d1d9` is Pyre Dampener (T1) and `b1b76d68` Heaven's Seal (T3); a table
   published during exploration had them reversed.
 - The trial GUID is per **tier** (ring), not per battle or per trial.
+
+## Celestial alcove events: the game's pool vs the saved maps (2026-10-27)
+
+`extraction/mt2_celestial_model.py` (ask Klara to run it) reads every story event's
+ticket count and slot window from `sharedassets0.assets`, simulates how often each
+should appear per run, and prints that beside the counts from the snapshot saves.
+
+- The tickets in the game files equal the wiki's "Priority Tickets" table; the Garfield
+  Boxes event (the wiki's "Wondrous Boxes") has 25 and any slot.
+- The min/max window is in **map slots** (the save's `activeDistance`), a fixed place:
+  1-2 Maera, 3-4 Thaddeus, 5-6 Tivi, 7-8 Lylith. It is not time, because in Soul Savior
+  the player picks the region order. Example: Mysterious Mirror ("Copier", max slot 3) can
+  only be in Maera's or Thaddeus's battle row.
+- With 121 maps the model fits (Garfield 26% seen vs 24% model). Earlier mismatches were
+  small-sample noise, and possibly missed quick rejects (the snapshot script now polls
+  every second).
