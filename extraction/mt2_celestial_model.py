@@ -35,7 +35,7 @@ def load_events(data_dir):
         if cid != 114:
             continue
         ch = data[off:off + size]
-        if b'Story/Event Prefabs' not in ch or size >= 1000:
+        if b'Story/Event Prefabs' not in ch or size >= 2000:
             continue
         name, _ = read_mname(data, off, le)
         strs = re.findall(rb'[\x20-\x7e]{5,}', ch)
@@ -45,7 +45,8 @@ def load_events(data_dir):
             starts.append((hexes[-1].end() + 3) & ~3)
         for st in starts:
             iv = [struct.unpack_from('<i', ch, i)[0] for i in range(st, size - 3, 4)]
-            k = next((i for i in range(3, len(iv) - 6) if iv[i] == 0 and iv[i + 1] == 1), None)
+            k = next((i for i in range(3, len(iv) - 6)
+                  if iv[i] == 0 and iv[i + 1] == 1 and iv[i - 2] > 0 and iv[i - 1] > 0), None)
             if k is not None:
                 out[name] = dict(tickets=iv[k - 2], lo=iv[k + 4], hi=iv[k + 5])
                 break
