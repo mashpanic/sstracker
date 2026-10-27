@@ -91,10 +91,69 @@ builds only; remove before the repo goes public).
 4. Give me the step list and the snapshot names (or just the time range); I diff
    the saves around each step.
 
+## Experiment 1 (2026-10-27): duplicate the large box with the Lifemother Pyre
+
+Setup: Bloom run, souls Wizlord T3 (spells: each upgrade +3 damage, +3 heal), Grump T3
+(unit: +3 health each turn, +2 attack each time it is damaged, kept as permanent
+`Plus3HPScalable` / `Plus2AttackScalable` upgrade entries) and Lil Cap T3 (to survive).
+`TraitCorrupt` on Wurmkin cards is just the "infused" effect, not a stat change.
+Run `9c37ee35`, Boxes alcove in the Thaddeus Battle row (slot 3, right).
+
+What the saves showed (snapshots in `mt2-save-copy/snapshots/`):
+
+- **15:57:52** (entering the event): `storyEventStates[].claimed` flips to true and the
+  RNG state changes. Nothing else; no deck change yet. The save is not written after
+  every pick, only at screen changes.
+- **16:02:21** (pre-battle screen of the next fight): the deck went from 20 to 18 cards.
+  Three units left it and a single card `GarfieldBoxesJackInTheBoxBase` appeared, with
+  `cardModifiers.boxedCardStateIds = [0, 1, 2]`. The three units sit in the new top-level
+  list `boxedCardStates`, copied exactly: a Husk Hermit with all its soul upgrade entries
+  (Grump marker, three `Plus2Attack`, three `Plus3HP`, `AddQuick`, `AddMultistrike`), a
+  Train Steward Shield with its Butterball upgrade, and a plain Train Steward Spear. The
+  game boxed the *upgraded* Shield, not the plain one left in the deck. So `boxedCardStateIds`
+  are indexes into `boxedCardStates`. The `isEventCachedCard*` flags stayed false on all of them.
+- **16:06:41** (after that fight, on the map): the boxed Hermit gained two new upgrade
+  entries (+10 attack, +18 health) while it was boxed. Units inside a box keep earning
+  soul scaling like units in the deck. The Wizlord spells in the deck scaled too.
+- **16:10-16:11** (after duplicating the box): the deck has **two** box cards, both with
+  `boxedCardStateIds [0, 1, 2]`. `boxedCardStates` still has 3 entries. So duplicating a
+  box copies only the box card; both boxes refer to the same three stored units.
+- **Combat**: the save does not record unit stats mid-fight; `replayData.replayEntries`
+  only grows by short encoded action records. Benj's notes are the only source of
+  in-fight stats. Both boxes opened the same unit each turn (Steward, Spear, Husk) so
+  the unit order appears fixed and shared.
+- **16:26:42** (victory): the stored Hermit went from 11 to 15 entries. The four new
+  ones are one entry per fight-time Hermit and stat: health +9 and +21, attack +2 and +16.
+  Benj's turn notes match exactly: Hermit #1 had 3 health scales (3 x 3 = 9) and 1 attack
+  scale (+2); Hermit #2 had 7 health scales (21) and 8 attack scales (16; Benj had counted
+  7 and then remembered the boss hit it once). Shield and Spear unchanged.
+
+Conclusion so far: two Hermits came out of the one shared stored Hermit; each kept its own
+gains during the fight, and afterwards both sets of gains were added to the single stored
+card. In the next fight every Hermit from either box starts with all of them (Benj
+predicted this before the fight and it matches). The save never held two Hermit states,
+so the stat gains are merged by *adding entries*, not by copying a unit.
+
+Context from Benj: a regular duplicate of a unit (in or out of combat) does not keep its
+soul upgrades. One other exception he has seen is hatched (egg) units, where both units
+keep a copy of the soul upgrade; he has not had a run to check whether it behaves like the
+box.
+
+## Next experiments
+
+1. **Play only one of the two boxes** in the next fight (Benj, 2026-10-27) and check what
+   the stored Hermit receives: does it get only that Hermit's gains, or also something for
+   the unopened box? Verify every stat against Benj's notes.
+2. Spells: the Wizlord spells with several upgrades are in the deck; no spell has been
+   boxed (boxes only take units). Still open whether copies of a spell share changes.
+3. The egg-unit case, if a run with a hatching unit and a scaling soul comes up.
+4. Build the deck-diff script (see Tools) now that there is a real case to run it on.
+
 ## Open items
 
 - Link a deck card to its unit and base stats (needs CardData decoded).
-- What `boxedCardStateIds`, `mergedCardStateIDs`, `isEventCachedCard*` mean.
+- What `mergedCardStateIDs` and `isEventCachedCard*` mean (`boxedCardStateIds` is settled:
+  indexes into `boxedCardStates`).
 - Spells: does a permanent change land in `additionalDamage`, in an upgrade, or
-  elsewhere? (No sample yet.)
-- Which souls / scaling cards to use as test cases (Benj to pick).
+  elsewhere? Answered for Wizlord T3: it is an upgrade entry (`WizlordT3_Upgrade_AddSpellPower`,
+  +3 attackDamage and +3 additionalHeal per entry), not a modifier.
