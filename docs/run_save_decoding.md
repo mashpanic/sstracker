@@ -210,23 +210,23 @@ upgraded central node, as the rule says.
 | UnitPrimary | `RewardNodeUnitPack<primary clan>` |
 | UnitAllied | `RewardNodeUnitPack<allied clan>` |
 | Boons | `RewardNodeCoinMedium` (coins) |
-| Well | `RewardNodePurgeTwo` (purge) |
+| Vortex | `RewardNodePurgeTwo` (purge; corrected 2026-10-27, was labelled Well) |
 | Remains | `RewardNodeHeal` (heal) |
 | Armory | `RewardNodeEquipmentOrRoom` |
 | Hoard | `RewardNodeBlessingOnly` |
-| Vortex | `RewardNodeDuplicateCard` |
+| Well | `RewardNodeDuplicateCard` (Empyrean Well: duplicate a non-Champion card; corrected 2026-10-27, was labelled Vortex) |
 | Celestial | `StoryEventPoolData` |
 
 Observed in the one Soul Savior map (16 sides = 32 minor nodes), **a sample, not
 a distribution**:
 - Every side is one "A" node plus one "B" node: A ∈ {UnitPrimary, UnitAllied,
-  Hoard, Vortex, Celestial} (16 of them), B ∈ {Armory, Boons, Well, Remains}
+  Hoard, Well, Celestial} (16 of them), B ∈ {Armory, Boons, Vortex, Remains}
   (16 of them).
-- Counts: Armory 6, UnitPrimary 4, UnitAllied 4, Well 4, Boons 3, Celestial 3,
-  Remains 3, Hoard 3, Vortex 2.
-- Pairs that always appeared together: Celestial + Well (3 of 3), Hoard +
-  Armory (3 of 3), Vortex + Boons (2 of 2); the unit nodes paired with Armory,
-  Remains, Well or Boons. (Could be chance with this few.)
+- Counts: Armory 6, UnitPrimary 4, UnitAllied 4, Vortex 4, Boons 3, Celestial 3,
+  Remains 3, Hoard 3, Well 2.
+- Pairs that always appeared together: Celestial + Vortex (3 of 3), Hoard +
+  Armory (3 of 3), Well + Boons (2 of 2); the unit nodes paired with Armory,
+  Remains, Vortex or Boons. (Could be chance with this few.)
 - Benj's hypothesis (to test): a fixed set of nodes is always present,
   randomly placed, and a few extra random nodes fill the remaining slots. The
   one sample is consistent with it (every type appears at least 2 times; A

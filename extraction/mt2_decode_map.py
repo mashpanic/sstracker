@@ -17,12 +17,12 @@ from mt2_decode_runs import WAVE_SETS, BOSS_VARIANTS, LIFEMOTHER, trial_name
 REGION = {1: (1, 'Maera'), 3: (2, 'Thaddeus'), 5: (3, 'Tivi'), 7: (4, 'Lylith')}
 
 # Node internal name -> in-game minor-node name (confirmed by Benj 2026-10-25):
-# Boons = coins, Well = purge, Remains = heal, Celestial = story event, Hoard = blessing
-# (gives a relic), Armory = equipment/room, Vortex = duplicate card. All confirmed.
+# Boons = coins, Vortex = purge two cards, Remains = heal, Celestial = story event, Hoard = blessing
+# (gives a relic), Armory = equipment/room, Well = duplicate a card (Empyrean Well). Well/Vortex corrected 2026-10-27 by Benj in game.
 LIKELY_NAME = {
     'RewardNodeEquipmentOrRoom': 'Armory', 'RewardNodeCoinMedium': 'Boons',
-    'RewardNodeBlessingOnly': 'Hoard', 'RewardNodePurgeTwo': 'Well',
-    'RewardNodeHeal': 'Remains', 'RewardNodeDuplicateCard': 'Vortex',
+    'RewardNodeBlessingOnly': 'Hoard', 'RewardNodePurgeTwo': 'Vortex',
+    'RewardNodeHeal': 'Remains', 'RewardNodeDuplicateCard': 'Well',
     'StoryEventPoolData': 'Celestial',
 }
 
