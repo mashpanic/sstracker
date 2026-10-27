@@ -24,5 +24,5 @@ while true; do
     cp "$p" "$OUT/$(date +%Y%m%d-%H%M%S)-$f"
     echo "$(date +%H:%M:%S) saved $f"
   done
-  sleep 5
+  sleep 1
 done
