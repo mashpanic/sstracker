@@ -63,6 +63,33 @@ entry, its `startDistance`, and when `inscryptionEventSuccess` flips. Compare th
 path number with the sides actually taken (`chosenBranch` per slot) in slot order and in
 play order.
 
+## First observation (2026-10-27, 17:18:17, Bloom run `9c37ee35`)
+
+Benj took the Inscryption alcove (Maera Boss row, slot 2, left) with too few forks left
+to follow the path, only to confirm nothing else happens. The save at that moment:
+
+- `storyEventStates` Inscryption `claimed` false -> true.
+- `followupEventStates` went from 0 to **3 entries**, created right away:
+  `InscryptionFollowupEventCorpseEater`, `...ManyLives`, `...WorthySacrifice`. Each has
+  `claimed false`, `canShowAfterVictory false` and three conditions, **every one with
+  `startDistance 2`**, which is the alcove's own slot (Maera Boss):
+  `FollowupConditionInscryptionEvent`, `FollowupConditionCardUpgradePresent` and
+  `FollowupConditionInscryptionEventIncomplete`, the last two naming the upgrade:
+  Corpse Eater <-> `InscryptionEventFecundity_Upgrade`, Many Lives <->
+  `InscryptionEventManyLives_Upgrade`, Worthy Sacrifice <->
+  `InscryptionEventWorthySacrifice_Upgrade`. (This settles the pairing guessed earlier.)
+- `inscryptionPathFilters` stayed 6, `inscryptionEventSuccess` stayed false. No deck
+  card changed. The rest of the diff was gold, score, the reward being marked claimed, and
+  the replay log.
+
+What this adds to the hypotheses: the follow-ups carry a **map slot number as their
+start distance** (2, where the event happened), not a count of fights played. This makes
+the slot-order idea more likely: the three "next rings" are probably slots 3, 4, 5
+(Thaddeus Battle, Thaddeus Boss, Tivi Battle) however the player routes. It does not prove
+it. The path number still has to be compared with the sides taken once a run actually
+follows or misses the path; the entries to watch are when each follow-up becomes
+`claimed`, and whether `inscryptionEventSuccess` flips.
+
 ## Related
 
 Event pool / tickets / slot windows: `extraction/mt2_celestial_model.py` and the end of
