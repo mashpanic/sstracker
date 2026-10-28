@@ -166,6 +166,33 @@ fight are appended to the single stored Hermit as their own upgrade entries, so 
 fight every Hermit from any box starts with all of them. The number of boxes opened only
 changes how many sets are appended.
 
+## Experiment 3 (2026-10-27, 17:24-17:36): seven boxes, Endless on five
+
+Setup: Benj copied the large box with the Lifemother Pyre until the deck held **seven box
+cards**, all with `boxedCardStateIds [0, 1, 2]` (`boxedCardStates` still 3 units). Five
+of them also carry the Inscryption **Fecundity** upgrade (from the alcove, put on the
+original) and the Merchant of Steel **Endless** upgrade; a Pyre copy of an upgraded box
+keeps those ordinary card upgrades (soul scaling is different: a regular duplicate
+drops it, per Benj). Two other boxes carry +60 health and Spikes 5 (Steel upgrades). The
+stored Hermit had 31 entries (about 226 attack and 264 health in scaling entries).
+Benj played boxes from a larger hand, not necessarily the same ones each time.
+
+- **Result (victory save 17:36:26):** the stored Hermit went from 31 to 47 entries: eight
+  new attack entries (+22, +30, +18, +18, +24, +24, +18, +6 = 160, i.e. 80 scales) and
+  eight new health entries (+15, +15, +15, +12, +12, +12, +12, +3 = 96, i.e. 32 scales).
+  **Eight Hermits' worth of gains from seven boxes**: Endless boxes can come back and give
+  more units, so the count of Hermits is not limited by the number of box cards.
+- Unchanged: seven box cards before and after, same ids on each, Shield (1 entry) and Spear
+  (0) unchanged. The three Inscryption follow-ups stayed unclaimed and
+  `inscryptionEventSuccess` stayed false even with Fecundity on cards in the deck.
+- The stored Hermit is now about 386 attack and 360 health in scaling entries (47 entries).
+
+Reading: the same merge rule holds at every size tried (2, 3 and 7+ boxes). Each Hermit
+that fights gets its own pair of new entries (attack, health) appended to the one stored
+Hermit; the unopened boxes add nothing. Note that the final fight (Lifemother) ends the
+run, and the game replaces the save with an empty stub then, so that fight's merge is
+probably never saved.
+
 ## Next experiments
 
 1. **Play only one of the boxes** in a fight (Benj, 2026-10-27) and check what the stored
