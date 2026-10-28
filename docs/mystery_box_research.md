@@ -228,8 +228,14 @@ That explanation is an inference from these saves, not shown by them.
    boxes? Verify every stat against Benj's notes.
 2. Spells: done in experiment 4 (the small box takes spells; they do not scale inside it).
    Still open: whether copies of a spell outside a box share changes.
-3. The egg-unit case, if a run with a hatching unit and a scaling soul comes up.
-4. Build the deck-diff script (see Tools) now that there is a real case to run it on.
+3. **Self-scaling cards** (Benj, 2026-10-27; a separate run, no souls needed): the spells
+   *Fanning the Flames* and *Subsuming Blade*, and the unit *Kinhost Carapace*, which scale on
+   their own. Benj has seen Kinhost Carapace's scaling carry across copies, the first time he saw
+   cross-copy scaling. Questions: does a self-scaling card inside a box keep its gains (like the
+   boxed Hermit) or lose them (like the boxed Echo Break)? Do copies of it share the gains? Where
+   are the gains stored (an upgrade entry on the card, as with Grump)?
+4. The egg-unit case, if a run with a hatching unit and a scaling soul comes up.
+5. Build the deck-diff script (see Tools) now that there is a real case to run it on.
 
 ## Open items
 
