@@ -193,13 +193,41 @@ Hermit; the unopened boxes add nothing. Note that the final fight (Lifemother) e
 run, and the game replaces the save with an empty stub then, so that fight's merge is
 probably never saved.
 
+## Experiment 4 (2026-10-27, 18:06-18:39): Wizlord (spell scaling) and the small box
+
+New Bloom run `2de22351`, souls Grump T3, Lil Cap T3, Wizlord T3 (later Bougie T3). The
+Boxes event here gave a **small box**: card `GarfieldBoxesSmallBoxBase` with
+`boxedCardStateIds [0, 1, 2]`, and three boxed **spells** in `boxedCardStates`: Echo
+Transfer (with the Corrupt icon and the Wizlord marker upgrade), Starter Echo Break
+(Corrupt only) and Echo Infusion (no upgrades). So the large box takes units and the small
+box takes spells. Benj copied the small box once (two box cards, same ids, boxed list still
+three spells), played Wizlord out of the box, and had the boxed Echo Break in hand.
+
+- **Scaling seen in the fight, not stored**: Benj saw the Echo Break from the box scale
+  during the fight. Afterwards the stored Echo Break still had **0** Wizlord entries (as did
+  Echo Transfer and Echo Infusion), in two separate fights.
+- **Spells outside the box scaled and were counted exactly**: deck baseline 15 Wizlord
+  entries (each entry = +3 damage, +3 heal, `WizlordT3_Upgrade_AddSpellPower`), Benj's
+  running count +12 (turn 1: +4, turn 2: +4, turn 3: 0, turn 4: +4), save after the fight:
+  27. Per card: Restoration Detonation 4 -> 5, Echo Break (Reduce Cost) 4 -> 5, Echo Break
+  (Inherent Spell Reduce Cost) 4 -> 9, Echo Break (Corrupt only) 3 -> 8.
+- Non-damage upgrades from the Merchant of Magic (Reduce Cost, Inherent Spell Reduce Cost)
+  are separate entries and did not disturb the count.
+
+Conclusion (Benj, 2026-10-27): cards inside a box cannot be upgraded by Wizlord, and a
+Wizlord played out of a box does upgrade cards outside it. This differs from units, where
+Grump's gains from boxed Hermits were merged into the stored Hermit. A reasonable reading is
+that Wizlord writes entries to the cards in the deck at the end of a fight, and boxed cards
+are not in the deck, while a unit's own scaling is written to the stored card it came from.
+That explanation is an inference from these saves, not shown by them.
+
 ## Next experiments
 
 1. **Play only one of the boxes** in a fight (Benj, 2026-10-27) and check what the stored
    Hermit receives: does it get only that Hermit's gains, or also something for the unopened
    boxes? Verify every stat against Benj's notes.
-2. Spells: the Wizlord spells with several upgrades are in the deck; no spell has been
-   boxed (boxes only take units). Still open whether copies of a spell share changes.
+2. Spells: done in experiment 4 (the small box takes spells; they do not scale inside it).
+   Still open: whether copies of a spell outside a box share changes.
 3. The egg-unit case, if a run with a hatching unit and a scaling soul comes up.
 4. Build the deck-diff script (see Tools) now that there is a real case to run it on.
 
