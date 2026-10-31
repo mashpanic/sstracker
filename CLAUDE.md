@@ -67,6 +67,8 @@ The boss epithet is encoded in its `BossBattle` variant *family* name: Maera **D
 
 **Minor-node left/right choice.** Before each central-region encounter (the region's minor-boss battle *and* its named boss), **four random minor nodes spawn**, arranged as a left pair and a right pair. The player chooses to go **left or right**, which selects **which two of the four** minor nodes are actually accessed (the other two are skipped). (This is the mechanic the removed Left Track / Right Track / Path grid columns tracked.)
 
+**Minor-node placement rules (155 runs, 2026-10-30).** The map is fixed at run start. Each side is one A node (UnitPrimary/UnitAllied/Hoard/Well/Celestial) + one B node (Armory/Boons/Vortex/Remains); the four nodes before a battle are all different. Each region has exactly one UnitPrimary, one UnitAllied, and two of {Hoard, Well, Celestial} (one is skipped); across the four regions the skipped nodes are always {X, X, Y, Z}, so the last region's skip is forced if the earlier three repeat one. B nodes have no fixed set. Left/right is biased (unit nodes left ~59%). Full rules, tendencies, and the verifier script `extraction/mt2_map_rules.py`: `docs/run_save_decoding.md` ("Minor-node placement rules").
+
 ## Web resources
 
 Base page for the soul savior mode of monster train 2
@@ -318,6 +320,20 @@ Goal: hovering an enemy name in the info box's wave lists shows that enemy's ATK
 - [x] **Duplicate enemy rows — RESOLVED for current data (2026-06-14).** Three SS enemies share a display name with distinct internals: `Mother's Amalgam`, `Mother's Blade`, `Mother's Supplicant`. Checked each pair against `waves.json`: in every case **exactly one internal actually spawns in a wave and the other is roster-only** (Blade spawns `R3_HeavyT1_Basic_Ver2`, not `R3_HeavyT2_Basic`; Amalgam spawns `RAny_Heavy_T2_BurstIfUnblocked`, not `R4_Heavy_ArmorIfUnblocked_Ver2`; Supplicant spawns `R3_MageT3_Junker_Ver2`, not `R3_MageT2_Junker`). The old "first row wins" rule was actually **wrong** for Amalgam and Supplicant (their first CSV row is the non-spawning one). Fix: `mt2_emit_enemy_stats.py` now drops the non-spawning internals via an `EXCLUDE_INTERNALS` set (derived from `waves.json`), leaving one row per display name. **Maintenance:** re-derive `EXCLUDE_INTERNALS` after a patch if rosters change. **Cleaner long-term fix (still open):** carry internal identity from `waves.json` into the wave descriptions so the hover keys on `Internal` directly, retiring the exclusion list.
 - [x] **Audit `waves.json` against `ENEMY_STATS` (coverage gap) — DONE, scripted (2026-07-03).** `extraction/mt2_audit_coverage.py` cross-checks every non-boss internal that spawns in `out/waves.json` (resolved per-order `tiers`) against the internals in the Overgrowth rows of `difficulty_observations.csv` (what `ENEMY_STATS`/`ENEMY_NOTES` emit from). A spawning internal with **no Overgrowth rows** is missing from `ENEMY_STATS`, so it's not in the app's name regex → renders as **plain text in wave lists** (no inline stats, no note popover) — the base-vs-upgraded trap that hid `EnchanterT1_Speed` / **Energizing Flautist** (Favored Ascent O1/O2), since its upgraded `_Ver2` twin covers the higher orders. The script reports MISSING (spawns, no row → exit 1) and UNREFERENCED (has rows, never spawns → informational), skipping bosses and `EXCLUDE_INTERNALS`. **Current result: 30/30 covered, 0 missing, 0 unreferenced** (after the Energizing Flautist fix). Re-run after `mt2_extract_waves.py` following a patch.
 - [x] **Sanity-check the observation data (validation pass) — DONE (2026-07-04).** Implemented as `mt2_collect_observations.py --check`, covering the monotonic-by-order and NOTE-divergence checks (plus the `mt2_audit_coverage.py` reachability cross-check). Runs clean: **0 MONO** (the lone flag, Bloom Mother's Blade ATK O2=8→O3=5, was a typo — O2 corrected to 5), and **24 NOTE** which are all *intentional* per-order divergences, not errors. Remaining sub-checks from the original plan (paired cells, valid-contents, plausible-ramp, reviewed-consistency) can be added to `--check` if a future need arises, but the primary structural checks are in place.
+
+## TODO — Remains+ bonus: how is it computed?
+
+Open question (noted 2026-10-30). The Remains+ node's hover text read: *"Restore 30% of max Pyre health. Your Pyre gains +40 attack and +11 health."* The heal is clearly a percent of max HP, but it's unclear whether the **+40 ATK / +11 HP** bonus is a flat value, or a percent of the Pyre's current stats.
+
+Pyre at the time of the observation: **67/95 HP, 115 ATK** (so +40 ATK ≈ 35% of 115; +11 HP ≈ 11.6% of 95 — no obvious clean percentage, which is why it's still open).
+
+- [ ] **Collect more Remains+ sightings.** Each time one shows up, record the full hover text *and* the Pyre's max HP / ATK at that moment (and region if it might matter). Add rows here:
+
+  | Run / date | Order | Hover bonus (ATK / HP) | Pyre max HP | Pyre ATK |
+  |---|---|---|---|---|
+  | 2026-10-30 | O4 | +40 / +11 | 95 | 115 |
+
+- [ ] Once there are 3+ data points, test: flat, percent-of-current, scales with region/order, or random within a range. If it's derivable from the save, check `docs/run_save_decoding.md` (Remains = `RewardNodeHeal`) for the underlying data.
 
 ## index.html (the product)
 

@@ -28,6 +28,7 @@ indexes). This file explains the structure; that one lists the values.
 | `mt2_decode_runs.py` | Decodes `RunHistory.json` into readable per-run JSON (`out/runs_decoded.json`) and prints a per-champion W–L summary. |
 | `mt2_emit_run_reference.py` | Writes `run_save_reference.md`. |
 | `mt2_decode_map.py` | Decodes the pre-generated map in an in-progress save; `--stats DIR` tallies minor nodes over many snapshots. |
+| `mt2_map_rules.py` | Verifies the minor-node placement rules over a snapshot directory and prints the tendencies (see "Minor-node placement rules"). |
 | `mt2_snapshot_saves.sh` | Run by the player: keeps every distinct version of the run save for later study. |
 
 Order: `guid_scan` → `resolve_guids` → `decode_runs` / `emit_run_reference`.
@@ -217,31 +218,94 @@ upgraded central node, as the rule says.
 | Well | `RewardNodeDuplicateCard` (Empyrean Well: duplicate a non-Champion card; corrected 2026-10-27, was labelled Vortex) |
 | Celestial | `StoryEventPoolData` |
 
-Observed in the one Soul Savior map (16 sides = 32 minor nodes), **a sample, not
-a distribution**:
-- Every side is one "A" node plus one "B" node: A ∈ {UnitPrimary, UnitAllied,
-  Hoard, Well, Celestial} (16 of them), B ∈ {Armory, Boons, Vortex, Remains}
-  (16 of them).
-- Counts: Armory 6, UnitPrimary 4, UnitAllied 4, Vortex 4, Boons 3, Celestial 3,
-  Remains 3, Hoard 3, Well 2.
-- Pairs that always appeared together: Celestial + Vortex (3 of 3), Hoard +
-  Armory (3 of 3), Well + Boons (2 of 2); the unit nodes paired with Armory,
-  Remains, Vortex or Boons. (Could be chance with this few.)
-- Benj's hypothesis (to test): a fixed set of nodes is always present,
-  randomly placed, and a few extra random nodes fill the remaining slots. The
-  one sample is consistent with it (every type appears at least 2 times; A
-  nodes at least 2, B nodes at least 3), but cannot show it.
-- The game's `RunDataSoulSavior` object lists the node slots and pools (a node
-  list per ring with `RandomChosenMainClassUnit`, `RandomChosenSubClassUnit`,
-  `DuplicateCard`, `StoryEventPool`, `BlessingOnly`, `Heal`, `CoinMedium`,
-  `EquipmentOrRoom`, plus integer fields that may be weights); not decoded.
-  If the hypothesis is right, the fixed set and the "fill" count should be in it.
+### Minor-node placement rules (155 runs, 2026-10-30)
 
-To study the **distribution** one needs many saves: finished-run records do not
-keep the map. `extraction/mt2_snapshot_saves.sh` (run it in the account that
-plays) keeps every distinct version of the run save; then
-`mt2_decode_map.py --stats DIR` tallies minor nodes and side pairs over the
-distinct runs. It also answers whether a Soul Savior map exists at run start.
+Tallied over 155 distinct Soul Savior runs (1,240 battle slots, 2,480 sides) from
+the snapshot saves, with `extraction/mt2_map_rules.py [DIR]` (re-run it to
+re-verify; it exits with a "RULE VIOLATIONS" line). The map is **fixed at run
+start**: no run's map changed across its snapshots (median 5 snapshots/run).
+Slots are indexed by region number (R1 Maera = slots 1-2, R2 Thaddeus 3-4, R3 Tivi
+5-6, R4 Lylith 7-8), not by the order the player visits them.
+
+**Hard rules (155/155 runs, no exceptions):**
+1. Every side is exactly one **A** node plus one **B** node.
+   A = UnitPrimary, UnitAllied, Hoard, Well, Celestial. B = Armory, Boons, Vortex, Remains.
+2. The four nodes before a battle (left pair + right pair) are **all different**:
+   two different A nodes and two different B nodes.
+3. Each **region** (its two slots = 4 sides) has exactly **one UnitPrimary, one
+   UnitAllied, and two different nodes out of {Hoard, Well, Celestial}**. So each
+   region *skips* exactly one of the three "other" A nodes.
+4. Across the four regions, the skipped nodes always form the multiset
+   **{X, X, Y, Z}**: one of the three is skipped twice (so it appears in only 2
+   regions) and the other two are skipped once (3 regions each). Never all four
+   the same, never 3+1, never 2+2. Per run, Hoard/Well/Celestial therefore count
+   2/3/3 in some order, and UnitPrimary/UnitAllied always count 4 each. Pure
+   chance would give this shape only about 44% of the time (36 of 81 sequences);
+   155/155 is not chance. This matches Benj's "fixed set + random fill" idea for
+   the A nodes.
+5. **B nodes have no fixed set** (per-run counts range e.g. Vortex 0-7, Armory
+   1-8); the only rule is the distinctness in rule 2.
+
+**Predicting the last region.** Because of rule 4, once three regions' skipped
+nodes are known the fourth is constrained:
+- If two of the three already skipped the **same** node, the last region **must
+  skip the third node** (cannot skip X or Y again), i.e. it contains the two
+  already-repeated types and cannot contain the missing one. Forced in 79 of 155
+  runs (51%).
+- If the three skipped three **different** nodes, the last region may skip any one
+  of them (R4 repeated R1/R2/R3 in 25/21/30 runs: no preference); no inference.
+- This is a property of the whole map, not of any one region: the six possible
+  "which two regions share a skip" pairs are about equally common (22/36/21/25/21/30,
+  chi-square 7.1, 5 df), so no region number is special and "last" can mean
+  last visited. The map is generated before play, so it never depends on visit order.
+  (Only 4 saved runs had all four regions visited, too few to check visit order
+  directly; not needed given the above.) Two of the 36 possible skip sequences
+  were never seen (Hoard,Celestial,Well,Well and Hoard,Well,Celestial,Celestial);
+  expected count is about 4 each, so likely chance, but unconfirmed.
+- Mid-region you only see partial information (each slot shows 2 sides), so the
+  skip is known with certainty only after both of the region's slots are visible.
+
+**Tendencies (not rules):**
+- B weights are uneven: Armory 28%, Vortex 28%, Boons 22%, Remains 22% of B
+  nodes. Pairs in a slot: Armory+Vortex 23%, Remains+Vortex 17%, Armory+Boons
+  17%, Boons+Vortex 15%, Armory+Remains 15%, Boons+Remains 12%. A and B on a side
+  are independent (chi-square 12.6, 12 df). Slot 2's B pair equals slot 1's about as
+  often as independence predicts (16.5% vs 17.4%).
+- Left/right is **not uniform**. Unit nodes sit left 59% of the time; Hoard, Well
+  and Celestial sit right about 60% (Hoard 148 L / 227 R). B nodes are about even
+  (Remains slightly left, Vortex slightly right). Unit-node layout in a region
+  (slot1 L,R | slot2 L,R): Uo|Uo 164, Uo|oU 129, UU|oo 102, oU|Uo 86, oo|UU 86,
+  oU|oU 53 (uniform would be about 103 each). **Units per section** (slot 1 = battle
+  section, slot 2 = boss section; each region has 2 units): the battle section has
+  0 units in 86 regions (13.9%), 1 in 432 (69.7%), 2 in 102 (16.5%), against 16.7 /
+  66.7 / 16.7% if the two units were placed uniformly among the four positions
+  (chi-square 3.8, 2 df, p about 0.15): **not different from chance**. The skew is in
+  *which side*, not *which section*: when a section holds exactly one unit it is on
+  the left 68% of the time in the battle section and 58% in the boss section. The slot-1 left position holds a unit
+  node 64% of the time, slot-1 right 39%, slot-2 left 54%, slot-2 right 43%.
+- **No B node is tied to a unit side (checked 2026-10-30).** In the battle section
+  (slot 1, all regions, 636 unit sides vs 604 non-unit sides) the paired B node
+  is Armory 26/26%, Boons 24/22%, Vortex 26/29%, Remains 24/23% (unit/non-unit;
+  chi-square 1.65, 3 df, p = 0.65). R1 alone and the boss section show the same
+  (p = 0.53, 0.19), and the B node does not change with whether the unit is on
+  the left or right (p = 0.19). The opposite side's other A node is also an even
+  Hoard/Well/Celestial split. The one real link is the left bias: if the right
+  side holds a unit, the left side also holds one 42% of the time in the battle
+  section (26% the other way round), since a lone unit is usually on the left.
+- Hoard is the node that appears in only 2 regions in 58% of runs (90), versus
+  Well 35 and Celestial 30 (33% each if random), so Hoard may be weighted.
+
+**Not decoded:** how the left/right bias and the B weights arise. The game's
+`RunDataSoulSavior` object lists the node slots and pools (a node list per ring
+with `RandomChosenMainClassUnit`, `RandomChosenSubClassUnit`, `DuplicateCard`,
+`StoryEventPool`, `BlessingOnly`, `Heal`, `CoinMedium`, `EquipmentOrRoom`, plus
+integer fields that may be weights); a simple weighted draw-without-replacement
+fit for B did not match well. If anyone revisits this, start there.
+
+To collect more maps: finished-run records do not keep the map.
+`extraction/mt2_snapshot_saves.sh` (run it in the account that plays) keeps every
+distinct version of the run save; `mt2_decode_map.py --stats DIR` tallies minor
+nodes and side pairs, and `mt2_map_rules.py DIR` checks the rules above.
 
 `regionRunVisitedRegions` and `regionRunDefeatedBosses` record progress;
 `souls` is the souls taken so far. The history's newest unfinished row (score
