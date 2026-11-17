@@ -1613,3 +1613,9 @@ function closeSouls() { showScreen(lastMainScreen); }
     } catch (e) { /* storage unavailable — treat as first visit */ }
     if (!hasSaved) showScreen('help');
 })();
+
+// Wiki button: the Soul Savior page on the Monster Train 2 wiki, in a new tab.
+const WIKI_URL = 'https://monstertrain2.miraheze.org/wiki/Soul_Savior';
+function openWiki() {
+    window.open(WIKI_URL, '_blank', 'noopener,noreferrer');
+}
