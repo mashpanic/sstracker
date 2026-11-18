@@ -191,11 +191,15 @@
 
         #encounter-info {
             margin-bottom: 10px;
-            padding: 15px;
+            padding: 8px 15px;
             background: #19191c;
             border: 1px solid #29292e;
             border-radius: 4px;
-            min-height: 80px;
+            /* Fixed height: tall enough for the longest list (the 8 Lifemother
+               waves), so the buttons below never move as selections change. */
+            box-sizing: border-box;
+            height: 164px;
+            overflow-y: auto;
         }
         /* Enemy names in the info-box wave lists carry inline ATK/HP as
            "(atk/hp)". A dotted underline = native title tooltip (full name only,
@@ -319,6 +323,8 @@
            screen. The toggle + reset buttons share one normalized style. ---- */
         .screen { display: none; }
         .screen.active { display: block; }
+        /* Half the empty space above the grid (8px body margin + 20px padding = 28px). */
+        #screen-tracker { margin-top: -14px; }
         .button-row { display: flex; gap: 10px; margin-top: 10px; }
         /* One shared style for every nav/reset/export button in a .button-row
            (uniform width keeps them aligned across screens). */
