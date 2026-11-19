@@ -579,6 +579,7 @@ async function resetGrid() {
     // above doesn't fire 'change', so the boxes keep their last text otherwise.
     document.querySelectorAll('.variant-select').forEach(sel => refreshMutatorBox(sel));
     document.getElementById('encounter-info').innerHTML = DEFAULT_INFO;
+    clearSelectionPulses(); // nothing stays selected, so nothing keeps pulsing either
     refreshOrderOptions(); // re-enable every order number
     reorderGroups();       // restore the default group order
     try {
@@ -687,6 +688,13 @@ function flagNeededBoxes(key) {
         const sel = document.getElementById(id);
         if (sel && !sel.value) sel.parentElement.classList.add('needs-flash');
     });
+}
+
+// Drop every pulse that belongs to a row selection: the provisional Order box and the
+// "needed" Variant / Wave-set flashes. Used when the selection itself is cleared (reset).
+function clearSelectionPulses() {
+    clearTempOrder();
+    document.querySelectorAll('.node-slot.needs-flash').forEach(slot => slot.classList.remove('needs-flash'));
 }
 
 // Called whenever a row becomes selected: contemplate the newly selected
