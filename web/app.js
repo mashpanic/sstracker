@@ -165,7 +165,9 @@ function updateNodeDisplay(selectEl) {
         // Variant placeholder text ("-- Select Variant --") is too long for the
         // box, so show a plain "?" until a real variant is chosen.
         labelEl.textContent = isUnselected ? '?' : fullText;
-        slotEl.title = isUnselected ? '' : fullText; // tooltip shows the untruncated name
+        // tip shows the untruncated name, and only when the box actually cuts it off
+        if (isUnselected) { slotEl.removeAttribute('data-tip'); slotEl.removeAttribute('data-tip-ifcut'); }
+        else { slotEl.setAttribute('data-tip', fullText); slotEl.setAttribute('data-tip-ifcut', ''); }
     } else {
         labelEl.textContent = selectEl.value;
     }
@@ -251,8 +253,8 @@ function noteForOrder(key, order) {
 // (e.g. "Maera the Dutiful") differs from the note key (e.g. "Sibling Hierarchy").
 // `order` resolves per-order notes (Athane Rage 1→2→3). When a note exists for
 // this order the span gets the resolved data-note/data-full-name (read by the
-// popover handlers) and drops the native title to avoid a double tooltip; with
-// no note, the full name stays on the native title as before.
+// popover handlers); with no note, the full name shows in the same styled popover (a tip with
+// just a title), so every enemy name behaves the same on hover.
 function enemySpan(name, statStr, noteKey, order) {
     const m = statStr && statStr.match(/(\d+)\D+(\d+)/);
     const num = m ? `(${m[1]}/${m[2]})` : '(?)';
@@ -261,7 +263,7 @@ function enemySpan(name, statStr, noteKey, order) {
     const note = noteForOrder(noteKey || name, order);
     const attrs = note
         ? ` data-note="${escapeAttr(note)}" data-full-name="${escapeAttr(name)}"`
-        : ` title="${escapeAttr(name)}"`;
+        : ` data-tip-title="${escapeAttr(name)}"`;
     return `<span class="${cls}"${attrs}>${disp}<span class="es-num">&nbsp;${num}</span></span>`;
 }
 
@@ -333,7 +335,7 @@ function stripBattleBoss(waves, region) {
 function appendBossPlaceholder(waves) {
     const parts = waves.split('<br>');
     const last = parts.length - 1;
-    parts[last] += ', <span class="enemy-stat" title="Select a boss for more information">Select Boss Variant</span>';
+    parts[last] += ', <span class="enemy-stat" data-tip="Select a boss for more information">Select Boss Variant</span>';
     return parts.join('<br>');
 }
 
@@ -655,7 +657,7 @@ function applyTempOrder(region) {
     const label = slot.querySelector('.label');
     if (label) label.textContent = String(value);
     slot.classList.add('order-temp'); // pulses (CSS) until cleared
-    slot.title = 'Provisional order — pick a number to keep it';
+    slot.setAttribute('data-tip', 'Provisional order — pick a number to keep it');
 }
 
 // Drop the current provisional order and restore the Order box to its real
@@ -668,7 +670,7 @@ function clearTempOrder() {
     if (!sel) return;
     const slot = sel.parentElement;
     slot.classList.remove('order-temp');
-    slot.title = '';
+    slot.removeAttribute('data-tip');
     updateNodeDisplay(sel); // repaint label from the real value ("?")
 }
 
@@ -1627,3 +1629,53 @@ const WIKI_URL = 'https://monstertrain2.miraheze.org/wiki/Soul_Savior';
 function openWiki() {
     window.open(WIKI_URL, '_blank', 'noopener,noreferrer');
 }
+
+// ----- Hover tips (data-tip) -----
+// Any element can opt in with data-tip="text" and/or data-tip-title="Title" (and
+// data-tip-kind="curse" for the red variant; data-tip-ifcut when the tip merely repeats
+// the element's own text and is only worth showing if that text is truncated). The tip shows instantly in the same
+// floating style as the grid's notes and replaces the browser's native title
+// tooltip, which looks different and lags. Delegated, so elements added later
+// (rows built later, rebuilt boxes) need no wiring. Never use a title attribute.
+(function setupTips() {
+    const pop = document.createElement('div');
+    pop.className = 'note-popover';
+    pop.style.display = 'none';
+    document.body.appendChild(pop);
+    let cur = null;
+    const tipOf = t => {
+        const el = t && t.closest ? t.closest('[data-tip],[data-tip-title]') : null;
+        if (!el || !(el.getAttribute('data-tip') || el.getAttribute('data-tip-title'))) return null;
+        // data-tip-ifcut: the tip only repeats the element's own text, so show it only when
+        // that text is cut off with an ellipsis (a box too narrow for a long name).
+        if (el.hasAttribute('data-tip-ifcut') && el.scrollWidth <= el.clientWidth) return null;
+        return el;
+    };
+    function hide() { cur = null; pop.style.display = 'none'; }
+    // Some elements have a richer popover of their own (boss variants, curse boxes, enemy
+    // notes), shown by an ancestor handler before this one runs. Defer to it rather than
+    // stack a second box on top.
+    const otherShown = () => [...document.querySelectorAll('.note-popover')].some(p => p !== pop && p.style.display === 'block');
+    function show(el) {
+        cur = el;
+        const title = el.getAttribute('data-tip-title');
+        const text = el.getAttribute('data-tip');
+        pop.className = 'note-popover' + (el.getAttribute('data-tip-kind') === 'curse' ? ' note-popover--curse' : '');
+        pop.innerHTML = (title ? `<strong>${escapeAttr(title)}</strong>` + (text ? '<br>' : '') : '') + escapeAttr(text || '');
+        pop.style.display = 'block';
+        const r = el.getBoundingClientRect();
+        const maxLeft = window.scrollX + document.documentElement.clientWidth - pop.offsetWidth - 8;
+        pop.style.top = (window.scrollY + r.bottom + 6) + 'px';
+        pop.style.left = Math.min(window.scrollX + r.left, Math.max(window.scrollX + 8, maxLeft)) + 'px';
+    }
+    document.addEventListener('mouseover', e => {
+        if (cur && !cur.isConnected) hide();   // its element was rebuilt under the mouse
+        const el = tipOf(e.target);
+        if (el && !otherShown()) { if (el !== cur) show(el); } else if (cur) hide();
+    });
+    document.addEventListener('mouseout', e => { if (cur && !cur.contains(e.relatedTarget)) hide(); });
+    // keyboard: a button reached with Tab shows its tip too
+    document.addEventListener('focusin', e => { const el = tipOf(e.target); if (el && el.matches('button') && !otherShown()) show(el); });
+    document.addEventListener('focusout', () => { if (cur) hide(); });
+    for (const n of ['click', 'keydown', 'scroll']) document.addEventListener(n, () => { if (cur) hide(); }, true);
+})();

@@ -138,7 +138,7 @@
             border-color: #ef4444;
             color: #ef4444;
             font-weight: bold;
-            cursor: help;
+            cursor: pointer;
         }
         /* Focus ring for keyboard tab-ring landing on the curse box (red to
            match the curse popover). */
@@ -202,17 +202,15 @@
             overflow-y: auto;
         }
         /* Enemy names in the info-box wave lists carry inline ATK/HP as
-           "(atk/hp)". A dotted underline = native title tooltip (full name only,
-           for enemies with no recorded ability note); see the solid-underline
-           rule below for enemies that have a note popover. */
+           "(atk/hp)". Every name has a hover popover, and the underline is the
+           hint for it: dotted for a name-only popover (an enemy with no recorded
+           ability note), solid green (rule below) for enemies that have a note. */
         #encounter-info .enemy-stat {
             border-bottom: 1px dotted #52525b;
-            cursor: help;
         }
         /* Enemies with a recorded ability note get the note popover on hover —
            solid green underline distinguishes them from name-only (dotted). */
         #encounter-info .enemy-stat[data-note] {
-            cursor: help;
             border-bottom: 1px solid #3f6f57;
         }
         /* Floating ability-note popover (shown on hover). Notes may be
@@ -490,7 +488,7 @@
             <button type="button" class="bar-btn" onclick="showScreen('champions')">Win-Loss</button>
             <button type="button" class="bar-btn" onclick="showScreen('help')">Help</button>
             <button type="button" class="bar-btn" onclick="showScreen('souls')">Souls</button>
-            <button type="button" class="bar-btn" onclick="openWiki()" title="Soul Savior page on the Monster Train 2 wiki (opens in a new tab)">Wiki</button>
+            <button type="button" class="bar-btn" onclick="openWiki()" data-tip-title="Wiki" data-tip="Soul Savior page on the Monster Train 2 wiki (opens in a new tab)">Wiki</button>
             <button type="button" id="reset-grid" class="bar-btn" onclick="resetGrid()">Reset grid</button>
         </div>
     </div>
