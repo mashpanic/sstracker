@@ -352,8 +352,10 @@
             gap: var(--cgap);
             width: max-content;
         }
-        .champion-tile { position: relative; width: var(--cw); height: var(--cw); cursor: pointer; }
-        .champion-tile img { display: block; width: 100%; height: 100%; }
+        .champion-tile { position: relative; width: var(--cw); height: var(--cw); cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; }
+        .champion-tile img { display: block; width: 100%; height: 100%; -webkit-user-drag: none; }
+        .champion-tile.champ-dragging { opacity: .55; z-index: 3; }
+        #champion-grid.champ-reordering, #champion-grid.champ-reordering .champion-tile { cursor: grabbing; }
         .champ-record {
             position: absolute; right: calc(var(--cw) * .03); bottom: calc(var(--cw) * .03);
             padding: .2em .38em .24em; border-radius: .4em; background: rgba(0,0,0,.62);
@@ -516,6 +518,7 @@
                 <button type="button" id="champ-streak-toggle" class="bar-btn" onclick="toggleStreak()">Add to streak</button>
                 <button type="button" id="reset-streak" class="bar-btn" onclick="resetStreak()">Reset streak</button>
                 <button type="button" id="reset-champions" class="bar-btn" onclick="resetChampions()">Reset record</button>
+                <button type="button" id="reset-order" class="bar-btn" onclick="resetChampionOrder()">Reset order</button>
                 <button type="button" class="bar-btn" onclick="showScreen('help')">Help</button>
                 <button type="button" class="bar-btn" onclick="showScreen('tracker')">Close</button>
             </div>
@@ -567,6 +570,7 @@
             <h3>Win-Loss</h3>
             <ul>
                 <li><strong>Tiles</strong> — each champion is a card-art tile showing its record as wins-losses (e.g. "7-3") at the bottom right.</li>
+                <li><strong>Reorder</strong> — drag a tile to a new place; the others shuffle along and the order is remembered. <strong>Reset order</strong> puts them back in the game's log-book order.</li>
                 <li><strong>Select</strong> — click a tile to select it (white outline). One champion is always selected; Fel is selected by default.</li>
                 <li><strong>Adjust</strong> — the bottom bar shows the selected champion's name and record. <strong>W+ / W− / L+ / L−</strong> change its record (counts never go below 0).</li>
                 <li><strong>Streak</strong> — <strong>Add to streak</strong> puts the selected champion in the current streak (green border); click it again (it reads "In streak ✓") to take it out. The bar shows how many champions are in the streak. Wins and losses are separate from the streak, so W+ / L+ never change it.</li>

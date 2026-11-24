@@ -1291,9 +1291,11 @@ const CHAMPION_BY_NAME = Object.fromEntries(CHAMPION_LOG_ORDER.map(c => [c.name,
 // In-memory state: records { name: {win, loss} }, the selected champion's name,
 // and the set of champions in the current streak. Saved on every change as
 // { records, selected, streak }. (Older saves also carried a row order and a
-// per-champion lap arrow; both are ignored now, and the lap's wins/losses are
-// already part of the win/loss totals.)
+// per-champion lap arrow; the lap's wins/losses are already part of the
+// win/loss totals.) The tile order is the player's own: dragging a tile moves
+// it, and the order is saved with the rest ({ records, selected, streak, order }).
 let championRecords = {};
+let championOrder = CHAMPION_LOG_ORDER.map(c => c.name);
 let selectedChamp = CHAMPION_DEFAULT_SELECTED;
 let streakChamps = new Set();
 
@@ -1311,12 +1313,16 @@ function loadChampionState() {
     }
     selectedChamp = (saved && CHAMPION_BY_NAME[saved.selected]) ? saved.selected : CHAMPION_DEFAULT_SELECTED;
     streakChamps = new Set(saved && Array.isArray(saved.streak) ? saved.streak.filter(n => CHAMPION_BY_NAME[n]) : []);
+    // saved order first (ignoring unknown or repeated names), then any champion it lacks in log-book order
+    const seen = new Set();
+    championOrder = ((saved && Array.isArray(saved.order)) ? saved.order : []).filter(n => CHAMPION_BY_NAME[n] && !seen.has(n) && seen.add(n));
+    CHAMPION_LOG_ORDER.forEach(c => { if (!seen.has(c.name)) championOrder.push(c.name); });
 }
 
 function saveChampionState() {
     try {
         localStorage.setItem(CHAMPION_STORAGE_KEY, JSON.stringify(
-            { records: championRecords, selected: selectedChamp, streak: [...streakChamps] }));
+            { records: championRecords, selected: selectedChamp, streak: [...streakChamps], order: championOrder }));
     } catch (e) { /* storage unavailable — ignore */ }
 }
 
@@ -1362,6 +1368,23 @@ async function resetStreak() {
     saveChampionState();
 }
 
+// Put the tiles in championOrder's order.
+function applyChampionOrder() {
+    const grid = document.getElementById('champion-grid');
+    const byName = Object.fromEntries([...grid.children].map(t => [t.dataset.champ, t]));
+    championOrder.forEach(n => grid.appendChild(byName[n]));
+}
+
+async function resetChampionOrder() {
+    if (!await confirmModal(
+        'Put the champions back in the game\'s log-book order? Records and the streak are kept.',
+        { confirmText: 'Reset order', cancelText: 'Cancel' }
+    )) return;
+    championOrder = CHAMPION_LOG_ORDER.map(c => c.name);
+    applyChampionOrder();
+    saveChampionState();
+}
+
 async function resetChampions() {
     if (!await confirmModal(
         'Reset the champion record? This clears every win/loss count. The streak is kept.',
@@ -1376,7 +1399,8 @@ async function resetChampions() {
     const grid = document.getElementById('champion-grid');
     if (!grid) return;
     loadChampionState();
-    CHAMPION_LOG_ORDER.forEach(c => {
+    championOrder.forEach(n => {
+        const c = CHAMPION_BY_NAME[n];
         const tile = document.createElement('div');
         tile.className = 'champion-tile';
         tile.dataset.champ = c.name;
@@ -1388,6 +1412,46 @@ async function resetChampions() {
         const tile = e.target.closest('.champion-tile');
         if (tile) setSelectedChamp(tile.dataset.champ);
     });
+    // Drag a tile to change the order: once the pointer has moved a few pixels the tile
+    // follows it, taking the place of each tile it passes over; the order is saved on release.
+    // A plain click (no movement) still just selects.
+    let drag = null;
+    grid.addEventListener('pointerdown', e => {
+        const tile = e.target.closest('.champion-tile');
+        if (!tile || (e.button || 0) !== 0) return;
+        drag = { tile, x: e.clientX, y: e.clientY, active: false };
+    });
+    document.addEventListener('pointermove', e => {
+        if (!drag) return;
+        if (!drag.active) {
+            if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 6) return;
+            drag.active = true;
+            drag.tile.classList.add('champ-dragging');
+            grid.classList.add('champ-reordering');
+        }
+        const under = document.elementFromPoint ? document.elementFromPoint(e.clientX, e.clientY) : e.target;
+        const over = under && under.closest ? under.closest('.champion-tile') : null;
+        if (!over || over === drag.tile || !grid.contains(over)) return;
+        const from = championOrder.indexOf(drag.tile.dataset.champ), to = championOrder.indexOf(over.dataset.champ);
+        championOrder.splice(from, 1);
+        championOrder.splice(to, 0, drag.tile.dataset.champ);
+        applyChampionOrder();
+    });
+    const endDrag = () => {
+        if (!drag) return;
+        const was = drag;
+        drag = null;
+        if (!was.active) return;
+        was.tile.classList.remove('champ-dragging');
+        grid.classList.remove('champ-reordering');
+        saveChampionState();
+        // the release also fires a click on the tile: swallow that one
+        const swallow = ev => { ev.stopPropagation(); ev.preventDefault(); };
+        grid.addEventListener('click', swallow, { capture: true, once: true });
+        setTimeout(() => grid.removeEventListener('click', swallow, true), 0);
+    };
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', endDrag);
     // W+/W−/L+/L− act on the selected champion (counts clamp at 0).
     document.getElementById('champ-editor').querySelectorAll('.btn-group button').forEach(btn => {
         btn.addEventListener('click', () => {
